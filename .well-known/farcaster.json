@@ -1,9 +1,12 @@
 {
-  "addresses": {
-    "eth": "0xb614b629466d9ce515410cb423960f980ecc6f73"
+  "address": "0xb614b629466d9ce515410cb423960f980ecc6f73",
+  "accountAssociation": {
+    "address": "0xb614b629466d9ce515410cb423960f980ecc6f73",
+    "chain": "ethereum",
+    "type": "eip155"
   },
-  "verified_addresses": {
+  "chains": ["eip155:1"],
+  "verifiedAddresses": {
     "eth_addresses": ["0xb614b629466d9ce515410cb423960f980ecc6f73"]
   }
 }
-
