@@ -3,9 +3,9 @@
   "slug": "reflex-test-arcade",
   "description": "A fast-paced neon reflex mini-game. Tap as soon as the button turns green!",
   "developer": "cryptovorlaxis",
-  "website": "https://cryptovorlaxis.github.io/reflex/",
+  "website": "https://reflex-s8dl.vercel.app",
   "app": {
-    "url": "https://cryptovorlaxis.github.io/reflex/index.html",
+    "url": "https://reflex-s8dl.vercel.app/index.html",
     "size": "compact"
   },
   "icon": "logo.png",
