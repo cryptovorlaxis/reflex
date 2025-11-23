@@ -1,0 +1,14 @@
+{
+  "name": "Reflex Test: Arcade Edition",
+  "slug": "reflex-test-arcade",
+  "description": "A fast-paced neon reflex mini-game. Tap as soon as the button turns green!",
+  "developer": "cryptovorlaxis",
+  "website": "https://cryptovorlaxis.github.io/reflex/",
+  "app": {
+    "url": "https://cryptovorlaxis.github.io/reflex/index.html",
+    "size": "compact"
+  },
+  "icon": "logo.png",
+  "keywords": ["reflex", "arcade", "mini-app", "game", "reaction"],
+  "version": "1.0.0"
+}
