@@ -1,1 +1,9 @@
+{
+  "addresses": {
+    "eth": "0xb614b629466d9ce515410cb423960f980ecc6f73"
+  },
+  "verified_addresses": {
+    "eth_addresses": ["0xb614b629466d9ce515410cb423960f980ecc6f73"]
+  }
+}
 
