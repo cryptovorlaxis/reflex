@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Reflex Test ⚡ Arcade Edition</title>
 
+<!-- Farcaster / Warpcast Embed META -->
+<meta property="og:title" content="Reflex Test – Arcade Edition">
+<meta property="og:description" content="Tap as fast as you can when the button turns green! Test your reflexes now.">
+<meta property="og:image" content="https://reflex-s8dl.vercel.app/logo.png">
+
+<!-- FRAME META (makes it work as an embeddable mini experience) -->
+<meta property="fc:frame" content="vNext">
+<meta property="fc:frame:image" content="https://reflex-s8dl.vercel.app/logo.png">
+<meta property="fc:frame:button:1" content="Play">
+<meta property="fc:frame:button:1:action" content="link">
+<meta property="fc:frame:button:1:target" content="https://reflex-s8dl.vercel.app/index.html">
+<meta property="fc:frame:post_url" content="https://reflex-s8dl.vercel.app/">
+
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
 
@@ -129,7 +142,7 @@
 </head>
 <body>
 
-<!-- LOGO (image file placed next to index.html) -->
+<!-- LOGO -->
 <img id="gameLogo" src="logo.png" alt="Reflex Test Logo">
 
 <div id="status">Press START to begin.</div>
