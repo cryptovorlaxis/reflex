@@ -1,12 +1,7 @@
 {
-  "address": "0xb614b629466d9ce515410cb423960f980ecc6f73",
   "accountAssociation": {
-    "address": "0xb614b629466d9ce515410cb423960f980ecc6f73",
-    "chain": "ethereum",
-    "type": "eip155"
-  },
-  "chains": ["eip155:1"],
-  "verifiedAddresses": {
-    "eth_addresses": ["0xb614b629466d9ce515410cb423960f980ecc6f73"]
+    "header": "eyJmaWQiOjc5NDkwMCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweEM5ODk0ZjZjYzdhOTA3NTE2MWE4NmQyRDg4Yzg5MTJmMzkwQzk2QTIifQ",
+    "payload": "eyJkb21haW4iOiJyZWZsZXgtczhkbC52ZXJjZWwuYXBwIn0",
+    "signature": "AOOuJ5o5Yn0Kh0ch/kBbs42Rh/y10RIf9X8prXOpk/dwVigk87UKEUFHV0fmZL9Yk6uBtwXHQrka+4ijLDqB7xs="
   }
 }
