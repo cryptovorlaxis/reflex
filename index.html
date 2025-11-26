@@ -250,17 +250,23 @@ function resetGame() {
 }
 </script>
 
-<!-- FARCASTER SDK READY -->
-<script>
-window.addEventListener("DOMContentLoaded", () => {
-    if (window.sdk?.actions?.ready) {
-        window.sdk.actions.ready();
-        console.log("Farcaster Mini App READY");
-    } else {
-        console.warn("Farcaster SDK not loaded or ready() missing.");
-    }
-});
+<!-- FARCASTER SDK - WORKING VERSION -->
+<script type="module">
+    import * as sdk from "https://esm.sh/@farcaster/sdk";
+
+    window.farcasterSDK = sdk;
+
+    window.addEventListener("DOMContentLoaded", () => {
+        try {
+            sdk.actions.ready();
+            console.log("✓ Farcaster Mini App READY");
+        } catch (e) {
+            console.error("SDK ready() failed:", e);
+        }
+    });
 </script>
+
 
 </body>
 </html>
+
