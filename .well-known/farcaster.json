@@ -4,5 +4,9 @@
     "payload": "eyJkb21haW4iOiJyZWZsZXgtczhkbC52ZXJjZWwuYXBwIn0",
     "signature": "AOOuJ5o5Yn0Kh0ch/kBbs42Rh/y10RIf9X8prXOpk/dwVigk87UKEUFHV0fmZL9Yk6uBtwXHQrka+4ijLDqB7xs="
   },
-  "domain": "reflex-s8dl.vercel.app"
+  "domain": "reflex-s8dl.vercel.app",
+  "name": "Cryptovorlaxis",
+  "description": "A Reflex-powered Farcaster Mini App.",
+  "icon": "https://reflex-s8dl.vercel.app/logo.png",
+  "homepageUrl": "https://reflex-s8dl.vercel.app"
 }
