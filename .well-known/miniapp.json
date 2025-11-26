@@ -1,0 +1,10 @@
+{
+  "schema": "https://standard.farcaster.xyz/schemas/manifest.json",
+  "name": "Cryptovorlaxis",
+  "shortName": "ReflexArcade",
+  "description": "Reflex Test Arcade Edition",
+  "author": "realmerselame",
+  "icon": "https://reflex-s8dl.vercel.app/logo.png",
+  "homepageUrl": "https://reflex-s8dl.vercel.app",
+  "appUrl": "https://reflex-s8dl.vercel.app/index.html"
+}
