@@ -1,15 +1,14 @@
 {
-  "accountAssociation": {
-    "header": "eyJmaWQiOjc5NDkwMCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweEM5ODk0ZjZjYzdhOTA3NTE2MWE4NmQyRDg4Yzg5MTJmMzkwQzk2QTIifQ",
-    "payload": "eyJkb21haW4iOiJyZWZsZXgtczhkbC52ZXJjZWwuYXBwIn0",
-    "signature": "AOOuJ5o5Yn0Kh0ch/kBbs42Rh/y10RIf9X8prXOpk/dwVigk87UKEUFHV0fmZL9Yk6uBtwXHQrka+4ijLDqB7xs="
-  },
-  "domain": "reflex-s8dl.vercel.app",
+  "version": "1.0",
   "name": "Cryptovorlaxis",
-  "description": "A Reflex-powered Farcaster Mini App.",
-  "icon": "https://reflex-s8dl.vercel.app/logo.png",
-
-  "homepageUrl": "https://reflex-s8dl.vercel.app",
-  "appUrl": "https://reflex-s8dl.vercel.app/index.html",
-  "webUrl": "https://reflex-s8dl.vercel.app"
+  "iconUrl": "https://reflex-s8dl.vercel.app/logo.png",
+  "subtitle": "Reflex Arcade",
+  "description": "Reflex Test Arcade Edition",
+  "primaryCategory": "games",
+  "splashScreenUrl": "https://reflex-s8dl.vercel.app/logo.png",
+  "splashBackgroundColor": "#000000",
+  "homeUrl": "https://reflex-s8dl.vercel.app/index.html",
+  "imageUrl": "https://reflex-s8dl.vercel.app/logo.png",
+  "tags": ["reflex", "arcade"],
+  "accountAssociation": {... aynı blok ...}
 }
