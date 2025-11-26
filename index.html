@@ -247,15 +247,13 @@ function resetGame() {
 }
 </script>
 
-<!-- FARCASTER SDK — DOĞRU TEK YÜKLEME -->
-<script type="module">
-    import * as sdk from "https://esm.sh/@farcaster/sdk";
+<!-- FARCASTER SDK — DOĞRU TEK YÜKLEME (ÇALIŞAN) -->
+<script src="https://esm.sh/@farcaster/sdk?bundle" defer></script>
 
-    window.farcasterSDK = sdk;
-
+<script>
     window.addEventListener("DOMContentLoaded", () => {
         try {
-            sdk.actions.ready();
+            window.farcaster.actions.ready();
             console.log("✓ Farcaster Mini App READY");
         } catch (e) {
             console.error("SDK ready() failed:", e);
@@ -263,5 +261,7 @@ function resetGame() {
     });
 </script>
 
+
 </body>
 </html>
+
