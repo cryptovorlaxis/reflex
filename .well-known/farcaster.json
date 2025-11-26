@@ -1,8 +1,8 @@
 {
   "accountAssociation": {
-    "header": "eyJmaWQiOjY5NDkwMCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweEM5ODk0ZjZjYzdhOTA3NTE2MWE4NmQyRDg4Yzg5MTJmMzkzQ2TIifQ",
+    "header": "eyJmaWQiOjc5NDkwMCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweEM5ODk0ZjZjYzdhOTA3NTE2MWE4NmQyRDg4Yzg5MTJmMzkwQzk2QTIifQ",
     "payload": "eyJkb21haW4iOiJyZWZsZXgtczhkbC52ZXJjZWwuYXBwIn0",
-    "signature": "AOOuJ5o5Yn0Kh0ch/kBbs42Rh/y10RIf9X8prXOpk/dwVigk87UKEUFHV0fmZL9Yk6uBtwXHQrka+4ijjDqB7xs="
+    "signature": "AOOuJ5o5Yn0Kh0ch/kBbs42Rh/y10RIf9X8prXOpk/dwVigk87UKEUFHV0fmZL9Yk6uBtwXHQrka+4ijLDqB7xs="
   },
   "domain": "reflex-s8dl.vercel.app"
 }
