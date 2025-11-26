@@ -8,5 +8,8 @@
   "name": "Cryptovorlaxis",
   "description": "A Reflex-powered Farcaster Mini App.",
   "icon": "https://reflex-s8dl.vercel.app/logo.png",
-  "homepageUrl": "https://reflex-s8dl.vercel.app"
+
+  "homepageUrl": "https://reflex-s8dl.vercel.app",
+  "appUrl": "https://reflex-s8dl.vercel.app/index.html",
+  "webUrl": "https://reflex-s8dl.vercel.app"
 }
