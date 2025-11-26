@@ -20,6 +20,9 @@
 <meta name="fc:page:button:1:type" content="link">
 <meta name="fc:page:button:1:target" content="https://reflex-s8dl.vercel.app/index.html">
 
+<!-- FARCASTER SDK -->
+<script src="https://esm.sh/@farcaster/sdk"></script>
+
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
 
@@ -247,6 +250,17 @@ function resetGame() {
 }
 </script>
 
+<!-- FARCASTER SDK READY -->
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+    if (window.sdk?.actions?.ready) {
+        window.sdk.actions.ready();
+        console.log("Farcaster Mini App READY");
+    } else {
+        console.warn("Farcaster SDK not loaded or ready() missing.");
+    }
+});
+</script>
+
 </body>
 </html>
-
