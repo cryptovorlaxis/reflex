@@ -266,19 +266,21 @@ function resetGame() {
 }
 </script>
 
-<!-- FARCASTER SDK — **DOĞRU VE GÜNCEL** -->
-<script src="https://esm.sh/@farcaster/sdk?bundle" defer></script>
+<!-- FARCASTER MINIAPP SDK — DOĞRU OLAN -->
+<script type="module">
+  import { sdk } from "https://esm.sh/@farcaster/miniapp-sdk";
 
-<script>
-    window.addEventListener("DOMContentLoaded", () => {
-        try {
-            window.farcaster.actions.ready();
-            console.log("✓ Farcaster Mini App READY");
-        } catch (e) {
-            console.error("SDK ready() failed:", e);
-        }
-    });
+  window.addEventListener("DOMContentLoaded", () => {
+    try {
+      sdk.actions.ready();
+      console.log("✓ MiniApp ready() çağrıldı");
+    } catch (err) {
+      console.error("MiniApp SDK ready() error:", err);
+    }
+  });
 </script>
+
 
 </body>
 </html>
+
