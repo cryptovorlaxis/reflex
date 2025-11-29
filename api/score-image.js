@@ -1,10 +1,10 @@
-import { ImageResponse } from "@vercel/og";
-
 export const config = {
   runtime: "edge",
 };
 
-export default async function handler(req) {
+import { ImageResponse } from "@vercel/og";
+
+export default function handler(req) {
   const { searchParams } = new URL(req.url);
   const score = searchParams.get("score") || "0.000";
 
@@ -12,24 +12,30 @@ export default async function handler(req) {
     (
       <div
         style={{
-          width: "600px",
-          height: "400px",
-          background: "black",
+          width: "100%",
+          height: "100%",
+          background: "#000",
           color: "#0ff",
-          fontSize: 50,
           display: "flex",
+          flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          fontFamily: "Arial",
-          border: "4px solid #0ff"
+          fontSize: 48,
+          fontFamily: "sans-serif",
         }}
       >
-        Reflex Score: {score}s
+        <div style={{ fontSize: 56, marginBottom: 20 }}>
+          ⚡ Reflex Test
+        </div>
+        <div>Your Reaction Time</div>
+        <div style={{ fontSize: 84, marginTop: 10 }}>
+          {score}s
+        </div>
       </div>
     ),
     {
-      width: 600,
-      height: 400,
+      width: 1200,
+      height: 630,
     }
   );
 }
