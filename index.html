@@ -172,7 +172,11 @@
 <button id="againBtn" class="actionBtn hidden">Play Again</button>
 <button id="shareBtn" class="actionBtn hidden">Share Score</button>
 
-<script>
+<!-- GAME + SDK SCRIPT -->
+<script type="module">
+
+import { sdk } from "https://esm.sh/@farcaster/miniapp-sdk";
+
 const soundReady = new Audio("ready.mp3");
 const soundFail = new Audio("fail.mp3");
 const soundWin = new Audio("win.mp3");
@@ -187,6 +191,39 @@ const scoreText = document.getElementById("score");
 const againBtn = document.getElementById("againBtn");
 const shareBtn = document.getElementById("shareBtn");
 
+// READY()
+window.addEventListener("DOMContentLoaded", () => {
+  try {
+    sdk.actions.ready();
+    console.log("✓ MiniApp ready() called");
+  } catch (err) {
+    console.error("MiniApp SDK ready() error:", err);
+  }
+});
+
+// SHARE SCORE
+shareBtn.addEventListener("click", () => {
+  const score = scoreText.innerText.replace(" s", "");
+  shareScore(score);
+});
+
+async function shareScore(score) {
+  const text =
+    `⚡ Reflex Test\n\n` +
+    `I just scored **${score}s**! Can you beat me?\n\n` +
+    `Play now 👇`;
+
+  const composeUrl =
+    "https://warpcast.com/~/compose?text=" + encodeURIComponent(text);
+
+  try {
+    await sdk.actions.openUrl({ url: composeUrl });
+  } catch (err) {
+    console.log("Share error:", err);
+  }
+}
+
+// GAME LOGIC
 btn.addEventListener("click", () => {
     if (gameState === "idle") startGame();
     else if (gameState === "ready") tooEarly();
@@ -194,7 +231,6 @@ btn.addEventListener("click", () => {
 });
 
 againBtn.addEventListener("click", resetGame);
-shareBtn.addEventListener("click", () => alert("Farcaster Mini App share placeholder."));
 
 function startGame() {
     gameState = "ready";
@@ -264,23 +300,8 @@ function resetGame() {
     btn.style.background = "#062e29";
     btn.classList.remove("glow", "readyPulse");
 }
+
 </script>
-
-<!-- FARCASTER MINIAPP SDK — DOĞRU OLAN -->
-<script type="module">
-  import { sdk } from "https://esm.sh/@farcaster/miniapp-sdk";
-
-  window.addEventListener("DOMContentLoaded", () => {
-    try {
-      sdk.actions.ready();
-      console.log("✓ MiniApp ready() çağrıldı");
-    } catch (err) {
-      console.error("MiniApp SDK ready() error:", err);
-    }
-  });
-</script>
-
 
 </body>
 </html>
-
