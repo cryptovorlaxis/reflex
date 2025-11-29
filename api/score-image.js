@@ -1,108 +1,45 @@
-import { ImageResponse } from "@vercel/og";
+export default async function handler(req, res) {
+  const { score = "0.000" } = req.query;
 
-export const config = {
-  runtime: "edge",
-};
+  const svg = `
+  <svg width="1200" height="630" viewBox="0 0 1200 630"
+       xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#00FFD5"/>
+        <stop offset="100%" stop-color="#0088FF"/>
+      </linearGradient>
+    </defs>
 
-export default async function handler(req) {
-  const { searchParams } = new URL(req.url);
-  const score = searchParams.get("score") || "0.000";
+    <rect width="1200" height="630" fill="black"/>
 
-  return new ImageResponse(
-    (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "radial-gradient(circle at center, #041014 0%, #000000 100%)",
-          position: "relative",
-          fontFamily: "Orbitron, sans-serif",
-          color: "#0ff",
-        }}
-      >
+    <text x="600" y="160" font-size="72"
+      font-family="Orbitron, sans-serif"
+      fill="url(#g)"
+      text-anchor="middle">
+      Reflex Test
+    </text>
 
-        {/* Cyber grid background */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage:
-              "linear-gradient(#00fff533 1px, transparent 1px), linear-gradient(90deg, #00fff533 1px, transparent 1px)",
-            backgroundSize: "40px 40px",
-            opacity: 0.25,
-          }}
-        ></div>
+    <text x="600" y="330" font-size="180"
+      font-family="Orbitron, sans-serif"
+      fill="#00FFE1"
+      text-anchor="middle">
+      ${score}s
+    </text>
 
-        {/* Glow ring */}
-        <div
-          style={{
-            position: "absolute",
-            width: "380px",
-            height: "380px",
-            borderRadius: "50%",
-            boxShadow: "0 0 90px #00fff5aa, 0 0 140px #00fff544 inset",
-            opacity: 0.6,
-          }}
-        ></div>
+    <text x="600" y="450" font-size="48"
+      font-family="Orbitron, sans-serif"
+      fill="#00FFD5"
+      text-anchor="middle">
+      Can you beat this?
+    </text>
+  </svg>
+  `;
 
-        {/* Title */}
-        <h1
-          style={{
-            fontSize: "58px",
-            margin: "0 0 20px 0",
-            textShadow: "0 0 20px #00fff5, 0 0 40px #00fff5",
-          }}
-        >
-          Reflex Test ⚡
-        </h1>
+  // ---- CRITICAL FIX ----
+  res.setHeader("Content-Type", "image/svg+xml");
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+  // -----------------------
 
-        {/* Score */}
-        <div
-          style={{
-            fontSize: "120px",
-            fontWeight: "bold",
-            color: "#00ffe1",
-            textShadow:
-              "0 0 25px #00fff5, 0 0 45px #00fff5, 0 0 70px #00fff5",
-          }}
-        >
-          {score}s
-        </div>
-
-        {/* Bottom text */}
-        <div
-          style={{
-            marginTop: "30px",
-            fontSize: "28px",
-            color: "#7ffdf8",
-            textShadow: "0 0 15px #00fff5aa",
-          }}
-        >
-          Can you beat this?
-        </div>
-
-        {/* Logo */}
-        <img
-          src="https://reflex-rho.vercel.app/logo.png"
-          width="110"
-          height="110"
-          style={{
-            position: "absolute",
-            bottom: 40,
-            right: 40,
-            borderRadius: "12px",
-            boxShadow: "0 0 20px #00fff5aa",
-          }}
-        />
-      </div>
-    ),
-    {
-      width: 1200,
-      height: 630,
-    }
-  );
+  return res.status(200).send(svg);
 }
