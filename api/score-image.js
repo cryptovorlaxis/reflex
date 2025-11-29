@@ -68,13 +68,17 @@ export default async function handler(req, res) {
       ${score}s
     </text>
 
-    <!-- Footer -->
-    <text x="50%" y="560" text-anchor="middle"
-      font-family="Orbitron" font-size="32"
-      fill="#0ff8" letter-spacing="2">
-      reflex-rho.vercel.app
-    </text>
-  </svg>`;
+   // --- CYBERPUNK FOOTER ---
+<footer>
+<rect x="150" y="560" width="900" height="2" fill="#00ffe1" opacity="0.35" />
+
+<text x="50%" y="600" text-anchor="middle"
+  font-family="Orbitron" font-size="36"
+  fill="#00ffe1" opacity="0.65" letter-spacing="6">
+  REFLEX ARCADE
+</text>
+</footer>
+
 
   res.setHeader("Content-Type", "image/svg+xml");
   res.status(200).send(svg);
