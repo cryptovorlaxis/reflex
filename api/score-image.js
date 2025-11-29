@@ -1,84 +1,56 @@
-export default async function handler(req, res) {
-  const { score = "0.000" } = req.query;
-
-  const parsed = parseFloat(score);
-  let title = "Reflex Test";
-  let subtitle = "";
-
-  if (parsed < 0.200) subtitle = "⚡ Lightning Speed!";
-  else if (parsed < 0.300) subtitle = "🚀 Ultra Reflex";
-  else if (parsed < 0.500) subtitle = "🔥 Sharp Reflexes";
-  else subtitle = "😎 Nice Try!";
+export default function handler(req, res) {
+  const score = req.query.score || "0.000";
 
   const svg = `
-  <svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <svg width="1200" height="630" viewBox="0 0 1200 630"
+       xmlns="http://www.w3.org/2000/svg" style="background:#000">
 
+    <!-- GLOW GRID -->
     <defs>
-      <!-- Neon Glow -->
-      <filter id="glow">
-        <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
-        <feMerge>
-          <feMergeNode in="coloredBlur"/>
-          <feMergeNode in="coloredBlur"/>
-          <feMergeNode in="coloredBlur"/>
-          <feMergeNode in="SourceGraphic"/>
-        </feMerge>
-      </filter>
-
-      <!-- Gradient BG -->
-      <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#020b14"/>
-        <stop offset="100%" stop-color="#000000"/>
+      <linearGradient id="gridLine" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#00ffe155"/>
+        <stop offset="100%" stop-color="#00ffe100"/>
       </linearGradient>
-
-      <!-- Neon Grid -->
-      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#0ff4" stroke-width="2"/>
-      </pattern>
     </defs>
 
-    <!-- Background -->
-    <rect width="1200" height="630" fill="url(#bgGrad)" />
-    <rect width="1200" height="630" fill="url(#grid)" opacity="0.3" />
+    <!-- Grid Lines -->
+    ${Array.from({length: 15})
+      .map((_, i) => `<rect x="${i * 80}" y="0" width="2" height="630" fill="url(#gridLine)" />`)
+      .join("")}
 
-    <!-- Main Title -->
-    <text x="50%" y="150" text-anchor="middle"
-      font-family="Orbitron" font-size="90"
-      fill="#00ffe1" filter="url(#glow)"
-      letter-spacing="3">
-      REFLEX TEST
+    <!-- TITLE -->
+    <text x="50%" y="140" text-anchor="middle"
+      font-family="Orbitron" font-size="72"
+      fill="#00ffe1" letter-spacing="5">
+      REFLEX SCORE
     </text>
 
-    <!-- Subtitle -->
-    <text x="50%" y="240" text-anchor="middle"
-      font-family="Orbitron" font-size="40"
-      fill="#00bfae" opacity="0.85">
-      ${subtitle}
-    </text>
-
-    <!-- SCORE BOX -->
-    <rect x="300" y="280" width="600" height="200" rx="20"
-      fill="none" stroke="#00ffe1" stroke-width="6"
-      filter="url(#glow)" />
-
-    <!-- SCORE TEXT -->
-    <text x="50%" y="400" text-anchor="middle"
-      font-family="Orbitron" font-size="110"
-      fill="#00fff2" filter="url(#glow)">
+    <!-- BIG SCORE -->
+    <text x="50%" y="330" text-anchor="middle"
+      font-family="Orbitron" font-size="140"
+      fill="#00ffe1" letter-spacing="8">
       ${score}s
     </text>
 
-   // --- CYBERPUNK FOOTER ---
-<footer>
-<rect x="150" y="560" width="900" height="2" fill="#00ffe1" opacity="0.35" />
+    <!-- Subtitle -->
+    <text x="50%" y="400" text-anchor="middle"
+      font-family="Orbitron" font-size="36"
+      fill="#00ffe199" letter-spacing="4">
+      Can you beat this?
+    </text>
 
-<text x="50%" y="600" text-anchor="middle"
-  font-family="Orbitron" font-size="36"
-  fill="#00ffe1" opacity="0.65" letter-spacing="6">
-  REFLEX ARCADE
-</text>
-</footer>
+    <!-- CYBERPUNK FOOTER LINE -->
+    <rect x="150" y="540" width="900" height="3" fill="#00ffe1" opacity="0.45" />
 
+    <!-- CYBERPUNK FOOTER TEXT -->
+    <text x="50%" y="595" text-anchor="middle"
+      font-family="Orbitron" font-size="40"
+      fill="#00ffe1" opacity="0.65" letter-spacing="10">
+      REFLEX ARCADE
+    </text>
+
+  </svg>
+  `;
 
   res.setHeader("Content-Type", "image/svg+xml");
   res.status(200).send(svg);
