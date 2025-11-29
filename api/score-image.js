@@ -1,37 +1,21 @@
-import { ImageResponse } from "@vercel/og";
+export default function handler(req, res) {
+  const { score } = req.query;
 
-export default function handler(req) {
-  const { searchParams } = new URL(req.url);
-  const score = searchParams.get("score") || "0.000";
+  const svg = `
+  <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="630" fill="#000"/>
+    <text x="50%" y="40%" font-size="72" fill="#0ff" text-anchor="middle" font-family="Arial">
+      Reflex Test Score
+    </text>
+    <text x="50%" y="55%" font-size="140" fill="#0ff" text-anchor="middle" font-family="Arial" font-weight="bold">
+      ${score}s
+    </text>
+    <text x="50%" y="80%" font-size="48" fill="#0ff" text-anchor="middle" font-family="Arial">
+      Can you beat me?
+    </text>
+  </svg>
+  `;
 
-  return new ImageResponse(
-    (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          background: "#000",
-          color: "#0ff",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          fontSize: 48,
-          fontFamily: "sans-serif",
-        }}
-      >
-        <div style={{ fontSize: 56, marginBottom: 20 }}>
-          ⚡ Reflex Test
-        </div>
-        <div>Your Reaction Time</div>
-        <div style={{ fontSize: 84, marginTop: 10 }}>
-          {score}s
-        </div>
-      </div>
-    ),
-    {
-      width: 1200,
-      height: 630,
-    }
-  );
+  res.setHeader("Content-Type", "image/svg+xml");
+  res.send(svg);
 }
