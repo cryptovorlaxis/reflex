@@ -183,7 +183,6 @@ function resetGame() {
     btn.style.background = "#062e29";
 }
 </script>
-
 <!-- CORRECT MINIAPP SDK -->
 <script type="module">
 import { sdk } from "https://esm.sh/@farcaster/miniapp-sdk";
@@ -200,23 +199,26 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 // SHARE SCORE
-window.shareScore = async function(score) {
-    const img = `https://reflex-rho.vercel.app/api/score-image?score=${score}`;
-    const txt = `⚡ Reflex Test\n\nI scored **${score}s**! Can you beat me?\n\n`;
+async function shareScore(score) {
+  const shareImage = `https://reflex-rho.vercel.app/api/score-image?score=${score}`;
 
-    const url =
-      "https://warpcast.com/~/compose?text=" +
-      encodeURIComponent(txt) +
-      "&embeds[]=" +
-      encodeURIComponent(img);
+  const text =
+    `⚡ Reflex Test — Arcade Mode\n\n` +
+    `I just hit **${score}s** ⚡\n` +
+    `Think you’re faster? Tap in and prove it. 👇\n\n`;
 
-    try {
-        await sdk.actions.openUrl({ url });
-    } catch (err) {
-        console.error("Share error:", err);
-    }
-};
+  const composeUrl =
+    "https://warpcast.com/~/compose?text=" +
+    encodeURIComponent(text) +
+    "&embeds[]=" +
+    encodeURIComponent(shareImage);
+
+  try {
+    await window.farcasterSDK.actions.openUrl({ url: composeUrl });
+  } catch (err) {
+    console.log("Share failed:", err);
+  }
+}
 </script>
 
-</body>
-</html>
+
