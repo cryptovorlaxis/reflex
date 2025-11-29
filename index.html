@@ -38,51 +38,49 @@
     }
     body::before {
         content: "";
-        position: fixed;
-        inset: 0;
-        background: linear-gradient(#0ff6d122 1px, transparent 1px),
-                    linear-gradient(90deg, #0ff6d122 1px, transparent 1px);
+        position: fixed; inset: 0;
+        background: 
+            linear-gradient(#0ff6d122 1px, transparent 1px),
+            linear-gradient(90deg, #0ff6d122 1px, transparent 1px);
         background-size: 45px 45px;
         animation: gridMove 14s linear infinite;
         z-index: -1;
     }
-    @keyframes gridMove { 0% { transform: translateY(0); } 100% { transform: translateY(45px); } }
+    @keyframes gridMove { 0% {transform:translateY(0);} 100% {transform:translateY(45px);} }
 
     #gameLogo {
-        width: 260px;
-        margin: 0 auto 20px auto;
-        display: block;
+        width: 260px; margin: 0 auto 20px auto;
         animation: logoAppear 1.2s ease-out forwards, logoGlow 2.5s ease-in-out infinite;
         opacity: 0;
     }
-    @keyframes logoAppear { 0% { transform: scale(0.6) translateY(-20px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
-    @keyframes logoGlow { 0% { filter: drop-shadow(0 0 6px #0ff); } 50% { filter: drop-shadow(0 0 16px #0ff); } 100% { filter: drop-shadow(0 0 6px #0ff); } }
+    @keyframes logoAppear {0%{transform:scale(0.6) translateY(-20px);opacity:0;}100%{transform:scale(1);opacity:1;}}
+    @keyframes logoGlow {0%{filter:drop-shadow(0 0 6px #0ff);}50%{filter:drop-shadow(0 0 16px #0ff);}100%{filter:drop-shadow(0 0 6px #0ff);}}
 
-    #status { font-size: 22px; margin-bottom: 20px; color: #8efff6; min-height: 28px; }
+    #status {font-size:22px;margin-bottom:20px;color:#8efff6;}
 
     #reactionButton {
-        width: 230px; height: 230px; border-radius: 50%; border: 4px solid #00e6c7;
-        background: radial-gradient(circle, #062e29, #001513);
-        font-size: 26px; color: #0ff6d1;
-        cursor: pointer; transition: 0.25s;
-        box-shadow: 0 0 25px #00ffd5cc, inset 0 0 25px #00ffd555;
+        width:230px;height:230px;border-radius:50%;
+        border:4px solid #00e6c7;
+        background: radial-gradient(circle,#062e29,#001513);
+        font-size:26px;color:#0ff6d1;
+        cursor:pointer;transition:0.25s;
+        box-shadow:0 0 25px #00ffd5cc, inset 0 0 25px #00ffd555;
     }
-    .glow { animation: neonGlow 1.5s ease-in-out infinite; }
-    @keyframes neonGlow { 0% { box-shadow: 0 0 12px #00ffd5; } 50% { box-shadow: 0 0 40px #00ffd5; } 100% { box-shadow: 0 0 12px #00ffd5; } }
-    .readyPulse { animation: pulse 0.25s; }
-    @keyframes pulse { 0% { transform: scale(1);} 40% {transform: scale(1.18);} 100% {transform: scale(1);} }
+    .glow {animation: neonGlow 1.5s ease-in-out infinite;}
+    @keyframes neonGlow {0%{box-shadow:0 0 12px #00ffd5;}50%{box-shadow:0 0 40px #00ffd5;}100%{box-shadow:0 0 12px #00ffd5;}}
+    .readyPulse {animation:pulse 0.25s;}
 
-    #score { margin-top: 25px; font-size: 34px; font-weight: bold; color: #00ffe1; }
+    #score {margin-top:25px;font-size:34px;font-weight:bold;color:#00ffe1;}
 
     .actionBtn {
-        margin: 15px 10px; padding: 14px 24px; font-size: 18px;
-        border-radius: 10px; border: 2px solid #00e6c7;
-        background: #012e28; color: #00ffe1;
-        box-shadow: 0 0 12px #00ffd566; cursor: pointer;
-        transition: 0.2s;
+        margin:15px 10px;padding:14px 24px;font-size:18px;
+        border-radius:10px;border:2px solid #00e6c7;
+        background:#012e28;color:#00ffe1;
+        box-shadow:0 0 12px #00ffd566;
+        cursor:pointer;transition:0.2s;
     }
-    .actionBtn:hover { transform: scale(1.1); box-shadow: 0 0 22px #00ffd5; }
-    .hidden { display: none; }
+    .actionBtn:hover {transform:scale(1.1);box-shadow:0 0 22px #00ffd5;}
+    .hidden {display:none;}
 </style>
 </head>
 
@@ -113,6 +111,7 @@ const scoreText = document.getElementById("score");
 const againBtn = document.getElementById("againBtn");
 const shareBtn = document.getElementById("shareBtn");
 
+// BUTTON LOGIC
 btn.addEventListener("click", () => {
     if (gameState === "idle") startGame();
     else if (gameState === "ready") tooEarly();
@@ -120,7 +119,7 @@ btn.addEventListener("click", () => {
 });
 
 againBtn.addEventListener("click", resetGame);
-shareBtn.addEventListener("click", () => shareScore(scoreText.innerText.replace(" s", "")));
+shareBtn.addEventListener("click", () => shareScore(scoreText.innerText.replace(" s","")));
 
 function startGame() {
     gameState = "ready";
@@ -130,7 +129,6 @@ function startGame() {
     btn.style.background = "#2a2e0f";
 
     const waitTime = Math.random() * 3000 + 1500;
-
     timeoutID = setTimeout(() => {
         gameState = "go";
         btn.classList.remove("glow");
@@ -150,26 +148,24 @@ function tooEarly() {
     statusText.innerText = "Too early! 😅";
     btn.style.background = "#3a0f0f";
     btn.innerText = "START";
-    btn.classList.remove("glow", "readyPulse");
+    btn.classList.remove("glow","readyPulse");
     soundFail.play();
-    navigator.vibrate([80, 80]);
+    navigator.vibrate([80,80]);
 }
 
 function stopTimer() {
-    const reactionTime = ((Date.now() - startTime) / 1000).toFixed(3);
+    const reactionTime = ((Date.now() - startTime)/1000).toFixed(3);
     statusText.innerText = "Nice reflex! 🎉";
     scoreText.innerText = reactionTime + " s";
     scoreText.classList.remove("hidden");
-
     gameState = "finished";
     againBtn.classList.remove("hidden");
     shareBtn.classList.remove("hidden");
-
     btn.style.background = "#122225";
     btn.innerText = "✔";
-    btn.classList.remove("glow", "readyPulse");
+    btn.classList.remove("glow","readyPulse");
     soundWin.play();
-    navigator.vibrate([150, 80, 150]);
+    navigator.vibrate([150,80,150]);
 }
 
 function resetGame() {
@@ -178,34 +174,36 @@ function resetGame() {
     scoreText.classList.add("hidden");
     againBtn.classList.add("hidden");
     shareBtn.classList.add("hidden");
-
     btn.innerText = "START";
     btn.style.background = "#062e29";
 }
 </script>
-<!-- CORRECT MINIAPP SDK -->
+
+<!-- MINIAPP SDK + SHARE -->
 <script type="module">
 import { sdk } from "https://esm.sh/@farcaster/miniapp-sdk";
 
+// GLOBAL SDK
 window.farcasterSDK = sdk;
 
+// READY
 window.addEventListener("DOMContentLoaded", () => {
     try {
         sdk.actions.ready();
-        console.log("✓ MiniApp ready() çağrıldı");
+        console.log("MiniApp READY");
     } catch (err) {
-        console.error("MiniApp SDK ready() error:", err);
+        console.error(err);
     }
 });
 
-// SHARE SCORE
-async function shareScore(score) {
+// SHARE FUNCTION (GLOBAL)
+window.shareScore = async function(score) {
   const shareImage = `https://reflex-rho.vercel.app/api/score-image?score=${score}`;
 
   const text =
     `⚡ Reflex Test — Arcade Mode\n\n` +
     `I just hit **${score}s** ⚡\n` +
-    `Think you’re faster? Tap in and prove it. 👇\n\n`;
+    `Think you’re faster? Tap in and prove it 👇\n\n`;
 
   const composeUrl =
     "https://warpcast.com/~/compose?text=" +
@@ -214,11 +212,12 @@ async function shareScore(score) {
     encodeURIComponent(shareImage);
 
   try {
-    await window.farcasterSDK.actions.openUrl({ url: composeUrl });
+    await sdk.actions.openUrl({ url: composeUrl });
   } catch (err) {
-    console.log("Share failed:", err);
+    console.error("Share failed:", err);
   }
-}
+};
 </script>
 
-
+</body>
+</html>
