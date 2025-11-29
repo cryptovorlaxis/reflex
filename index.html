@@ -182,7 +182,7 @@ function resetGame() {
 }
 </script>
 
-<!-- MINIAPP SDK (DOĞRU VE TEK SÜRÜM) -->
+<!-- MINIAPP SDK -->
 <script type="module">
 import * as sdk from "https://esm.sh/@farcaster/miniapp-sdk";
 
@@ -190,7 +190,7 @@ window.farcasterSDK = sdk;
 
 window.addEventListener("DOMContentLoaded", () => {
     try {
-        sdk.actions.ready();   // ← BUNUN DOĞRU ÇALIŞMASI PREVIEW'İ DÜZELTİYOR
+        sdk.actions.ready();
         console.log("✓ MiniApp READY");
     } catch (err) {
         console.error("MiniApp SDK ready() error:", err);
