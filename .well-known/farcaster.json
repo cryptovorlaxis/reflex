@@ -20,5 +20,11 @@
   "screenshots": [
     "https://reflex-rho.vercel.app/logo.png"
   ],
-  "author": "realmerselame"
+  "author": "realmerselame",
+
+  "accountAssociation": {
+    "header": "eyJmaWQiOjc5NDkwMCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweEM5ODk0ZjZjYzdhOTA3NTE2MWE4NmQyRDg4Yzg5MTJmMzkwQzk2QTIifQ",
+    "payload": "eyJkb21haW4iOiJyZWZsZXgtcmhvLnZlcmNlbC5hcHAifQ",
+    "signature": "vD3G251a5GsYczzk8gKMG2QkTQoIhzJHHUazDGnbbzJ+6WxReVUS4eFtzmiCCmPe85wCT7c8SHGGO5BHey7LMxw="
+  }
 }
