@@ -1,7 +1,3 @@
-export const config = {
-  runtime: "edge",
-};
-
 import { ImageResponse } from "@vercel/og";
 
 export default function handler(req) {
