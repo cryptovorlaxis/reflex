@@ -8,19 +8,19 @@
 <!-- SOCIAL META -->
 <meta property="og:title" content="Reflex Test – Arcade Edition">
 <meta property="og:description" content="Tap as fast as you can when the button turns green! Test your reflexes now.">
-<meta property="og:image" content="https://reflex-s8dl.vercel.app/logo.png">
+<meta property="og:image" content="https://reflex.vercel.app/logo.png">
 
 <!-- FARCASTER MINIAPP EMBED -->
 <meta name="fc:miniapp" content='{
   "version": "1",
-  "imageUrl": "https://reflex-s8dl.vercel.app/logo.png",
+  "imageUrl": "https://reflex.vercel.app/logo.png",
   "button": {
     "title": "⚡ Play Reflex Test",
     "action": {
       "type": "launch_miniapp",
-      "url": "https://reflex-s8dl.vercel.app/index.html",
+      "url": "https://reflex.vercel.app/index.html",
       "name": "Reflex Test",
-      "splashImageUrl": "https://reflex-s8dl.vercel.app/logo.png",
+      "splashImageUrl": "https://reflex.vercel.app/logo.png",
       "splashBackgroundColor": "#000000"
     }
   }
@@ -189,7 +189,7 @@ shareBtn.addEventListener("click", () => {
 
 // --- SHARE SCORE FUNCTION ---
 async function shareScore(score) {
-  const shareImage = `https://reflex-s8dl.vercel.app/api/score-image?score=${score}`;
+  const shareImage = `https://reflex.vercel.app/api/score-image?score=${score}`;
 
   const text =
     `⚡ Reflex Test\n\n` +
