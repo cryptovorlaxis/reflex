@@ -189,7 +189,7 @@ shareBtn.addEventListener("click", () => {
 
 // --- SHARE SCORE FUNCTION ---
 async function shareScore(score) {
-  const shareImage = `https://reflex.vercel.app/api/score-image?score=${score}`;
+  const shareImage = `https://reflex-s8dl.vercel.app/api/score-image?score=${score}`;
 
   const text =
     `⚡ Reflex Test\n\n` +
@@ -202,11 +202,12 @@ async function shareScore(score) {
     encodeURIComponent(shareImage);
 
   try {
-    await window.farcasterSDK.actions.openUrl({ url: composeUrl });
+    await window.farcasterSDK.actions.openURL({ url: composeUrl });
   } catch (err) {
     console.log("Share failed:", err);
   }
 }
+
 
 function startGame() {
     gameState = "ready";
@@ -295,3 +296,4 @@ function resetGame() {
 
 </body>
 </html>
+
