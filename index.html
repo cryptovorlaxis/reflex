@@ -202,19 +202,15 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 // SHARE SCORE
-shareBtn.addEventListener("click", () => {
-  const score = scoreText.innerText.replace(" s", "");
-  shareScore(score);
-});
-
 async function shareScore(score) {
+  const imgUrl = `https://reflex-s8dl.vercel.app/api/score-image?score=${score}`;
+
   const text =
     `⚡ Reflex Test\n\n` +
-    `I just scored **${score}s**! Can you beat me?\n\n` +
-    `Play now 👇`;
+    `I just scored ${score}s! Try to beat me.\n\n`;
 
   const composeUrl =
-    "https://warpcast.com/~/compose?text=" + encodeURIComponent(text);
+    `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(imgUrl)}`;
 
   try {
     await sdk.actions.openUrl({ url: composeUrl });
@@ -222,6 +218,7 @@ async function shareScore(score) {
     console.log("Share error:", err);
   }
 }
+
 
 // GAME LOGIC
 btn.addEventListener("click", () => {
@@ -305,3 +302,4 @@ function resetGame() {
 
 </body>
 </html>
+
