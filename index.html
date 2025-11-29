@@ -10,7 +10,7 @@
 <meta property="og:description" content="Tap as fast as you can when the button turns green! Test your reflexes now.">
 <meta property="og:image" content="https://reflex-s8dl.vercel.app/logo.png">
 
-<!-- FARCASTER MINIAPP EMBED -->
+<!-- FARCASTER MINIAPP EMBED (V1 OFFICIAL) -->
 <meta name="fc:miniapp" content='{
   "version": "1",
   "imageUrl": "https://reflex-s8dl.vercel.app/logo.png",
@@ -22,6 +22,19 @@
       "name": "Cryptovorlaxis",
       "splashImageUrl": "https://reflex-s8dl.vercel.app/logo.png",
       "splashBackgroundColor": "#000000"
+    }
+  }
+}' />
+
+<!-- BACKWARD COMPATIBILITY -->
+<meta name="fc:frame" content='{
+  "version":"1",
+  "imageUrl":"https://reflex-s8dl.vercel.app/logo.png",
+  "button":{
+    "title":"⚡ Play Reflex Test",
+    "action":{
+      "type":"launch_frame",
+      "url":"https://reflex-s8dl.vercel.app/index.html"
     }
   }
 }' />
@@ -38,33 +51,114 @@
         overflow-x: hidden;
     }
 
-    #leaderboard {
-        margin-top: 40px;
-        background: #001e1a;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 0 20px #00ffd522;
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background:
+            linear-gradient(#0ff6d122 1px, transparent 1px),
+            linear-gradient(90deg, #0ff6d122 1px, transparent 1px);
+        background-size: 45px 45px;
+        animation: gridMove 14s linear infinite;
+        z-index: -1;
     }
 
-    #leaderboard h2 {
-        font-size: 24px;
-        margin-bottom: 14px;
+    @keyframes gridMove {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(45px); }
+    }
+
+    #gameLogo {
+        width: 260px;
+        margin: 0 auto 20px auto;
+        display: block;
+        animation: logoAppear 1.2s ease-out forwards, logoGlow 2.5s ease-in-out infinite;
+        opacity: 0;
+    }
+
+    @keyframes logoAppear {
+        0% { transform: scale(0.6) translateY(-20px); opacity: 0; }
+        100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    @keyframes logoGlow {
+        0% { filter: drop-shadow(0 0 6px #0ff) brightness(0.9); }
+        50% { filter: drop-shadow(0 0 16px #0ff) brightness(1.3); }
+        100% { filter: drop-shadow(0 0 6px #0ff) brightness(0.9); }
+    }
+
+    #status {
+        font-size: 22px;
+        margin-bottom: 20px;
+        color: #8efff6;
+        text-shadow: 0 0 8px #00ffd5;
+        min-height: 28px;
+    }
+
+    #reactionButton {
+        width: 230px;
+        height: 230px;
+        border-radius: 50%;
+        border: 4px solid #00e6c7;
+        background: radial-gradient(circle, #062e29, #001513);
+        font-size: 26px;
         color: #0ff6d1;
-        text-shadow: 0 0 10px #00ffd5;
+        cursor: pointer;
+        transition: 0.25s;
+        box-shadow: 0 0 25px #00ffd5cc, inset 0 0 25px #00ffd555;
     }
 
-    .lb-item {
-        padding: 6px 0;
+    .glow {
+        animation: neonGlow 1.5s ease-in-out infinite;
+    }
+
+    @keyframes neonGlow {
+        0% { box-shadow: 0 0 12px #00ffd5, inset 0 0 12px #00ffd5; }
+        50% { box-shadow: 0 0 40px #00ffd5, inset 0 0 18px #00ffd5; }
+        100% { box-shadow: 0 0 12px #00ffd5, inset 0 0 12px #00ffd5; }
+    }
+
+    .readyPulse {
+        animation: pulse 0.25s;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        40% { transform: scale(1.18); }
+        100% { transform: scale(1); }
+    }
+
+    #score {
+        margin-top: 25px;
+        font-size: 34px;
+        font-weight: bold;
+        text-shadow: 0 0 14px #00ffe1;
+        color: #00ffe1;
+    }
+
+    .actionBtn {
+        margin: 15px 10px;
+        padding: 14px 24px;
         font-size: 18px;
-        border-bottom: 1px solid #0ff3;
+        border-radius: 10px;
+        border: 2px solid #00e6c7;
+        background: #012e28;
+        color: #00ffe1;
+        text-shadow: 0 0 6px #00ffd5;
+        box-shadow: 0 0 12px #00ffd566;
+        cursor: pointer;
+        transition: 0.2s;
     }
 
-    .lb-item span {
-        color: #aaffff;
+    .actionBtn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 22px #00ffd5;
     }
+
+    .hidden { display: none; }
 </style>
-
 </head>
+
 <body>
 
 <img id="gameLogo" src="logo.png" alt="Reflex Test Logo">
@@ -76,60 +170,22 @@
 <div id="score" class="hidden"></div>
 
 <button id="againBtn" class="actionBtn hidden">Play Again</button>
+<button id="shareBtn" class="actionBtn hidden">Share Score</button>
 
-<div id="leaderboard">
-    <h2>🏆 Leaderboard (Top 10)</h2>
-    <div id="lb-list">Loading...</div>
-</div>
-
-<script type="module">
-/* ------------------------------ */
-/*         SUPABASE CLIENT        */
-/* ------------------------------ */
-import { createClient } from "https://esm.sh/@supabase/supabase-js";
-
-const SUPABASE_URL = "https://vxuxkirkpdgowhvqvsti.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4dXhraXJrcGRnb3dodnF2c3RpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzMDk3NzUsImV4cCI6MjA3OTg4NTc3NX0.rlHG7tnB2QMRFZGMW9o8DgCAHMEJzpS7FLvwbhywjZQ";
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-/* ------------------------------ */
-/*     FARCASTER MINIAPP SDK     */
-/* ------------------------------ */
-import { sdk } from "https://esm.sh/@farcaster/miniapp-sdk";
-
-let farcasterUser = null;
-
-window.addEventListener("DOMContentLoaded", async () => {
-    try {
-        sdk.actions.ready();
-        farcasterUser = await sdk.context.getUser();
-
-        console.log("✓ MiniApp Ready");
-        console.log("User:", farcasterUser);
-
-        loadLeaderboard();
-    } catch (err) {
-        console.error("MiniApp Init Error:", err);
-    }
-});
-
-/* ------------------------------ */
-/*           GAME LOGIC           */
-/* ------------------------------ */
+<script>
+const soundReady = new Audio("ready.mp3");
+const soundFail = new Audio("fail.mp3");
+const soundWin = new Audio("win.mp3");
 
 let gameState = "idle";
 let startTime = 0;
 let timeoutID;
 
-const soundReady = new Audio("ready.mp3");
-const soundFail = new Audio("fail.mp3");
-const soundWin = new Audio("win.mp3");
-
 const btn = document.getElementById("reactionButton");
 const statusText = document.getElementById("status");
 const scoreText = document.getElementById("score");
 const againBtn = document.getElementById("againBtn");
+const shareBtn = document.getElementById("shareBtn");
 
 btn.addEventListener("click", () => {
     if (gameState === "idle") startGame();
@@ -138,20 +194,29 @@ btn.addEventListener("click", () => {
 });
 
 againBtn.addEventListener("click", resetGame);
+shareBtn.addEventListener("click", () => alert("Farcaster Mini App share placeholder."));
 
 function startGame() {
     gameState = "ready";
     statusText.innerText = "Get ready...";
     btn.innerText = "WAIT";
+    btn.classList.add("glow");
+    btn.style.background = "#2a2e0f";
 
     const waitTime = Math.floor(Math.random() * 3000) + 1500;
 
     timeoutID = setTimeout(() => {
         gameState = "go";
-        btn.innerText = "TAP!";
-        statusText.innerText = "NOW! 🟢";
 
+        btn.classList.remove("glow");
+        btn.classList.add("readyPulse");
+        btn.style.background = "#0f4d3e";
+        btn.innerText = "TAP!";
+
+        statusText.innerText = "NOW! 🟢";
         soundReady.play();
+        navigator.vibrate(120);
+
         startTime = Date.now();
     }, waitTime);
 }
@@ -160,11 +225,15 @@ function tooEarly() {
     clearTimeout(timeoutID);
     gameState = "idle";
     statusText.innerText = "Too early! 😅";
+    btn.style.background = "#3a0f0f";
     btn.innerText = "START";
+    btn.classList.remove("glow", "readyPulse");
+
     soundFail.play();
+    navigator.vibrate([80, 80]);
 }
 
-async function stopTimer() {
+function stopTimer() {
     const endTime = Date.now();
     const reactionTime = ((endTime - startTime) / 1000).toFixed(3);
 
@@ -172,63 +241,46 @@ async function stopTimer() {
     scoreText.innerText = reactionTime + " s";
     scoreText.classList.remove("hidden");
 
-    soundWin.play();
     gameState = "finished";
+    againBtn.classList.remove("hidden");
+    shareBtn.classList.remove("hidden");
 
-    // SAVE SCORE IN SUPABASE
-    await saveScore(reactionTime);
+    btn.style.background = "#122225";
+    btn.innerText = "✔";
+    btn.classList.remove("glow", "readyPulse");
 
-    // LOAD NEW LEADERBOARD
-    loadLeaderboard();
+    soundWin.play();
+    navigator.vibrate([150, 80, 150]);
 }
 
 function resetGame() {
     gameState = "idle";
     statusText.innerText = "Press START to begin.";
     scoreText.classList.add("hidden");
+    againBtn.classList.add("hidden");
+    shareBtn.classList.add("hidden");
+
     btn.innerText = "START";
-}
-
-/* ------------------------------ */
-/*       SUPABASE FUNCTIONS      */
-/* ------------------------------ */
-
-async function saveScore(time) {
-    if (!farcasterUser) return;
-
-    const { fid, username } = farcasterUser;
-
-    const { error } = await supabase.from("scores").insert({
-        fid: fid,
-        username: username,
-        score: parseFloat(time)
-    });
-
-    if (error) console.error("Score save error:", error);
-}
-
-async function loadLeaderboard() {
-    const lb = document.getElementById("lb-list");
-
-    const { data, error } = await supabase
-        .from("scores")
-        .select("*")
-        .order("score", { ascending: true })
-        .limit(10);
-
-    if (error) {
-        lb.innerHTML = "Error loading leaderboard.";
-        return;
-    }
-
-    lb.innerHTML = data
-        .map(
-            (row, i) =>
-                `<div class="lb-item">#${i + 1} — <b>${row.username}</b> <span>${row.score}s</span></div>`
-        )
-        .join("");
+    btn.style.background = "#062e29";
+    btn.classList.remove("glow", "readyPulse");
 }
 </script>
 
+<!-- FARCASTER MINIAPP SDK — DOĞRU OLAN -->
+<script type="module">
+  import { sdk } from "https://esm.sh/@farcaster/miniapp-sdk";
+
+  window.addEventListener("DOMContentLoaded", () => {
+    try {
+      sdk.actions.ready();
+      console.log("✓ MiniApp ready() çağrıldı");
+    } catch (err) {
+      console.error("MiniApp SDK ready() error:", err);
+    }
+  });
+</script>
+
+
 </body>
 </html>
+
