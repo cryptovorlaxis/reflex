@@ -10,7 +10,7 @@
 <meta property="og:description" content="Tap as fast as you can when the button turns green! Test your reflexes now.">
 <meta property="og:image" content="https://reflex-s8dl.vercel.app/logo.png">
 
-<!-- FARCASTER MINIAPP EMBED (V1 OFFICIAL) -->
+<!-- FARCASTER MINIAPP EMBED -->
 <meta name="fc:miniapp" content='{
   "version": "1",
   "imageUrl": "https://reflex-s8dl.vercel.app/logo.png",
@@ -19,22 +19,9 @@
     "action": {
       "type": "launch_miniapp",
       "url": "https://reflex-s8dl.vercel.app/index.html",
-      "name": "Cryptovorlaxis",
+      "name": "Reflex Test",
       "splashImageUrl": "https://reflex-s8dl.vercel.app/logo.png",
       "splashBackgroundColor": "#000000"
-    }
-  }
-}' />
-
-<!-- BACKWARD COMPATIBILITY -->
-<meta name="fc:frame" content='{
-  "version":"1",
-  "imageUrl":"https://reflex-s8dl.vercel.app/logo.png",
-  "button":{
-    "title":"⚡ Play Reflex Test",
-    "action":{
-      "type":"launch_frame",
-      "url":"https://reflex-s8dl.vercel.app/index.html"
     }
   }
 }' />
@@ -172,11 +159,7 @@
 <button id="againBtn" class="actionBtn hidden">Play Again</button>
 <button id="shareBtn" class="actionBtn hidden">Share Score</button>
 
-<!-- GAME + SDK SCRIPT -->
-<script type="module">
-
-import { sdk } from "https://esm.sh/@farcaster/miniapp-sdk";
-
+<script>
 const soundReady = new Audio("ready.mp3");
 const soundFail = new Audio("fail.mp3");
 const soundWin = new Audio("win.mp3");
@@ -191,36 +174,6 @@ const scoreText = document.getElementById("score");
 const againBtn = document.getElementById("againBtn");
 const shareBtn = document.getElementById("shareBtn");
 
-// READY()
-window.addEventListener("DOMContentLoaded", () => {
-  try {
-    sdk.actions.ready();
-    console.log("✓ MiniApp ready() called");
-  } catch (err) {
-    console.error("MiniApp SDK ready() error:", err);
-  }
-});
-
-// SHARE SCORE
-async function shareScore(score) {
-  const imgUrl = `https://reflex-s8dl.vercel.app/api/score-image?score=${score}`;
-
-  const text =
-    `⚡ Reflex Test\n\n` +
-    `I just scored ${score}s! Try to beat me.\n\n`;
-
-  const composeUrl =
-    `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(imgUrl)}`;
-
-  try {
-    await sdk.actions.openUrl({ url: composeUrl });
-  } catch (err) {
-    console.log("Share error:", err);
-  }
-}
-
-
-// GAME LOGIC
 btn.addEventListener("click", () => {
     if (gameState === "idle") startGame();
     else if (gameState === "ready") tooEarly();
@@ -228,6 +181,32 @@ btn.addEventListener("click", () => {
 });
 
 againBtn.addEventListener("click", resetGame);
+
+// --- SHARE BUTTON ---
+shareBtn.addEventListener("click", () => {
+    shareScore(scoreText.innerText.replace(" s",""));
+});
+
+// --- SHARE SCORE FUNCTION ---
+async function shareScore(score) {
+  const shareImage = `https://reflex-s8dl.vercel.app/api/score-image?score=${score}`;
+
+  const text =
+    `⚡ Reflex Test\n\n` +
+    `I scored **${score}s**! Can you beat me?\n\n`;
+
+  const composeUrl =
+    "https://warpcast.com/~/compose?text=" +
+    encodeURIComponent(text) +
+    "&embeds[]=" +
+    encodeURIComponent(shareImage);
+
+  try {
+    await window.farcasterSDK.actions.openUrl({ url: composeUrl });
+  } catch (err) {
+    console.log("Share failed:", err);
+  }
+}
 
 function startGame() {
     gameState = "ready";
@@ -297,9 +276,22 @@ function resetGame() {
     btn.style.background = "#062e29";
     btn.classList.remove("glow", "readyPulse");
 }
+</script>
 
+<!-- MINIAPP SDK -->
+<script type="module">
+  import * as sdk from "https://esm.sh/@farcaster/miniapp-sdk";
+  window.farcasterSDK = sdk;
+
+  window.addEventListener("DOMContentLoaded", () => {
+    try {
+      sdk.actions.ready();
+      console.log("MiniApp READY");
+    } catch (err) {
+      console.error("MiniApp SDK ready() error:", err);
+    }
+  });
 </script>
 
 </body>
 </html>
-
