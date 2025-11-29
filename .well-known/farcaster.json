@@ -1,27 +1,19 @@
 {
   "version": "1.0",
   "domain": "reflex-rho.vercel.app",
-  "name": "Cryptovorlaxis",
-  "subtitle": "Reflex Arcade",
-  "description": "Reflex Test Arcade Edition. Tap as fast as you can when the screen turns green!",
+  "name": "Reflex Test",
+  "subtitle": "Fastest Tap Wins",
+  "description": "Reflex Test Arcade Edition. Tap when the screen turns green!",
   "iconUrl": "https://reflex-rho.vercel.app/logo.png",
   "primaryCategory": "games",
   "imageUrl": "https://reflex-rho.vercel.app/logo.png",
   "splashScreenUrl": "https://reflex-rho.vercel.app/logo.png",
   "splashBackgroundColor": "#000000",
   "homeUrl": "https://reflex-rho.vercel.app/index.html",
-  "castShareUrl": "https://warpcast.com/~/compose?text=Try%20Cryptovorlaxis%20Reflex%20Arcade!&embeds[]=https://reflex-rho.vercel.app/index.html",
-  "tags": [
-    "reflex",
-    "arcade",
-    "game",
-    "speed"
-  ],
-  "screenshots": [
-    "https://reflex-rho.vercel.app/logo.png"
-  ],
+  "castShareUrl": "https://warpcast.com/~/compose?text=Try%20Reflex%20Arcade!&embeds[]=https://reflex-rho.vercel.app/index.html",
+  "tags": ["reflex", "arcade", "game", "speed"],
+  "screenshots": ["https://reflex-rho.vercel.app/logo.png"],
   "author": "realmerselame",
-
   "accountAssociation": {
     "header": "eyJmaWQiOjc5NDkwMCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweEM5ODk0ZjZjYzdhOTA3NTE2MWE4NmQyRDg4Yzg5MTJmMzkwQzk2QTIifQ",
     "payload": "eyJkb21haW4iOiJyZWZsZXgtcmhvLnZlcmNlbC5hcHAifQ",
