@@ -1,7 +1,8 @@
 {
   "version": "1.0",
-  "name": "Reflex Test",
   "domain": "reflex-rho.vercel.app",
+
+  "name": "Reflex Test",
   "subtitle": "Arcade Reflex Challenge",
   "description": "Tap as fast as you can when the light turns green! Reflex Test Arcade Edition.",
   "author": "realmerselame",
@@ -9,6 +10,7 @@
 
   "iconUrl": "https://reflex-rho.vercel.app/logo.png",
   "imageUrl": "https://reflex-rho.vercel.app/screenshot/screenshot1.png",
+  "heroImageUrl": "https://reflex-rho.vercel.app/screenshot/screenshot1.png",
   "splashScreenUrl": "https://reflex-rho.vercel.app/screenshot/screenshot1.png",
   "splashBackgroundColor": "#000000",
 
