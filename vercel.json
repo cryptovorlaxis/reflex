@@ -3,10 +3,5 @@
     "api/*.js": {
       "runtime": "edge"
     }
-  },
-  "rewrites": [
-    { "source": "/screenshot/(.*)", "destination": "/screenshot/$1" },
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/(.*)", "destination": "/$1" }
-  ]
+  }
 }
