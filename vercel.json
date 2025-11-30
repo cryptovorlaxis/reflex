@@ -3,7 +3,7 @@
     "api/*.js": {
       "runtime": "edge"
     }
-  },
+  }, <-- Bu virgül (Line 6), alttaki "rewrites" kısmını ayırır.
   "rewrites": [
     { 
       "source": "/screenshot/(.*)", 
