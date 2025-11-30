@@ -2,22 +2,19 @@
   "version": "1.0",
   "domain": "reflex-rho.vercel.app",
   "name": "Reflex Test",
-  "subtitle": "Fastest Tap Wins",
-  "description": "Reflex Test Arcade Edition. Tap when the screen turns green!",
+  "subtitle": "Arcade Edition",
+  "description": "Fast Reaction Mini Game — Test your reflexes!",
   "iconUrl": "https://reflex-rho.vercel.app/logo.png",
   "primaryCategory": "games",
-  "imageUrl": "https://reflex-rho.vercel.app/logo.png",
-  "splashScreenUrl": "https://reflex-rho.vercel.app/logo.png",
+  "imageUrl": "https://reflex-rho.vercel.app/screenshots/screenshot1.png",
+  "splashScreenUrl": "https://reflex-rho.vercel.app/screenshots/screenshot1.png",
   "splashBackgroundColor": "#000000",
   "homeUrl": "https://reflex-rho.vercel.app/index.html",
-  "castShareUrl": "https://warpcast.com/~/compose?text=Try%20Reflex%20Arcade!&embeds[]=https://reflex-rho.vercel.app/index.html",
-  "tags": ["reflex", "arcade", "game", "speed"],
+  "castShareUrl": "https://warpcast.com/~/compose?text=Play%20Reflex%20Test!&embeds[]=https://reflex-rho.vercel.app",
+  "tags": ["reflex", "arcade", "game"],
   "screenshots": [
-  "https://reflex-rho.vercel.app/screenshots/screenshot1.png"],
+    "https://reflex-rho.vercel.app/screenshots/screenshot1.png"
+  ],
   "author": "realmerselame",
   "accountAssociation": {
-    "header": "eyJmaWQiOjc5NDkwMCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweEM5ODk0ZjZjYzdhOTA3NTE2MWE4NmQyRDg4Yzg5MTJmMzkwQzk2QTIifQ",
-    "payload": "eyJkb21haW4iOiJyZWZsZXgtcmhvLnZlcmNlbC5hcHAifQ",
-    "signature": "vD3G251a5GsYczzk8gKMG2QkTQoIhzJHHUazDGnbbzJ+6WxReVUS4eFtzmiCCmPe85wCT7c8SHGGO5BHey7LMxw="
-  }
-}
+    "header": "eyJmaWQiOjc5NDkwMCwidHlwZSI6ImF1dGgiLCJrZXkiOi
