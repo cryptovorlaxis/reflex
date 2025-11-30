@@ -1,8 +1,14 @@
 {
-  "name": "reflex-miniapp",
+  "name": "reflex-test",
   "version": "1.0.0",
-  "type": "module",
+  "main": "index.html",
+  "license": "MIT",
+  "scripts": {
+    "build": "echo 'No build step required.' && exit 0"
+  },
   "dependencies": {
-    "@vercel/og": "0.6.2"
+    "@vercel/og": "^0.6.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }
