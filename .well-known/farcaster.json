@@ -12,7 +12,8 @@
   "homeUrl": "https://reflex-rho.vercel.app/index.html",
   "castShareUrl": "https://warpcast.com/~/compose?text=Try%20Reflex%20Arcade!&embeds[]=https://reflex-rho.vercel.app/index.html",
   "tags": ["reflex", "arcade", "game", "speed"],
-  "screenshots": ["https://reflex-rho.vercel.app/logo.png"],
+  "screenshots": [
+  "https://reflex-rho.vercel.app/screenshots/screenshot1.png"],
   "author": "realmerselame",
   "accountAssociation": {
     "header": "eyJmaWQiOjc5NDkwMCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweEM5ODk0ZjZjYzdhOTA3NTE2MWE4NmQyRDg4Yzg5MTJmMzkwQzk2QTIifQ",
