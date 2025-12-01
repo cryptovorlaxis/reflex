@@ -1,10 +1,8 @@
 {
-  "name": "reflex-test",
+  "name": "reflex-arcade",
   "version": "1.0.0",
-  "main": "index.html",
-  "license": "MIT",
   "scripts": {
-    "build": "echo 'No build step required.' && exit 0"
+    "build": "echo 'Build script not needed for static/api only'"
   },
   "dependencies": {
     "@vercel/og": "^0.6.2",
