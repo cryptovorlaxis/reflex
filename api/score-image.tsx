@@ -5,18 +5,12 @@ export const config = {
   runtime: 'edge',
 };
 
-export default async function handler(req) {
+export default function handler(req) {
   const { searchParams } = new URL(req.url);
   const score = searchParams.get('score') || '0.000';
 
-  const orbitronData = await fetch(
-    'https://fonts.gstatic.com/s/orbitron/v25/yMJMMV7293Z09/wtrwa7W5btl98.ttf'
-  ).then((res) => res.arrayBuffer());
-
-  const rajdhaniData = await fetch(
-    'https://fonts.gstatic.com/s/rajdhani/v15/LDI2apCSOBg7S-WT7F0cxTs.ttf'
-  ).then((res) => res.arrayBuffer());
-
+  // NOT: Font yüklemeyi (fetch) kaldırdık. Sistem fontu kullanacağız.
+  
   return new ImageResponse(
     (
       <div
@@ -28,10 +22,11 @@ export default async function handler(req) {
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: '#050505',
-          fontFamily: '"Rajdhani"',
+          fontFamily: 'sans-serif', // Standart font
           position: 'relative',
         }}
       >
+        {/* Arka Plan */}
         <div
           style={{
             position: 'absolute',
@@ -40,6 +35,8 @@ export default async function handler(req) {
             opacity: 0.9,
           }}
         />
+        
+        {/* Izgara Deseni */}
         <div
           style={{
             position: 'absolute',
@@ -49,6 +46,8 @@ export default async function handler(req) {
             opacity: 0.5,
           }}
         />
+
+        {/* Skor Kartı */}
         <div
           style={{
             display: 'flex',
@@ -63,7 +62,7 @@ export default async function handler(req) {
             zIndex: 10,
           }}
         >
-          <div style={{ fontFamily: '"Orbitron"', color: '#00f3ff', fontSize: 40, marginBottom: 10, fontWeight: 700 }}>
+          <div style={{ color: '#00f3ff', fontSize: 40, marginBottom: 10, fontWeight: 700 }}>
             REFLEX TEST
           </div>
           <div style={{ color: '#bc13fe', fontSize: 30, letterSpacing: 4, textTransform: 'uppercase' }}>
@@ -72,7 +71,7 @@ export default async function handler(req) {
           <div style={{ fontSize: 140, fontWeight: 900, color: 'white', lineHeight: 1, marginTop: 15, textShadow: '4px 4px 0 #bc13fe' }}>
             {score}s
           </div>
-          <div style={{ marginTop: 30, backgroundColor: '#00f3ff', color: 'black', fontSize: 24, padding: '10px 40px', borderRadius: 50, fontWeight: 700, fontFamily: '"Orbitron"' }}>
+          <div style={{ marginTop: 30, backgroundColor: '#00f3ff', color: 'black', fontSize: 24, padding: '10px 40px', borderRadius: 50, fontWeight: 700 }}>
             CYBERPUNK ELITE
           </div>
         </div>
@@ -81,10 +80,7 @@ export default async function handler(req) {
     {
       width: 1200,
       height: 630,
-      fonts: [
-        { name: 'Orbitron', data: orbitronData, style: 'normal' },
-        { name: 'Rajdhani', data: rajdhaniData, style: 'normal' },
-      ],
+      // Font ayarlarını kaldırdık
     }
   );
 }
