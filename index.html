@@ -31,8 +31,9 @@
         --color-neon-cyan: #00f3ff;
         --color-neon-pink: #bc13fe;
         --color-neon-green: #0aff0a;
+        --color-neon-yellow: #ffea00;
         --color-bg: #050505;
-        --glass-bg: rgba(20, 20, 30, 0.65);
+        --glass-bg: rgba(20, 20, 30, 0.75);
         --glass-border: rgba(255, 255, 255, 0.15);
     }
 
@@ -52,58 +53,53 @@
     }
 
     /* --- BACKGROUND EFFECTS --- */
-    /* 1. Nebula (Derinlik) */
     .bg-nebula {
         position: fixed; inset: 0; z-index: -3;
         background: radial-gradient(circle at 50% 120%, #1a0b2e 0%, #000 70%);
-        animation: pulseBg 10s ease-in-out infinite;
+        animation: pulseBg 8s ease-in-out infinite;
     }
-    
-    /* 2. Stars (Hareketli Parçacıklar) */
     .stars {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background-image: 
-            radial-gradient(1px 1px at 20px 30px, #fff, transparent),
-            radial-gradient(1px 1px at 40px 70px, #fff, transparent),
-            radial-gradient(1px 1px at 50px 160px, #fff, transparent),
-            radial-gradient(1px 1px at 90px 40px, #fff, transparent),
-            radial-gradient(1px 1px at 130px 80px, #fff, transparent);
+        position: fixed; inset: 0; z-index: -2;
+        background-image: radial-gradient(1px 1px at 20px 30px, #fff, transparent), radial-gradient(1px 1px at 40px 70px, #fff, transparent);
         background-size: 200px 200px;
         animation: starsMove 100s linear infinite;
-        opacity: 0.5;
-        z-index: -2;
+        opacity: 0.6;
     }
-
-    /* 3. Cyber Grid (Izgara) */
     .cyber-grid {
         position: fixed; top: 0; left: 0; width: 100%; height: 200%;
-        background: 
-            linear-gradient(transparent 0%, rgba(188, 19, 254, 0.3) 2%, transparent 3%),
-            linear-gradient(90deg, transparent 0%, rgba(0, 243, 255, 0.2) 2%, transparent 3%);
+        background: linear-gradient(transparent 0%, rgba(188, 19, 254, 0.3) 2%, transparent 3%),
+                    linear-gradient(90deg, transparent 0%, rgba(0, 243, 255, 0.2) 2%, transparent 3%);
         background-size: 80px 80px;
         transform: perspective(400px) rotateX(60deg) translateY(-100px) translateZ(-200px);
-        opacity: 0.3; /* Biraz daha belirgin yaptık */
+        opacity: 0.25;
         animation: gridScroll 20s linear infinite;
         z-index: -1;
-        box-shadow: 0 -50px 100px rgba(0, 243, 255, 0.1);
     }
-
-    /* 4. Scanlines & Vignette */
     .scanlines {
         position: fixed; inset: 0; pointer-events: none; z-index: 999;
-        background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.15));
+        background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
         background-size: 100% 4px;
-    }
-    .vignette {
-        position: fixed; inset: 0; pointer-events: none; z-index: 998;
-        background: radial-gradient(circle, transparent 60%, black 140%);
     }
 
     @keyframes gridScroll { 0% { background-position: 0 0; } 100% { background-position: 0 80px; } }
     @keyframes starsMove { 0% { transform: translateY(0); } 100% { transform: translateY(-1000px); } }
     @keyframes pulseBg { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
 
-    /* --- UI CONTAINER --- */
+    /* --- PARTICLES (Kıvılcım Efekti) --- */
+    .particle {
+        position: absolute;
+        pointer-events: none;
+        background: white;
+        border-radius: 50%;
+        z-index: 100;
+        animation: flyOut 0.6s ease-out forwards;
+    }
+    @keyframes flyOut {
+        0% { transform: translate(0, 0) scale(1); opacity: 1; }
+        100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+    }
+
+    /* --- UI --- */
     .game-ui {
         width: 100%; max-width: 420px;
         padding: 20px;
@@ -113,139 +109,124 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 25px;
+        gap: 20px;
     }
 
-    /* --- LOGO (BÜYÜK AMA SİLİK) --- */
-    .logo-container { 
-        position: relative; 
-        margin-bottom: 5px; 
-    }
+    .logo-container { position: relative; margin-bottom: 10px; }
     #gameLogo { 
-        width: 280px; /* Büyütüldü (Eskisi 220px idi) */
-        height: auto;
-        /* "Çok belirgin olmasın" isteği için: */
-        opacity: 0.85; 
-        filter: drop-shadow(0 0 10px rgba(0, 243, 255, 0.4)); /* Gölge yumuşatıldı */
+        width: 280px; height: auto; opacity: 0.9;
+        filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.3));
         transition: 0.5s;
     }
-    #gameLogo:hover { opacity: 1; filter: drop-shadow(0 0 20px var(--color-neon-cyan)); }
     
-    /* --- MAIN BUTTON --- */
     #reactionButton {
-        width: 250px; height: 250px;
+        width: 260px; height: 260px;
         border-radius: 50%;
         border: 4px solid var(--color-neon-cyan);
         background: radial-gradient(circle, #0a151f 30%, #000 90%);
         color: var(--color-neon-cyan);
         font-family: 'Rajdhani', sans-serif;
         font-weight: 700;
-        font-size: 36px;
+        font-size: 38px;
         letter-spacing: 3px;
         cursor: pointer;
         position: relative;
         box-shadow: 0 0 30px rgba(0, 243, 255, 0.2), inset 0 0 50px rgba(0, 243, 255, 0.1);
-        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         text-shadow: 0 0 10px var(--color-neon-cyan);
-        outline: none;
-        -webkit-tap-highlight-color: transparent;
+        outline: none; -webkit-tap-highlight-color: transparent;
     }
 
-    /* Buton Durumları */
     #reactionButton.mode-wait {
         border-color: #ffaa00;
         color: #ffaa00;
-        background: radial-gradient(circle, #1a1000 30%, #000 90%);
-        box-shadow: 0 0 40px rgba(255, 170, 0, 0.2);
-        animation: pulseOrange 1.5s infinite;
+        box-shadow: 0 0 50px rgba(255, 170, 0, 0.3);
+        animation: pulseOrange 0.8s infinite alternate;
     }
     #reactionButton.mode-go {
-        background: radial-gradient(circle, #003300 0%, #000 90%);
         border-color: var(--color-neon-green);
         color: #fff;
-        font-size: 52px;
-        text-shadow: 0 0 20px var(--color-neon-green);
-        box-shadow: 0 0 60px var(--color-neon-green), inset 0 0 40px var(--color-neon-green);
-        transform: scale(1.05);
+        background: radial-gradient(circle, #003300 0%, #000 90%);
+        box-shadow: 0 0 80px var(--color-neon-green), inset 0 0 40px var(--color-neon-green);
+        transform: scale(1.02);
     }
     #reactionButton.mode-fail {
         border-color: var(--color-neon-pink);
         color: var(--color-neon-pink);
-        box-shadow: 0 0 50px var(--color-neon-pink);
+        box-shadow: 0 0 60px var(--color-neon-pink);
         animation: shake 0.4s;
     }
+    #reactionButton:active { transform: scale(0.96); }
 
-    #reactionButton:active { transform: scale(0.95); }
-
-    /* --- STATUS TEXT --- */
     #status {
         font-family: 'Rajdhani', sans-serif;
-        font-size: 22px;
-        color: #888; /* Varsayılan olarak daha silik */
+        font-size: 24px;
+        color: #888;
         text-transform: uppercase;
         letter-spacing: 2px;
-        min-height: 28px;
+        min-height: 30px;
         font-weight: 600;
-        transition: color 0.3s;
     }
 
     /* --- SCORE CARD --- */
     .score-panel {
         background: var(--glass-bg);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         border: 1px solid var(--glass-border);
-        border-radius: 16px;
-        padding: 25px;
+        border-radius: 20px;
+        padding: 30px 20px;
         width: 100%;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-        transform: translateY(30px);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -40%) scale(0.9);
         opacity: 0;
-        transition: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        pointer-events: none; /* Gizliyken tıklanmasın */
+        pointer-events: none;
+        transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        z-index: 200;
     }
     .score-panel.visible { 
+        transform: translate(-50%, -50%) scale(1);
         opacity: 1; 
-        transform: translateY(0); 
         pointer-events: all;
     }
 
+    #rankTitle {
+        font-size: 18px; letter-spacing: 4px; text-transform: uppercase;
+        color: var(--color-neon-yellow);
+        text-shadow: 0 0 10px var(--color-neon-yellow);
+    }
     #score {
-        font-size: 64px;
-        font-weight: 900;
-        line-height: 1;
-        margin: 10px 0 20px 0;
+        font-size: 72px; font-weight: 900; line-height: 1;
         background: linear-gradient(to bottom, #fff, var(--color-neon-cyan));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.4));
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.5));
     }
     
-    .btn-group { display: flex; gap: 15px; justify-content: center; width: 100%; }
-    
+    .btn-group { display: flex; gap: 15px; width: 100%; margin-top: 10px; }
     .cyber-btn {
         flex: 1;
-        background: rgba(0, 243, 255, 0.1);
+        background: rgba(0, 243, 255, 0.05);
         border: 1px solid var(--color-neon-cyan);
         color: var(--color-neon-cyan);
         padding: 14px;
         font-family: 'Orbitron', sans-serif;
-        font-weight: 700;
-        text-transform: uppercase;
-        font-size: 14px;
-        cursor: pointer;
-        transition: 0.2s;
-        border-radius: 8px;
+        font-weight: 700; text-transform: uppercase;
+        font-size: 14px; cursor: pointer;
+        transition: 0.2s; border-radius: 8px;
     }
     .cyber-btn:hover {
-        background: var(--color-neon-cyan);
-        color: #000;
-        box-shadow: 0 0 25px var(--color-neon-cyan);
+        background: var(--color-neon-cyan); color: #000;
+        box-shadow: 0 0 30px var(--color-neon-cyan);
     }
 
-    @keyframes pulseOrange { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
-    @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } 100% { transform: translateX(0); } }
-    .hidden { display: none !important; }
+    @keyframes pulseOrange { from { opacity: 1; } to { opacity: 0.6; } }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
 
 </style>
 </head>
@@ -256,7 +237,6 @@
 <div class="stars"></div>
 <div class="cyber-grid"></div>
 <div class="scanlines"></div>
-<div class="vignette"></div>
 
 <div class="game-ui">
     <div class="logo-container">
@@ -266,15 +246,16 @@
     <div id="status">SYSTEM READY</div>
 
     <button id="reactionButton">START</button>
+</div>
 
-    <div id="scorePanel" class="score-panel hidden">
-        <div style="font-size: 13px; color: #ccc; letter-spacing: 1px;">REACTION TIME</div>
-        <div id="score">0.000</div>
-        
-        <div class="btn-group">
-            <button id="againBtn" class="cyber-btn">RETRY</button>
-            <button id="shareBtn" class="cyber-btn">SHARE</button>
-        </div>
+<div id="scorePanel" class="score-panel">
+    <div id="rankTitle">UNRANKED</div>
+    <div id="score">0.000</div>
+    <div style="font-size: 12px; color: #aaa;">REACTION TIME</div>
+    
+    <div class="btn-group">
+        <button id="againBtn" class="cyber-btn">RETRY</button>
+        <button id="shareBtn" class="cyber-btn">SHARE</button>
     </div>
 </div>
 
@@ -283,6 +264,7 @@
     const statusText = document.getElementById("status");
     const scorePanel = document.getElementById("scorePanel");
     const scoreText = document.getElementById("score");
+    const rankTitle = document.getElementById("rankTitle");
     const againBtn = document.getElementById("againBtn");
     const shareBtn = document.getElementById("shareBtn");
 
@@ -294,26 +276,61 @@
     let startTime = 0;
     let timeoutID;
 
-    // Mobil tarayıcılarda seslerin kilidini açmak için
-    document.body.addEventListener('touchstart', function() {
-        if(soundReady) { soundReady.load(); }
+    // Mobil ses kilidi
+    document.body.addEventListener('touchstart', () => {
+        if(soundReady) soundReady.load();
     }, {once:true});
 
     function playSound(sound) {
-        if(sound) { 
-            sound.pause(); 
-            sound.currentTime = 0; 
-            sound.play().catch(e => console.log(e)); 
-        }
+        if(sound) { sound.pause(); sound.currentTime = 0; sound.play().catch(()=>{}); }
     }
     function vibrate(pattern) {
         if(navigator.vibrate) navigator.vibrate(pattern);
     }
 
-    btn.addEventListener("click", () => {
+    // --- PARTICLE EFFECT (KIVILCIMLAR) ---
+    function spawnParticles(x, y, color) {
+        for (let i = 0; i < 15; i++) {
+            const particle = document.createElement("div");
+            particle.classList.add("particle");
+            document.body.appendChild(particle);
+
+            // Rastgele yön
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = Math.random() * 100 + 50;
+            const tx = Math.cos(angle) * velocity + "px";
+            const ty = Math.sin(angle) * velocity + "px";
+
+            particle.style.left = x + "px";
+            particle.style.top = y + "px";
+            particle.style.background = color;
+            particle.style.width = (Math.random() * 4 + 2) + "px";
+            particle.style.height = particle.style.width;
+            
+            // CSS değişkenlerine gönder
+            particle.style.setProperty("--tx", tx);
+            particle.style.setProperty("--ty", ty);
+
+            // Temizle
+            setTimeout(() => particle.remove(), 600);
+        }
+    }
+
+    btn.addEventListener("click", (e) => {
+        // Efekt pozisyonu (Button merkezi)
+        const rect = btn.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+
         if (gameState === "idle") startGame();
-        else if (gameState === "wait") triggerFail();
-        else if (gameState === "go") triggerSuccess();
+        else if (gameState === "wait") {
+            triggerFail();
+            spawnParticles(x, y, "#bc13fe"); // Pembe kıvılcım
+        }
+        else if (gameState === "go") {
+            triggerSuccess();
+            spawnParticles(x, y, "#0aff0a"); // Yeşil kıvılcım
+        }
     });
 
     againBtn.addEventListener("click", resetGame);
@@ -325,7 +342,7 @@
         
         statusText.innerText = "WAIT FOR SIGNAL...";
         statusText.style.color = "#ffaa00";
-        statusText.style.textShadow = "0 0 10px rgba(255, 170, 0, 0.5)";
+        statusText.style.textShadow = "none";
         
         btn.innerText = "HOLD";
         btn.className = ""; 
@@ -337,7 +354,7 @@
             gameState = "go";
             statusText.innerText = "TAP NOW !!!";
             statusText.style.color = "#0aff0a";
-            statusText.style.textShadow = "0 0 15px rgba(10, 255, 10, 0.8)";
+            statusText.style.textShadow = "0 0 20px #0aff0a";
             
             btn.innerText = "TAP!";
             btn.className = "";
@@ -355,7 +372,7 @@
         
         statusText.innerText = "TOO EARLY!";
         statusText.style.color = "#bc13fe";
-        statusText.style.textShadow = "0 0 15px rgba(188, 19, 254, 0.8)";
+        statusText.style.textShadow = "0 0 20px #bc13fe";
         
         btn.innerText = "FAIL";
         btn.className = "";
@@ -372,17 +389,27 @@
         const seconds = (time / 1000).toFixed(3);
         gameState = "finished";
 
-        // Yazıyı daha anlaşılır yaptık
-        statusText.innerText = "REFLEX DETECTED";
+        statusText.innerText = "REFLEX CAPTURED";
         statusText.style.color = "#00f3ff";
-        statusText.style.textShadow = "0 0 15px rgba(0, 243, 255, 0.8)";
-
+        
         btn.innerText = "✔";
         btn.className = ""; 
 
+        // RÜTBE HESAPLAMA
+        let rank = "ROOKIE";
+        let rankColor = "#fff";
+        
+        if (time < 200) { rank = "🤖 CYBER DEMON"; rankColor = "#ff0000"; }
+        else if (time < 250) { rank = "⚡ NEON NINJA"; rankColor = "#0aff0a"; }
+        else if (time < 350) { rank = "🕶️ STREET SAMURAI"; rankColor = "#00f3ff"; }
+        else { rank = "🐢 GLITCH"; rankColor = "#aaa"; }
+
+        rankTitle.innerText = rank;
+        rankTitle.style.color = rankColor;
+        rankTitle.style.textShadow = `0 0 15px ${rankColor}`;
+
         scoreText.innerText = seconds + "s";
-        scorePanel.classList.remove("hidden");
-        setTimeout(() => scorePanel.classList.add("visible"), 10);
+        scorePanel.classList.add("visible");
 
         playSound(soundWin);
         vibrate([100, 50, 100]);
@@ -395,10 +422,6 @@
         statusText.style.textShadow = "none";
         
         scorePanel.classList.remove("visible");
-        // Animasyon bitince hidden yap, hemen değil
-        setTimeout(() => {
-            if(gameState === "idle") scorePanel.classList.add("hidden");
-        }, 500);
 
         btn.innerText = "START";
         btn.className = "";
@@ -414,8 +437,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
 async function shareScore(score) {
     const cleanScore = score.replace("s", "");
+    const rankText = document.getElementById("rankTitle").innerText;
+    
     const shareImage = `https://reflex-rho.vercel.app/api/score-image?score=${cleanScore}`;
-    const text = `🚀 CYBER REFLEX: ${score}\n\nCan you beat my reaction time? 👇`;
+    const text = `⚡ ${rankText}\nReflex: ${score}\n\nCan you beat me? 👇`;
+    
     const composeUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(shareImage)}`;
     try { await sdk.actions.openUrl({ url: composeUrl }); } catch (e) {}
 }
