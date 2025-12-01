@@ -17,7 +17,6 @@
     "action": {
       "type": "launch_miniapp",
       "url": "https://reflex-rho.vercel.app",
-      /* URL düzeltildi: index.html yerine ana domain kullanıldı */
       "name": "Reflex Test",
       "splashImageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
       "splashBackgroundColor": "#000000"
@@ -60,7 +59,7 @@
         background: linear-gradient(var(--neon-primary) 1px, transparent 1px),
                     linear-gradient(90deg, var(--neon-primary) 1px, transparent 1px);
         background-size: 45px 45px;
-        opacity: 0.1; /* Opaklık azaltıldı */
+        opacity: 0.1; 
         animation: gridMove 14s linear infinite;
         z-index: -1;
     }
@@ -68,7 +67,6 @@
 
     #gameLogo {
         width: 260px; margin: 0 auto 20px auto; display: block;
-        /* Parıltı rengi değişkene bağlandı */
         filter: drop-shadow(0 0 10px var(--neon-primary)); 
         animation: logoAppear 1.2s ease-out forwards, logoGlow 2.5s ease-in-out infinite;
         opacity: 0;
@@ -82,7 +80,6 @@
         margin-bottom: 25px; 
         color: var(--neon-primary); 
         min-height: 28px;
-        /* Metin Neon Gölge */
         text-shadow: 0 0 8px #fff, 0 0 12px var(--neon-primary); 
     }
     
@@ -93,21 +90,20 @@
 
     #reactionButton {
         width: 230px; height: 230px; border-radius: 50%; 
-        border: 5px solid var(--neon-primary); /* Kalın border */
+        border: 5px solid var(--neon-primary);
         background: radial-gradient(circle, #062e29, #001513);
-        font-size: 32px; /* Font büyüdü */
+        font-size: 32px; 
         color: var(--neon-primary);
         cursor: pointer; transition: 0.25s, box-shadow 0.3s;
         box-shadow: 0 0 25px var(--neon-primary), inset 0 0 25px var(--neon-primary);
     }
     .glow { 
         animation: neonGlow 1.5s ease-in-out infinite; 
-        /* Göz yanılması için kırmızımsı/sarımsı bir başlangıç */
         background: radial-gradient(circle, #2a2e0f, #151000);
     }
     @keyframes neonGlow { 
         0% { box-shadow: 0 0 12px var(--neon-primary); } 
-        50% { box-shadow: 0 0 40px var(--neon-primary), 0 0 60px rgba(0, 255, 209, 0.4); } /* Daha güçlü glow */
+        50% { box-shadow: 0 0 40px var(--neon-primary), 0 0 60px rgba(0, 255, 209, 0.4); }
         100% { box-shadow: 0 0 12px var(--neon-primary); } 
     }
     .readyPulse { animation: pulse 0.25s; }
@@ -117,13 +113,13 @@
     #score { 
         margin-top: 25px; 
         font-size: 40px; 
-        font-weight: 900; /* Daha kalın */
+        font-weight: 900;
         color: #fff; 
-        text-shadow: 0 0 10px var(--neon-primary), 0 0 20px var(--neon-primary); /* Güçlü neon gölge */
+        text-shadow: 0 0 10px var(--neon-primary), 0 0 20px var(--neon-primary);
     }
 
     .actionBtn {
-        margin: 15px 10px; padding: 16px 28px; /* Padding büyüdü */
+        margin: 15px 10px; padding: 16px 28px;
         font-size: 18px;
         border-radius: 10px; border: 2px solid var(--neon-primary);
         background: var(--bg-medium); 
@@ -133,7 +129,7 @@
         transition: 0.2s, box-shadow 0.4s;
     }
     .actionBtn:hover { 
-        transform: scale(1.05); /* Abartısız büyüme */
+        transform: scale(1.05);
         box-shadow: 0 0 20px var(--neon-primary), 0 0 30px rgba(0, 255, 209, 0.6); 
     }
     .hidden { display: none; }
@@ -159,7 +155,7 @@ let gameState = "idle";
 let startTime = 0;
 let timeoutID;
 
-// Dosyalar Root'ta olduğu için yollar temizlendi
+// Dosyalar Root'ta olduğu için yollar temiz
 const soundReady = new Audio("ready.mp3");
 const soundFail = new Audio("fail.mp3");
 const soundWin = new Audio("win.mp3");
@@ -170,7 +166,7 @@ const scoreText = document.getElementById("score");
 const againBtn = document.getElementById("againBtn");
 const shareBtn = document.getElementById("shareBtn");
 
-// Sesleri durdurup tekrar oynatmak için yardımcı fonksiyon
+// Sesleri durdurup tekrar oynatmak için yardımcı fonksiyon (Çakışmayı önler)
 function playSound(sound) {
     if (sound) {
         sound.pause();
@@ -199,7 +195,7 @@ function startGame() {
     gameState = "ready";
     statusText.innerText = "Get ready...";
     
-    // YENİ: Başlangıçta durumu sıfırla
+    // YENİ: Başlangıçta başarı sınıfı ekle
     statusText.classList.remove("status-fail");
     statusText.classList.add("status-success");
 
@@ -256,7 +252,7 @@ function stopTimer() {
     scoreText.innerText = reactionTime + " s";
     scoreText.classList.remove("hidden");
     
-    // YENİ: Başarı sınıfı eklendi
+    // YENİ: Başarı sınıfı korundu
     statusText.classList.remove("status-fail");
     statusText.classList.add("status-success");
 
