@@ -4,45 +4,63 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Reflex Test ⚡ Arcade Edition</title>
- 
-<!-- SOCIAL META -->
+ 
 <meta property="og:title" content="Reflex Test – Arcade Edition">
 <meta property="og:description" content="Tap as fast as you can when the button turns green! Test your reflexes now.">
-<meta property="og:image" content="https://reflex-rho.vercel.app/logo.png">
+<meta property="og:image" content="https://reflex-rho.vercel.app/screenshot1.png">
 
-<!-- FARCASTER MINIAPP EMBED -->
 <meta name="fc:miniapp" content='{
-  "version": "1",
-  "imageUrl": "https://reflex-rho.vercel.app/logo.png",
-  "button": {
-    "title": "⚡ Play Reflex Test",
-    "action": {
-      "type": "launch_miniapp",
-      "url": "https://reflex-rho.vercel.app/index.html",
-      "name": "Reflex Test",
-      "splashImageUrl": "https://reflex-rho.vercel.app/logo.png",
-      "splashBackgroundColor": "#000000"
-    }
-  }
+  "version": "1",
+  "imageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
+  "button": {
+    "title": "⚡ Play Reflex Test",
+    "action": {
+      "type": "launch_miniapp",
+      "url": "https://reflex-rho.vercel.app",
+      /* URL düzeltildi: index.html yerine ana domain kullanıldı */
+      "name": "Reflex Test",
+      "splashImageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
+      "splashBackgroundColor": "#000000"
+    }
+  }
 }' />
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+    /* **YENİ: Ana Tema Değişkenleri** */
+    :root {
+        --neon-primary: #00ffe1; /* Açık Cyan */
+        --neon-secondary: #ff0073; /* Pembe (Hata/Aksan) */
+        --bg-dark: #0a0f1e;
+        --bg-medium: #062e29;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap');
+    
     body {
         font-family: "Orbitron", sans-serif;
-        background: radial-gradient(circle at center, #0a0f1e, #000);
-        color: #0ff6d1;
+        background: radial-gradient(circle at center, var(--bg-dark), #000);
+        color: var(--neon-primary);
         text-align: center;
-        padding: 30px;
+        padding: 20px 0;
         overflow-x: hidden;
+        min-height: 100vh;
     }
+    
+    /* **YENİ: Merkezi İçerik Alanı** */
+    .container {
+        max-width: 450px;
+        margin: 0 auto;
+        padding: 10px;
+    }
+
     body::before {
         content: "";
         position: fixed;
         inset: 0;
-        background: linear-gradient(#0ff6d122 1px, transparent 1px),
-                    linear-gradient(90deg, #0ff6d122 1px, transparent 1px);
+        background: linear-gradient(var(--neon-primary) 1px, transparent 1px),
+                    linear-gradient(90deg, var(--neon-primary) 1px, transparent 1px);
         background-size: 45px 45px;
+        opacity: 0.1; /* Opaklık azaltıldı */
         animation: gridMove 14s linear infinite;
         z-index: -1;
     }
@@ -50,57 +68,98 @@
 
     #gameLogo {
         width: 260px; margin: 0 auto 20px auto; display: block;
+        /* Parıltı rengi değişkene bağlandı */
+        filter: drop-shadow(0 0 10px var(--neon-primary)); 
         animation: logoAppear 1.2s ease-out forwards, logoGlow 2.5s ease-in-out infinite;
         opacity: 0;
     }
     @keyframes logoAppear { 0% { transform: scale(0.6) translateY(-20px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
-    @keyframes logoGlow { 0% { filter: drop-shadow(0 0 6px #0ff); } 50% { filter: drop-shadow(0 0 16px #0ff); } 100% { filter: drop-shadow(0 0 6px #0ff); } }
+    @keyframes logoGlow { 0% { filter: drop-shadow(0 0 6px var(--neon-primary)); } 50% { filter: drop-shadow(0 0 16px var(--neon-primary)); } 100% { filter: drop-shadow(0 0 6px var(--neon-primary)); } }
 
-    #status { font-size: 22px; margin-bottom: 20px; color: #8efff6; min-height: 28px; }
+    /* **YENİ: Status Metinleri** */
+    #status { 
+        font-size: 20px; 
+        margin-bottom: 25px; 
+        color: var(--neon-primary); 
+        min-height: 28px;
+        /* Metin Neon Gölge */
+        text-shadow: 0 0 8px #fff, 0 0 12px var(--neon-primary); 
+    }
+    
+    /* **YENİ: Durum Renkleri (JS'te kullanılacak)** */
+    .status-success { color: #fff; text-shadow: 0 0 8px #fff, 0 0 15px var(--neon-primary); }
+    .status-fail { color: #f00; text-shadow: 0 0 8px #ff0000, 0 0 15px var(--neon-secondary); }
+
 
     #reactionButton {
-        width: 230px; height: 230px; border-radius: 50%; border: 4px solid #00e6c7;
+        width: 230px; height: 230px; border-radius: 50%; 
+        border: 5px solid var(--neon-primary); /* Kalın border */
         background: radial-gradient(circle, #062e29, #001513);
-        font-size: 26px; color: #0ff6d1;
-        cursor: pointer; transition: 0.25s;
-        box-shadow: 0 0 25px #00ffd5cc, inset 0 0 25px #00ffd555;
+        font-size: 32px; /* Font büyüdü */
+        color: var(--neon-primary);
+        cursor: pointer; transition: 0.25s, box-shadow 0.3s;
+        box-shadow: 0 0 25px var(--neon-primary), inset 0 0 25px var(--neon-primary);
     }
-    .glow { animation: neonGlow 1.5s ease-in-out infinite; }
-    @keyframes neonGlow { 0% { box-shadow: 0 0 12px #00ffd5; } 50% { box-shadow: 0 0 40px #00ffd5; } 100% { box-shadow: 0 0 12px #00ffd5; } }
+    .glow { 
+        animation: neonGlow 1.5s ease-in-out infinite; 
+        /* Göz yanılması için kırmızımsı/sarımsı bir başlangıç */
+        background: radial-gradient(circle, #2a2e0f, #151000);
+    }
+    @keyframes neonGlow { 
+        0% { box-shadow: 0 0 12px var(--neon-primary); } 
+        50% { box-shadow: 0 0 40px var(--neon-primary), 0 0 60px rgba(0, 255, 209, 0.4); } /* Daha güçlü glow */
+        100% { box-shadow: 0 0 12px var(--neon-primary); } 
+    }
     .readyPulse { animation: pulse 0.25s; }
     @keyframes pulse { 0% { transform: scale(1);} 40% {transform: scale(1.18);} 100% {transform: scale(1);} }
 
-    #score { margin-top: 25px; font-size: 34px; font-weight: bold; color: #00ffe1; }
+    /* **YENİ: Score Metni** */
+    #score { 
+        margin-top: 25px; 
+        font-size: 40px; 
+        font-weight: 900; /* Daha kalın */
+        color: #fff; 
+        text-shadow: 0 0 10px var(--neon-primary), 0 0 20px var(--neon-primary); /* Güçlü neon gölge */
+    }
 
     .actionBtn {
-        margin: 15px 10px; padding: 14px 24px; font-size: 18px;
-        border-radius: 10px; border: 2px solid #00e6c7;
-        background: #012e28; color: #00ffe1;
-        box-shadow: 0 0 12px #00ffd566; cursor: pointer;
-        transition: 0.2s;
+        margin: 15px 10px; padding: 16px 28px; /* Padding büyüdü */
+        font-size: 18px;
+        border-radius: 10px; border: 2px solid var(--neon-primary);
+        background: var(--bg-medium); 
+        color: var(--neon-primary);
+        box-shadow: 0 0 12px var(--neon-primary); 
+        cursor: pointer;
+        transition: 0.2s, box-shadow 0.4s;
     }
-    .actionBtn:hover { transform: scale(1.1); box-shadow: 0 0 22px #00ffd5; }
+    .actionBtn:hover { 
+        transform: scale(1.05); /* Abartısız büyüme */
+        box-shadow: 0 0 20px var(--neon-primary), 0 0 30px rgba(0, 255, 209, 0.6); 
+    }
     .hidden { display: none; }
 </style>
 </head>
 
 <body>
 
-<img id="gameLogo" src="logo.png" alt="Reflex Test Logo">
+<div class="container">
+    <img id="gameLogo" src="logo.png" alt="Reflex Test Logo">
 
-<div id="status">Press START to begin.</div>
+    <div id="status" class="status-success">Press START to begin.</div>
 
-<button id="reactionButton">START</button>
-<div id="score" class="hidden"></div>
+    <button id="reactionButton">START</button>
+    <div id="score" class="hidden"></div>
 
-<button id="againBtn" class="actionBtn hidden">Play Again</button>
-<button id="shareBtn" class="actionBtn hidden">Share Score</button>
+    <button id="againBtn" class="actionBtn hidden">Play Again</button>
+    <button id="shareBtn" class="actionBtn hidden">Share Score</button>
+</div>
 
 <script>
 let gameState = "idle";
 let startTime = 0;
 let timeoutID;
 
+// Dosyalar Root'ta olduğu için yollar temizlendi
 const soundReady = new Audio("ready.mp3");
 const soundFail = new Audio("fail.mp3");
 const soundWin = new Audio("win.mp3");
@@ -110,6 +169,22 @@ const statusText = document.getElementById("status");
 const scoreText = document.getElementById("score");
 const againBtn = document.getElementById("againBtn");
 const shareBtn = document.getElementById("shareBtn");
+
+// Sesleri durdurup tekrar oynatmak için yardımcı fonksiyon
+function playSound(sound) {
+    if (sound) {
+        sound.pause();
+        sound.currentTime = 0;
+        sound.play();
+    }
+}
+
+// Titreşim için yardımcı fonksiyon (daha güvenli)
+function safeVibrate(pattern) {
+    if (navigator.vibrate) {
+        navigator.vibrate(pattern);
+    }
+}
 
 btn.addEventListener("click", () => {
     if (gameState === "idle") startGame();
@@ -123,9 +198,16 @@ shareBtn.addEventListener("click", () => shareScore(scoreText.innerText.replace(
 function startGame() {
     gameState = "ready";
     statusText.innerText = "Get ready...";
+    
+    // YENİ: Başlangıçta durumu sıfırla
+    statusText.classList.remove("status-fail");
+    statusText.classList.add("status-success");
+
     btn.innerText = "WAIT";
     btn.classList.add("glow");
     btn.style.background = "#2a2e0f";
+
+    clearTimeout(timeoutID);
 
     const waitTime = Math.random() * 3000 + 1500;
 
@@ -136,21 +218,36 @@ function startGame() {
         btn.style.background = "#0f4d3e";
         btn.innerText = "TAP!";
         statusText.innerText = "NOW! 🟢";
-        soundReady.play();
-        navigator.vibrate(120);
+        
+        playSound(soundReady);
+        safeVibrate(120);
+        
         startTime = Date.now();
     }, waitTime);
 }
 
 function tooEarly() {
     clearTimeout(timeoutID);
-    gameState = "idle";
+    gameState = "too_early_delay"; 
     statusText.innerText = "Too early! 😅";
+    
+    // YENİ: Hata sınıfı eklendi
+    statusText.classList.remove("status-success");
+    statusText.classList.add("status-fail");
+    
     btn.style.background = "#3a0f0f";
-    btn.innerText = "START";
+    btn.innerText = "STOP!";
     btn.classList.remove("glow", "readyPulse");
-    soundFail.play();
-    navigator.vibrate([80, 80]);
+    
+    playSound(soundFail);
+    safeVibrate([80, 80]);
+    
+    // UX Geliştirme: 1 saniye sonra oyunu sıfırla
+    setTimeout(() => {
+        if (gameState === "too_early_delay") {
+             resetGame(); 
+        }
+    }, 1000); 
 }
 
 function stopTimer() {
@@ -158,6 +255,10 @@ function stopTimer() {
     statusText.innerText = "Nice reflex! 🎉";
     scoreText.innerText = reactionTime + " s";
     scoreText.classList.remove("hidden");
+    
+    // YENİ: Başarı sınıfı eklendi
+    statusText.classList.remove("status-fail");
+    statusText.classList.add("status-success");
 
     gameState = "finished";
     againBtn.classList.remove("hidden");
@@ -166,23 +267,29 @@ function stopTimer() {
     btn.style.background = "#122225";
     btn.innerText = "✔";
     btn.classList.remove("glow", "readyPulse");
-    soundWin.play();
-    navigator.vibrate([150, 80, 150]);
+    
+    playSound(soundWin);
+    safeVibrate([150, 80, 150]);
 }
 
 function resetGame() {
     gameState = "idle";
     statusText.innerText = "Press START to begin.";
+    
+    // YENİ: Durumu sıfırlarken başarı sınıfını koru
+    statusText.classList.remove("status-fail"); 
+    statusText.classList.add("status-success"); 
+    
     scoreText.classList.add("hidden");
     againBtn.classList.add("hidden");
     shareBtn.classList.add("hidden");
 
     btn.innerText = "START";
     btn.style.background = "#062e29";
+    btn.classList.remove("glow", "readyPulse");
 }
 </script>
 
-<!-- MINIAPP SDK -->
 <script type="module">
 import * as sdk from "https://esm.sh/@farcaster/miniapp-sdk";
 
@@ -198,24 +305,24 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 async function shareScore(score) {
-  const shareImage = `https://reflex-rho.vercel.app/api/score-image?score=${score}`;
+    const shareImage = `https://reflex-rho.vercel.app/api/score-image?score=${score}`;
 
-  const text =
-    `⚡ Reflex Test — Arcade Mode\n\n` +
-    `I just hit **${score}s** ⚡\n` +
-    `Think you’re faster? Tap in and prove it. 👇\n\n`;
+    const text =
+        `⚡ Reflex Test — Arcade Mode\n\n` +
+        `I just hit **${score}s** ⚡\n` +
+        `Think you’re faster? Tap in and prove it. 👇\n\n`;
 
-  const composeUrl =
-    "https://warpcast.com/~/compose?text=" +
-    encodeURIComponent(text) +
-    "&embeds[]=" +
-    encodeURIComponent(shareImage);
+    const composeUrl =
+        "https://warpcast.com/~/compose?text=" +
+        encodeURIComponent(text) +
+        "&embeds[]=" +
+        encodeURIComponent(shareImage);
 
-  try {
-    await sdk.actions.openUrl({ url: composeUrl });
-  } catch (err) {
-    console.log("Share failed:", err);
-  }
+    try {
+        await sdk.actions.openUrl({ url: composeUrl });
+    } catch (err) {
+        console.log("Share failed:", err);
+    }
 }
 </script>
 
