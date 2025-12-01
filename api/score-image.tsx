@@ -9,8 +9,7 @@ export default async function handler(req) {
   const { searchParams } = new URL(req.url);
   const score = searchParams.get('score') || '0.000';
 
-  // DÜZELTME: Fontları fonksiyonun İÇİNDE yüklüyoruz.
-  // Bu, 'unsupported module' hatasını kesin olarak çözer.
+  // Fontları yüklüyoruz (Fonksiyonun içinde)
   const orbitronFontData = await fetch(
     'https://fonts.gstatic.com/s/orbitron/v25/yMJMMV7293Z09/wtrwa7W5btl98.ttf'
   ).then((res) => res.arrayBuffer());
@@ -119,8 +118,16 @@ export default async function handler(req) {
       width: 1200,
       height: 630,
       fonts: [
-        { name: 'Orbitron', data: orbitronData, style: 'normal' },
-        { name: 'Rajdhani', data: rajdhaniData, style: 'normal' },
+        {
+          name: 'Orbitron',
+          data: orbitronFontData, // DÜZELTİLDİ: Artık doğru değişkeni kullanıyor
+          style: 'normal',
+        },
+        {
+          name: 'Rajdhani',
+          data: rajdhaniFontData, // DÜZELTİLDİ: Artık doğru değişkeni kullanıyor
+          style: 'normal',
+        },
       ],
     }
   );
