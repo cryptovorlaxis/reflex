@@ -1,5 +1,5 @@
 import { ImageResponse } from '@vercel/og';
-import React from 'react'; // BU SATIR EKLENDİ - KRİTİK
+import React from 'react';
 
 export const config = {
   runtime: 'edge',
@@ -9,7 +9,7 @@ export default async function handler(req) {
   const { searchParams } = new URL(req.url);
   const score = searchParams.get('score') || '0.000';
 
-  // Fontları güvenli şekilde yüklüyoruz
+  // Fontları fonksiyonun içinde yüklüyoruz (Hata önleyici yöntem)
   const orbitronData = await fetch(
     'https://fonts.gstatic.com/s/orbitron/v25/yMJMMV7293Z09/wtrwa7W5btl98.ttf'
   ).then((res) => res.arrayBuffer());
