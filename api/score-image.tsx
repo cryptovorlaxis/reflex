@@ -4,14 +4,9 @@ export const config = {
   runtime: 'edge',
 };
 
-// Fontları Google Fonts'tan çekiyoruz
-const orbitronFont = fetch(
-  new URL('https://fonts.gstatic.com/s/orbitron/v25/yMJMMV7293Z09/wtrwa7W5btl98.ttf', import.meta.url)
-).then((res) => res.arrayBuffer());
-
-const rajdhaniFont = fetch(
-  new URL('https://fonts.gstatic.com/s/rajdhani/v15/LDI2apCSOBg7S-WT7F0cxTs.ttf', import.meta.url)
-).then((res) => res.arrayBuffer());
+// DÜZELTME: 'new URL' kaldırıldı, doğrudan string kullanıldı.
+const orbitronFont = fetch('https://fonts.gstatic.com/s/orbitron/v25/yMJMMV7293Z09/wtrwa7W5btl98.ttf').then((res) => res.arrayBuffer());
+const rajdhaniFont = fetch('https://fonts.gstatic.com/s/rajdhani/v15/LDI2apCSOBg7S-WT7F0cxTs.ttf').then((res) => res.arrayBuffer());
 
 export default async function handler(req) {
   const [orbitronData, rajdhaniData] = await Promise.all([orbitronFont, rajdhaniFont]);
