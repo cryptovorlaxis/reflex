@@ -1,18 +1,23 @@
 import { ImageResponse } from '@vercel/og';
+import React from 'react';
 
 export const config = {
   runtime: 'edge',
 };
 
-// DÜZELTME: 'new URL' kaldırıldı, doğrudan string kullanıldı.
-const orbitronFont = fetch('https://fonts.gstatic.com/s/orbitron/v25/yMJMMV7293Z09/wtrwa7W5btl98.ttf').then((res) => res.arrayBuffer());
-const rajdhaniFont = fetch('https://fonts.gstatic.com/s/rajdhani/v15/LDI2apCSOBg7S-WT7F0cxTs.ttf').then((res) => res.arrayBuffer());
-
 export default async function handler(req) {
-  const [orbitronData, rajdhaniData] = await Promise.all([orbitronFont, rajdhaniFont]);
-  
   const { searchParams } = new URL(req.url);
   const score = searchParams.get('score') || '0.000';
+
+  // DÜZELTME: Fontları fonksiyonun İÇİNDE yüklüyoruz.
+  // Bu, 'unsupported module' hatasını kesin olarak çözer.
+  const orbitronFontData = await fetch(
+    'https://fonts.gstatic.com/s/orbitron/v25/yMJMMV7293Z09/wtrwa7W5btl98.ttf'
+  ).then((res) => res.arrayBuffer());
+
+  const rajdhaniFontData = await fetch(
+    'https://fonts.gstatic.com/s/rajdhani/v15/LDI2apCSOBg7S-WT7F0cxTs.ttf'
+  ).then((res) => res.arrayBuffer());
 
   return new ImageResponse(
     (
