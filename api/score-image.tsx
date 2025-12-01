@@ -1,5 +1,4 @@
 import { ImageResponse } from '@vercel/og';
-import React from 'react';
 
 export const config = {
   runtime: 'edge',
@@ -9,7 +8,7 @@ export default async function handler(req) {
   const { searchParams } = new URL(req.url);
   const score = searchParams.get('score') || '0.000';
 
-  // Fontları yüklüyoruz (Fonksiyonun içinde)
+  // Fontları yükle
   const orbitronFontData = await fetch(
     'https://fonts.gstatic.com/s/orbitron/v25/yMJMMV7293Z09/wtrwa7W5btl98.ttf'
   ).then((res) => res.arrayBuffer());
@@ -28,88 +27,93 @@ export default async function handler(req) {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'radial-gradient(circle at 50% 120%, #1a0b2e 0%, #000000 50%, #0a151f 100%)',
+          // Arka plan: Koyu Cyberpunk gradyan
+          background: 'linear-gradient(to bottom, #050505, #1a0b2e)',
           fontFamily: '"Rajdhani"',
           position: 'relative',
         }}
       >
-        {/* Cyber Grid Arka Plan */}
+        {/* Izgara Efekti (3D yerine 2D Flat Desen) */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundImage: 'linear-gradient(transparent 0%, rgba(0, 243, 255, 0.15) 1px, transparent 2px), linear-gradient(90deg, transparent 0%, rgba(188, 19, 254, 0.15) 1px, transparent 2px)',
-            backgroundSize: '60px 60px',
-            transform: 'perspective(500px) rotateX(60deg) scale(1.5)',
-            opacity: 0.5,
+            backgroundImage: 'linear-gradient(#333 1px, transparent 1px), linear-gradient(90deg, #333 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
+            opacity: 0.2,
           }}
         />
 
-        {/* Camsı Kart */}
+        {/* Ana Kart */}
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: 'rgba(20, 20, 30, 0.8)',
-            borderRadius: '24px',
-            border: '2px solid rgba(0, 243, 255, 0.4)',
-            boxShadow: '0 0 60px rgba(0, 243, 255, 0.15)',
-            padding: '40px 60px',
+            backgroundColor: '#0a151f',
+            borderRadius: '20px',
+            border: '4px solid #00f3ff',
+            boxShadow: '0 0 50px rgba(0, 243, 255, 0.4)',
+            padding: '40px 80px',
+            zIndex: 10,
           }}
         >
+          {/* Başlık */}
           <div
             style={{
               fontFamily: '"Orbitron"',
               color: '#00f3ff',
-              fontSize: '32px',
-              letterSpacing: '2px',
+              fontSize: '40px',
+              fontWeight: 700,
               marginBottom: '10px',
-              textShadow: '0 0 15px rgba(0, 243, 255, 0.6)',
+              textShadow: '0 0 10px #00f3ff',
             }}
           >
-            REFLEX TEST ⚡
+            REFLEX TEST
           </div>
 
+          {/* Alt Başlık */}
           <div
             style={{
               color: '#bc13fe',
-              fontSize: '24px',
-              letterSpacing: '2px',
+              fontSize: '28px',
+              letterSpacing: '4px',
               textTransform: 'uppercase',
             }}
           >
             REACTION TIME
           </div>
 
+          {/* Skor */}
           <div
             style={{
-              fontSize: '130px',
+              fontSize: '150px',
               fontFamily: '"Rajdhani"',
               fontWeight: 700,
-              color: '#ffffff',
+              color: '#fff',
               lineHeight: 1,
               marginTop: '10px',
-              textShadow: '0 0 30px #00f3ff',
+              textShadow: '4px 4px 0px #bc13fe',
             }}
           >
             {score}s
           </div>
 
+          {/* Etiket */}
           <div
             style={{
-              marginTop: '30px',
-              color: '#000',
+              marginTop: '20px',
               backgroundColor: '#00f3ff',
-              fontSize: '20px',
-              padding: '10px 30px',
+              color: '#000',
+              fontSize: '24px',
+              padding: '10px 40px',
               borderRadius: '50px',
               fontFamily: '"Orbitron"',
               fontWeight: 700,
             }}
           >
-            BEAT MY SCORE
+            CYBERPUNK ELITE
           </div>
         </div>
       </div>
@@ -120,12 +124,12 @@ export default async function handler(req) {
       fonts: [
         {
           name: 'Orbitron',
-          data: orbitronFontData, // DÜZELTİLDİ: Artık doğru değişkeni kullanıyor
+          data: orbitronFontData,
           style: 'normal',
         },
         {
           name: 'Rajdhani',
-          data: rajdhaniFontData, // DÜZELTİLDİ: Artık doğru değişkeni kullanıyor
+          data: rajdhaniFontData,
           style: 'normal',
         },
       ],
