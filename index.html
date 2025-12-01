@@ -25,16 +25,19 @@
 }' />
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700;900&display=swap');
 
     :root {
-        --color-neon-cyan: #00f3ff;
-        --color-neon-pink: #bc13fe;
-        --color-neon-green: #0aff0a;
-        --color-neon-yellow: #ffea00;
         --color-bg: #050505;
-        --glass-bg: rgba(20, 20, 30, 0.75);
+        --glass-bg: rgba(20, 20, 30, 0.85);
         --glass-border: rgba(255, 255, 255, 0.15);
+        
+        /* Rank Colors */
+        --rank-s-plus: #ffffff; /* The Singularity */
+        --rank-s: #ff003c;      /* Cyber Demon */
+        --rank-a: #00f3ff;      /* Neon Operative */
+        --rank-b: #ffaa00;      /* Street Samurai */
+        --rank-c: #bc13fe;      /* System Glitch */
     }
 
     * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
@@ -85,13 +88,9 @@
     @keyframes starsMove { 0% { transform: translateY(0); } 100% { transform: translateY(-1000px); } }
     @keyframes pulseBg { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
 
-    /* --- PARTICLES (Kıvılcım Efekti) --- */
+    /* --- PARTICLES --- */
     .particle {
-        position: absolute;
-        pointer-events: none;
-        background: white;
-        border-radius: 50%;
-        z-index: 100;
+        position: absolute; pointer-events: none; background: white; border-radius: 50%; z-index: 100;
         animation: flyOut 0.6s ease-out forwards;
     }
     @keyframes flyOut {
@@ -102,127 +101,111 @@
     /* --- UI --- */
     .game-ui {
         width: 100%; max-width: 420px;
-        padding: 20px;
-        text-align: center;
-        position: relative;
-        z-index: 10;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
+        padding: 20px; text-align: center; position: relative; z-index: 10;
+        display: flex; flex-direction: column; align-items: center; gap: 20px;
     }
 
     .logo-container { position: relative; margin-bottom: 10px; }
     #gameLogo { 
         width: 280px; height: auto; opacity: 0.9;
-        filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.3));
-        transition: 0.5s;
+        filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.3)); transition: 0.5s;
     }
     
     #reactionButton {
         width: 260px; height: 260px;
         border-radius: 50%;
-        border: 4px solid var(--color-neon-cyan);
+        border: 4px solid var(--rank-a);
         background: radial-gradient(circle, #0a151f 30%, #000 90%);
-        color: var(--color-neon-cyan);
-        font-family: 'Rajdhani', sans-serif;
-        font-weight: 700;
-        font-size: 38px;
-        letter-spacing: 3px;
-        cursor: pointer;
-        position: relative;
+        color: var(--rank-a);
+        font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 38px; letter-spacing: 3px;
+        cursor: pointer; position: relative;
         box-shadow: 0 0 30px rgba(0, 243, 255, 0.2), inset 0 0 50px rgba(0, 243, 255, 0.1);
         transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        text-shadow: 0 0 10px var(--color-neon-cyan);
-        outline: none; -webkit-tap-highlight-color: transparent;
+        text-shadow: 0 0 10px var(--rank-a); outline: none; -webkit-tap-highlight-color: transparent;
     }
 
     #reactionButton.mode-wait {
-        border-color: #ffaa00;
-        color: #ffaa00;
+        border-color: var(--rank-b); color: var(--rank-b);
         box-shadow: 0 0 50px rgba(255, 170, 0, 0.3);
         animation: pulseOrange 0.8s infinite alternate;
     }
     #reactionButton.mode-go {
-        border-color: var(--color-neon-green);
-        color: #fff;
+        border-color: #0aff0a; color: #fff;
         background: radial-gradient(circle, #003300 0%, #000 90%);
-        box-shadow: 0 0 80px var(--color-neon-green), inset 0 0 40px var(--color-neon-green);
+        box-shadow: 0 0 80px #0aff0a, inset 0 0 40px #0aff0a;
         transform: scale(1.02);
     }
     #reactionButton.mode-fail {
-        border-color: var(--color-neon-pink);
-        color: var(--color-neon-pink);
-        box-shadow: 0 0 60px var(--color-neon-pink);
+        border-color: var(--rank-c); color: var(--rank-c);
+        box-shadow: 0 0 60px var(--rank-c);
         animation: shake 0.4s;
     }
     #reactionButton:active { transform: scale(0.96); }
 
     #status {
-        font-family: 'Rajdhani', sans-serif;
-        font-size: 24px;
-        color: #888;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        min-height: 30px;
-        font-weight: 600;
+        font-family: 'Rajdhani', sans-serif; font-size: 24px; color: #888;
+        text-transform: uppercase; letter-spacing: 2px; min-height: 30px; font-weight: 600;
     }
 
-    /* --- SCORE CARD --- */
+    /* --- PROFESYONEL SKOR KARTI --- */
     .score-panel {
         background: var(--glass-bg);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid var(--glass-border);
-        border-radius: 20px;
-        padding: 30px 20px;
-        width: 100%;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.7);
-        position: absolute;
-        top: 50%; left: 50%;
+        backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        border: 2px solid var(--glass-border); /* Border kalınlaştı */
+        border-radius: 24px;
+        padding: 35px 25px;
+        width: 90%; max-width: 380px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+        position: absolute; top: 50%; left: 50%;
         transform: translate(-50%, -40%) scale(0.9);
-        opacity: 0;
-        pointer-events: none;
+        opacity: 0; pointer-events: none; z-index: 200;
+        display: flex; flex-direction: column; align-items: center; gap: 15px;
         transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-        z-index: 200;
     }
     .score-panel.visible { 
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1; 
-        pointer-events: all;
+        transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: all;
     }
 
+    /* RÜTBE STİLLERİ (Dinamik Değişecek) */
     #rankTitle {
-        font-size: 18px; letter-spacing: 4px; text-transform: uppercase;
-        color: var(--color-neon-yellow);
-        text-shadow: 0 0 10px var(--color-neon-yellow);
-    }
-    #score {
-        font-size: 72px; font-weight: 900; line-height: 1;
-        background: linear-gradient(to bottom, #fff, var(--color-neon-cyan));
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.5));
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 24px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
+        color: #fff;
     }
     
-    .btn-group { display: flex; gap: 15px; width: 100%; margin-top: 10px; }
+    /* Rütbeye göre kartın parlaması */
+    .score-panel.rank-s-plus { border-color: var(--rank-s-plus); box-shadow: 0 0 50px rgba(255,255,255,0.4); }
+    .score-panel.rank-s-plus #rankTitle { color: var(--rank-s-plus); text-shadow: 0 0 20px var(--rank-s-plus); }
+
+    .score-panel.rank-s { border-color: var(--rank-s); box-shadow: 0 0 50px rgba(255, 0, 60, 0.4); }
+    .score-panel.rank-s #rankTitle { color: var(--rank-s); text-shadow: 0 0 20px var(--rank-s); }
+
+    .score-panel.rank-a { border-color: var(--rank-a); box-shadow: 0 0 50px rgba(0, 243, 255, 0.4); }
+    .score-panel.rank-a #rankTitle { color: var(--rank-a); text-shadow: 0 0 20px var(--rank-a); }
+
+    .score-panel.rank-b { border-color: var(--rank-b); box-shadow: 0 0 50px rgba(255, 170, 0, 0.4); }
+    .score-panel.rank-b #rankTitle { color: var(--rank-b); text-shadow: 0 0 20px var(--rank-b); }
+
+    .score-panel.rank-c { border-color: var(--rank-c); box-shadow: 0 0 50px rgba(188, 19, 254, 0.4); }
+    .score-panel.rank-c #rankTitle { color: var(--rank-c); text-shadow: 0 0 20px var(--rank-c); }
+
+
+    #score {
+        font-size: 76px; font-weight: 900; line-height: 1;
+        background: linear-gradient(to bottom, #fff, #aaa);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 15px rgba(255,255,255,0.3));
+    }
+    
+    .btn-group { display: flex; gap: 15px; width: 100%; margin-top: 15px; }
     .cyber-btn {
-        flex: 1;
-        background: rgba(0, 243, 255, 0.05);
-        border: 1px solid var(--color-neon-cyan);
-        color: var(--color-neon-cyan);
-        padding: 14px;
-        font-family: 'Orbitron', sans-serif;
-        font-weight: 700; text-transform: uppercase;
-        font-size: 14px; cursor: pointer;
-        transition: 0.2s; border-radius: 8px;
+        flex: 1; background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.3); color: #fff;
+        padding: 14px; font-family: 'Orbitron', sans-serif; font-weight: 700; text-transform: uppercase;
+        font-size: 14px; cursor: pointer; transition: 0.2s; border-radius: 8px;
     }
     .cyber-btn:hover {
-        background: var(--color-neon-cyan); color: #000;
-        box-shadow: 0 0 30px var(--color-neon-cyan);
+        background: #fff; color: #000; box-shadow: 0 0 30px #fff;
     }
 
     @keyframes pulseOrange { from { opacity: 1; } to { opacity: 0.6; } }
@@ -249,9 +232,10 @@
 </div>
 
 <div id="scorePanel" class="score-panel">
+    <div style="font-size: 12px; color: #aaa; letter-spacing: 2px; margin-bottom: -10px;">TIER RANK</div>
     <div id="rankTitle">UNRANKED</div>
     <div id="score">0.000</div>
-    <div style="font-size: 12px; color: #aaa;">REACTION TIME</div>
+    <div style="font-size: 12px; color: #aaa;">REACTION TIME (s)</div>
     
     <div class="btn-group">
         <button id="againBtn" class="cyber-btn">RETRY</button>
@@ -268,18 +252,28 @@
     const againBtn = document.getElementById("againBtn");
     const shareBtn = document.getElementById("shareBtn");
 
+    // SESLER
     const soundReady = new Audio("ready.mp3");
     const soundFail = new Audio("fail.mp3");
     const soundWin = new Audio("win.mp3");
+    // MÜZİK HATIRLATMASI: 'music.mp3' yüklersen çalar.
+    const bgMusic = new Audio("music.mp3");
+    bgMusic.loop = true; bgMusic.volume = 0.4;
 
     let gameState = "idle";
     let startTime = 0;
     let timeoutID;
+    let musicStarted = false;
 
-    // Mobil ses kilidi
-    document.body.addEventListener('touchstart', () => {
+    document.body.addEventListener('click', startBackgroundMusic, { once: true });
+    document.body.addEventListener('touchstart', startBackgroundMusic, { once: true });
+
+    function startBackgroundMusic() {
+        if (!musicStarted && bgMusic) {
+            bgMusic.play().then(() => { musicStarted = true; }).catch(e => {});
+        }
         if(soundReady) soundReady.load();
-    }, {once:true});
+    }
 
     function playSound(sound) {
         if(sound) { sound.pause(); sound.currentTime = 0; sound.play().catch(()=>{}); }
@@ -288,36 +282,24 @@
         if(navigator.vibrate) navigator.vibrate(pattern);
     }
 
-    // --- PARTICLE EFFECT (KIVILCIMLAR) ---
     function spawnParticles(x, y, color) {
         for (let i = 0; i < 15; i++) {
             const particle = document.createElement("div");
             particle.classList.add("particle");
             document.body.appendChild(particle);
-
-            // Rastgele yön
             const angle = Math.random() * Math.PI * 2;
             const velocity = Math.random() * 100 + 50;
-            const tx = Math.cos(angle) * velocity + "px";
-            const ty = Math.sin(angle) * velocity + "px";
-
-            particle.style.left = x + "px";
-            particle.style.top = y + "px";
+            particle.style.left = x + "px"; particle.style.top = y + "px";
             particle.style.background = color;
             particle.style.width = (Math.random() * 4 + 2) + "px";
             particle.style.height = particle.style.width;
-            
-            // CSS değişkenlerine gönder
-            particle.style.setProperty("--tx", tx);
-            particle.style.setProperty("--ty", ty);
-
-            // Temizle
+            particle.style.setProperty("--tx", (Math.cos(angle) * velocity) + "px");
+            particle.style.setProperty("--ty", (Math.sin(angle) * velocity) + "px");
             setTimeout(() => particle.remove(), 600);
         }
     }
 
     btn.addEventListener("click", (e) => {
-        // Efekt pozisyonu (Button merkezi)
         const rect = btn.getBoundingClientRect();
         const x = rect.left + rect.width / 2;
         const y = rect.top + rect.height / 2;
@@ -325,11 +307,11 @@
         if (gameState === "idle") startGame();
         else if (gameState === "wait") {
             triggerFail();
-            spawnParticles(x, y, "#bc13fe"); // Pembe kıvılcım
+            spawnParticles(x, y, "var(--rank-c)");
         }
         else if (gameState === "go") {
             triggerSuccess();
-            spawnParticles(x, y, "#0aff0a"); // Yeşil kıvılcım
+            spawnParticles(x, y, "#0aff0a");
         }
     });
 
@@ -339,29 +321,20 @@
     function startGame() {
         gameState = "wait";
         scorePanel.classList.remove("visible");
-        
         statusText.innerText = "WAIT FOR SIGNAL...";
-        statusText.style.color = "#ffaa00";
+        statusText.style.color = "var(--rank-b)";
         statusText.style.textShadow = "none";
-        
         btn.innerText = "HOLD";
-        btn.className = ""; 
-        btn.classList.add("mode-wait");
-
+        btn.className = ""; btn.classList.add("mode-wait");
         const randomTime = Math.random() * 3000 + 1500; 
-
         timeoutID = setTimeout(() => {
             gameState = "go";
             statusText.innerText = "TAP NOW !!!";
             statusText.style.color = "#0aff0a";
             statusText.style.textShadow = "0 0 20px #0aff0a";
-            
             btn.innerText = "TAP!";
-            btn.className = "";
-            btn.classList.add("mode-go");
-            
-            playSound(soundReady);
-            vibrate(100);
+            btn.className = ""; btn.classList.add("mode-go");
+            playSound(soundReady); vibrate(100);
             startTime = Date.now();
         }, randomTime);
     }
@@ -369,18 +342,12 @@
     function triggerFail() {
         clearTimeout(timeoutID);
         gameState = "idle"; 
-        
         statusText.innerText = "TOO EARLY!";
-        statusText.style.color = "#bc13fe";
-        statusText.style.textShadow = "0 0 20px #bc13fe";
-        
+        statusText.style.color = "var(--rank-c)";
+        statusText.style.textShadow = "0 0 20px var(--rank-c)";
         btn.innerText = "FAIL";
-        btn.className = "";
-        btn.classList.add("mode-fail");
-        
-        playSound(soundFail);
-        vibrate([50, 50, 50]);
-
+        btn.className = ""; btn.classList.add("mode-fail");
+        playSound(soundFail); vibrate([50, 50, 50]);
         setTimeout(resetGame, 1500);
     }
 
@@ -390,29 +357,36 @@
         gameState = "finished";
 
         statusText.innerText = "REFLEX CAPTURED";
-        statusText.style.color = "#00f3ff";
-        
+        statusText.style.color = "var(--rank-a)";
         btn.innerText = "✔";
         btn.className = ""; 
 
-        // RÜTBE HESAPLAMA
-        let rank = "ROOKIE";
-        let rankColor = "#fff";
+        // YENİ PROFESYONEL RÜTBE SİSTEMİ
+        let rankName = "";
+        let rankClass = "";
         
-        if (time < 200) { rank = "🤖 CYBER DEMON"; rankColor = "#ff0000"; }
-        else if (time < 250) { rank = "⚡ NEON NINJA"; rankColor = "#0aff0a"; }
-        else if (time < 350) { rank = "🕶️ STREET SAMURAI"; rankColor = "#00f3ff"; }
-        else { rank = "🐢 GLITCH"; rankColor = "#aaa"; }
+        // Eski sınıfları temizle
+        scorePanel.classList.remove("rank-s-plus", "rank-s", "rank-a", "rank-b", "rank-c");
 
-        rankTitle.innerText = rank;
-        rankTitle.style.color = rankColor;
-        rankTitle.style.textShadow = `0 0 15px ${rankColor}`;
+        if (time < 180) { 
+            rankName = "THE SINGULARITY 🌌"; rankClass = "rank-s-plus"; 
+        } else if (time < 220) { 
+            rankName = "CYBER DEMON 👹"; rankClass = "rank-s";
+        } else if (time < 260) { 
+            rankName = "NEON OPERATIVE ⚡"; rankClass = "rank-a";
+        } else if (time < 320) { 
+            rankName = "STREET SAMURAI ⚔️"; rankClass = "rank-b";
+        } else { 
+            rankName = "SYSTEM GLITCH 👾"; rankClass = "rank-c";
+        }
 
-        scoreText.innerText = seconds + "s";
+        rankTitle.innerText = rankName;
+        scorePanel.classList.add(rankClass); // Yeni rütbe rengini uygula
+
+        scoreText.innerText = seconds;
         scorePanel.classList.add("visible");
 
-        playSound(soundWin);
-        vibrate([100, 50, 100]);
+        playSound(soundWin); vibrate([100, 50, 100]);
     }
 
     function resetGame() {
@@ -420,9 +394,7 @@
         statusText.innerText = "SYSTEM READY";
         statusText.style.color = "#888";
         statusText.style.textShadow = "none";
-        
         scorePanel.classList.remove("visible");
-
         btn.innerText = "START";
         btn.className = "";
     }
@@ -436,12 +408,9 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 async function shareScore(score) {
-    const cleanScore = score.replace("s", "");
     const rankText = document.getElementById("rankTitle").innerText;
-    
-    const shareImage = `https://reflex-rho.vercel.app/api/score-image?score=${cleanScore}`;
-    const text = `⚡ ${rankText}\nReflex: ${score}\n\nCan you beat me? 👇`;
-    
+    const shareImage = `https://reflex-rho.vercel.app/api/score-image?score=${score}`;
+    const text = `⚡ ${rankText}\nReflex: ${score}s\n\nCan you beat my time? 👇`;
     const composeUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(shareImage)}`;
     try { await sdk.actions.openUrl({ url: composeUrl }); } catch (e) {}
 }
