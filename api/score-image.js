@@ -1,4 +1,5 @@
 import { ImageResponse } from '@vercel/og';
+import React from 'react';
 
 export const config = {
   runtime: 'edge',
@@ -12,75 +13,77 @@ export default function handler(req) {
     (
       <div
         style={{
+          display: 'flex',
           height: '100%',
           width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: '#050505', // Düz siyah arka plan
-          color: 'white',
-          fontFamily: 'sans-serif', // Sistem fontu kullanıyoruz (Garanti çalışır)
+          flexDirection: 'column',
+          backgroundImage: 'linear-gradient(to bottom, #050505, #1a0b2e)',
+          fontFamily: 'sans-serif',
         }}
       >
-        {/* Basit Cyberpunk Arka Plan */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage: 'linear-gradient(to bottom, #1a0b2e, #000)',
-            opacity: 0.8,
-          }}
-        />
-        
-        {/* Izgara Çizgileri */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage: 'linear-gradient(rgba(0, 243, 255, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 243, 255, 0.2) 1px, transparent 1px)',
-            backgroundSize: '50px 50px',
-            opacity: 0.3,
-          }}
-        />
-
-        {/* Skor Kutusu */}
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
+            backgroundColor: '#0a151f',
             border: '4px solid #00f3ff',
-            borderRadius: '20px',
-            padding: '40px 60px',
-            backgroundColor: 'rgba(0,0,0,0.8)',
-            boxShadow: '0 0 50px rgba(0, 243, 255, 0.5)',
-            zIndex: 10,
+            borderRadius: 20,
+            padding: '40px 80px',
+            boxShadow: '0 0 60px rgba(0, 243, 255, 0.4)',
           }}
         >
-          <div style={{ fontSize: 30, color: '#00f3ff', fontWeight: 'bold', marginBottom: 10 }}>
+          <div
+            style={{
+              color: '#00f3ff',
+              fontSize: 50,
+              fontWeight: 'bold',
+              marginBottom: 10,
+              textShadow: '0 0 20px #00f3ff',
+            }}
+          >
             REFLEX TEST
           </div>
           
-          <div style={{ fontSize: 24, color: '#bc13fe', letterSpacing: '2px' }}>
-            REACTION TIME
+          <div
+            style={{
+              color: '#bc13fe',
+              fontSize: 30,
+              letterSpacing: 4,
+              marginBottom: 20,
+              textTransform: 'uppercase',
+            }}
+          >
+            Reaction Time
           </div>
 
-          <div style={{ fontSize: 120, fontWeight: '900', color: 'white', lineHeight: 1, marginTop: 10 }}>
+          <div
+            style={{
+              fontSize: 140,
+              fontWeight: 900,
+              color: 'white',
+              lineHeight: 1,
+              textShadow: '4px 4px 0px #bc13fe',
+            }}
+          >
             {score}s
           </div>
 
-          <div style={{ 
-            marginTop: 20, 
-            backgroundColor: '#00f3ff', 
-            color: 'black', 
-            padding: '10px 30px', 
-            borderRadius: 50, 
-            fontSize: 20,
-            fontWeight: 'bold' 
-          }}>
-            CYBER ELITE
+          <div
+             style={{
+               marginTop: 30,
+               backgroundColor: '#00f3ff',
+               color: 'black',
+               fontSize: 24,
+               padding: '10px 40px',
+               borderRadius: 50,
+               fontWeight: 'bold',
+             }}
+          >
+            CYBERPUNK ELITE
           </div>
         </div>
       </div>
@@ -88,7 +91,6 @@ export default function handler(req) {
     {
       width: 1200,
       height: 630,
-      // Font ayarlarını sildik, sistem fontu kullanacak.
     }
   );
 }
