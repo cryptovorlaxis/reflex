@@ -3,61 +3,32 @@
     "header": "eyJmaWQiOjc5NDkwMCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweEM5ODk0ZjZjYzdhOTA3NTE2MWE4NmQyRDg4Yzg5MTJmMzkwQzk2QTIifQ",
     "payload": "eyJkb21haW4iOiJyZWZsZXgtcmhvLnZlcmNlbC5hcHAifQ",
     "signature": "vD3G251a5GsYczzk8gKMG2QkTQoIhzJHHUazDGnbbzJ+6WxReVUS4eFtzmiCCmPe85wCT7c8SHGGO5BHey7LMxw="
-  }
-},
-
-  "frame": {
-
-    "version": "1",
-
-    "name": "Reflex Test Arcade",
-
-    "iconUrl": "https://reflex-rho.vercel.app/screenshot1.png",
-
-    "homeUrl": "https://reflex-rho.vercel.app",
-
-    "imageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
-
-    "buttonTitle": "Start Game",
-
-    "splashImageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
-
-    "splashBackgroundColor": "#0f0f0f",
-
-    "webhookUrl": "https://reflex-rho.vercel.app/api/webhook"
-
   },
-
+  "frame": {
+    "version": "1",
+    "name": "Reflex Test Arcade",
+    "iconUrl": "https://reflex-rho.vercel.app/screenshot1.png",
+    "homeUrl": "https://reflex-rho.vercel.app",
+    "imageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
+    "buttonTitle": "Start Game",
+    "splashImageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
+    "splashBackgroundColor": "#0f0f0f",
+    "webhookUrl": "https://reflex-rho.vercel.app/api/webhook"
+  },
   "triggers": [
-
     {
-
       "type": "cast",
-
       "action": {
-
         "type": "launch_frame",
-
         "name": "Play Reflex",
-
         "url": "https://reflex-rho.vercel.app",
-
         "splashImageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
-
         "splashBackgroundColor": "#0f0f0f"
-
       }
-
     }
-
   ],
-
   "version": "1.0",
-
   "screenshots": [
-
     "https://reflex-rho.vercel.app/screenshot1.png"
-
   ]
-
 }
