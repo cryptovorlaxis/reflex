@@ -1,26 +1,4 @@
 {
-  "rewrites": [
-    {
-      "source": "/api/:match*",
-      "destination": "/api/:match*"
-    },
-    {
-      "source": "/screenshot1.png",
-      "destination": "/public/screenshot1.png"
-    },
-    {
-      "source": "/.well-known/farcaster.json",
-      "destination": "/public/.well-known/farcaster.json"
-    },
-    {
-      "source": "/",
-      "destination": "/public/index.html"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/public/$1"
-    }
-  ],
   "headers": [
     {
       "source": "/.well-known/farcaster.json",
