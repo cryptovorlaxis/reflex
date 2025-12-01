@@ -1,13 +1,22 @@
 {
+  "headers": [
+    {
+      "source": "/.well-known/farcaster.json",
+      "headers": [
+        { "key": "Content-Type", "value": "application/json" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    },
+    {
+      "source": "/screenshot1.png",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    }
+  ],
   "functions": {
-    "api/*.js": {
+    "api/**/*.js": {
       "runtime": "edge"
     }
-  }, <-- Bu virgül (Line 6), alttaki "rewrites" kısmını ayırır.
-  "rewrites": [
-    { 
-      "source": "/screenshot/(.*)", 
-      "destination": "/public/screenshot/$1" 
-    }
-  ]
+  }
 }
