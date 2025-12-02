@@ -19,11 +19,11 @@ export default function handler(req) {
           alignItems: 'center',
           justifyContent: 'center',
           flexDirection: 'column',
-          backgroundColor: 'black', // Düz Siyah (Risk yok)
-          fontFamily: 'monospace',
+          backgroundColor: 'black', // Düz Siyah
+          fontFamily: 'sans-serif', // Standart Font
         }}
       >
-        {/* Ana Kutu */}
+        {/* Dış Çerçeve */}
         <div
           style={{
             display: 'flex',
@@ -32,43 +32,46 @@ export default function handler(req) {
             justifyContent: 'center',
             width: '900px',
             height: '500px',
-            backgroundColor: '#111111', // Koyu Gri Zemin
-            border: '8px solid #00f3ff', // Mavi Çerçeve
-            borderRadius: '40px',
-            // Basit Kutu Gölgesi (Karmaşık değil)
-            boxShadow: '0 0 50px #00f3ff', 
+            border: '10px solid #00FFFF', // Düz Mavi Çizgi
+            borderRadius: '0px', // Köşe yuvarlama bile yok (Garanti olsun)
+            backgroundColor: '#111111',
           }}
         >
           {/* Başlık */}
-          <div style={{ 
-            color: '#00f3ff', 
-            fontSize: 60, 
-            fontWeight: 'bold', 
-            marginBottom: 20 
-          }}>
+          <div
+            style={{
+              fontSize: 60,
+              color: '#00FFFF', // Camgöbeği
+              fontWeight: 'bold',
+              marginBottom: 20,
+            }}
+          >
             REFLEX TEST
           </div>
 
           {/* Skor */}
-          <div style={{ 
-            fontSize: 160, 
-            fontWeight: 'bold', 
-            color: 'white', 
-            lineHeight: 1 
-          }}>
+          <div
+            style={{
+              fontSize: 150,
+              fontWeight: 'bold',
+              color: 'white',
+              lineHeight: 1,
+            }}
+          >
             {score}s
           </div>
 
-          {/* Etiket */}
-          <div style={{ 
-            marginTop: 40, 
-            backgroundColor: '#00f3ff', 
-            color: 'black', 
-            fontSize: 30, 
-            padding: '15px 60px', 
-            borderRadius: 50, 
-            fontWeight: 'bold' 
-          }}>
+          {/* Alt Etiket */}
+          <div
+            style={{
+              marginTop: 40,
+              fontSize: 30,
+              backgroundColor: '#00FFFF',
+              color: 'black',
+              padding: '10px 50px',
+              fontWeight: 'bold',
+            }}
+          >
             CYBER ELITE
           </div>
         </div>
