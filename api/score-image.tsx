@@ -30,7 +30,7 @@ export default async function handler(req) {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            border: '4px solid #00f3ff', // Mavi Çerçeve
+            border: '8px solid #00f3ff', // Kalın Mavi Çerçeve
             borderRadius: '20px',
             padding: '40px 80px',
             backgroundColor: '#111',
@@ -41,7 +41,7 @@ export default async function handler(req) {
           <div
             style={{
               color: '#00f3ff',
-              fontSize: 50,
+              fontSize: 60,
               fontWeight: 'bold',
               marginBottom: 20,
               letterSpacing: '-2px',
@@ -70,8 +70,8 @@ export default async function handler(req) {
               backgroundColor: '#00f3ff',
               color: 'black',
               fontSize: 30,
-              padding: '10px 50px',
-              borderRadius: 50,
+              padding: '15px 50px',
+              borderRadius: '50px',
               fontWeight: 'bold',
             }}
           >
