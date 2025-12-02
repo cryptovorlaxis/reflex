@@ -19,22 +19,11 @@ export default function handler(req) {
           alignItems: 'center',
           justifyContent: 'center',
           flexDirection: 'column',
-          backgroundColor: '#050505', // Siyah Zemin
-          fontFamily: 'monospace',    // Garanti Font
+          backgroundColor: 'black', // Düz Siyah (Risk yok)
+          fontFamily: 'monospace',
         }}
       >
-        {/* Arka Plan Deseni */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage: 'linear-gradient(rgba(0, 243, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 243, 255, 0.1) 1px, transparent 1px)',
-            backgroundSize: '50px 50px',
-            opacity: 0.3,
-          }}
-        />
-
-        {/* Neon Kutu */}
+        {/* Ana Kutu */}
         <div
           style={{
             display: 'flex',
@@ -43,31 +32,41 @@ export default function handler(req) {
             justifyContent: 'center',
             width: '900px',
             height: '500px',
+            backgroundColor: '#111111', // Koyu Gri Zemin
             border: '8px solid #00f3ff', // Mavi Çerçeve
             borderRadius: '40px',
-            backgroundColor: '#111',
-            boxShadow: '0 0 80px #00f3ff', // Parlama
-            zIndex: 10,
+            // Basit Kutu Gölgesi (Karmaşık değil)
+            boxShadow: '0 0 50px #00f3ff', 
           }}
         >
           {/* Başlık */}
-          <div style={{ fontSize: 60, color: '#00f3ff', marginBottom: 20, fontWeight: 'bold' }}>
+          <div style={{ 
+            color: '#00f3ff', 
+            fontSize: 60, 
+            fontWeight: 'bold', 
+            marginBottom: 20 
+          }}>
             REFLEX TEST
           </div>
 
           {/* Skor */}
-          <div style={{ fontSize: 160, fontWeight: 'bold', color: 'white', lineHeight: 1, textShadow: '6px 6px 0px #bc13fe' }}>
+          <div style={{ 
+            fontSize: 160, 
+            fontWeight: 'bold', 
+            color: 'white', 
+            lineHeight: 1 
+          }}>
             {score}s
           </div>
 
           {/* Etiket */}
           <div style={{ 
             marginTop: 40, 
-            fontSize: 40,
             backgroundColor: '#00f3ff', 
             color: 'black', 
-            padding: '10px 60px', 
-            borderRadius: 50,
+            fontSize: 30, 
+            padding: '15px 60px', 
+            borderRadius: 50, 
             fontWeight: 'bold' 
           }}>
             CYBER ELITE
