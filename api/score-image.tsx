@@ -1,25 +1,32 @@
 import { ImageResponse } from '@vercel/og';
+import React from 'react';
 
 export const config = {
   runtime: 'edge',
 };
 
-export default function handler(req) {
+export default async function handler(req) {
   const { searchParams } = new URL(req.url);
   const score = searchParams.get('score') || '0.000';
+
+  // 1. STANDART FONT YÜKLÜYORUZ (Roboto)
+  // Bu olmadan yazı yazılamaz!
+  const fontData = await fetch(
+    'https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxK.ttf'
+  ).then((res) => res.arrayBuffer());
 
   return new ImageResponse(
     (
       <div
         style={{
-          display: 'flex',
           height: '100%',
           width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          flexDirection: 'column',
-          backgroundColor: 'black', // Kırmızı yerine Siyah
-          fontFamily: 'monospace',
+          backgroundColor: '#050505',
+          fontFamily: '"Roboto"', // İndirdiğimiz fontu kullanıyoruz
         }}
       >
         <div
@@ -28,30 +35,30 @@ export default function handler(req) {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            border: '4px solid #00f3ff', // Mavi Çerçeve
+            border: '4px solid #00f3ff',
             borderRadius: 20,
             padding: '40px 80px',
             backgroundColor: '#111',
           }}
         >
-          <div style={{ color: '#00f3ff', fontSize: 50, fontWeight: 'bold', marginBottom: 20 }}>
+          <div style={{ color: '#00f3ff', fontSize: 50, marginBottom: 10 }}>
             REFLEX TEST
           </div>
-
-          <div style={{ fontSize: 140, fontWeight: 'bold', color: 'white', lineHeight: 1 }}>
+          
+          <div style={{ fontSize: 140, color: 'white', lineHeight: 1 }}>
             {score}s
           </div>
 
           <div style={{ 
-            marginTop: 40, 
-            backgroundColor: '#00f3ff', 
-            color: 'black', 
-            fontSize: 30, 
-            padding: '10px 50px',
+            marginTop: 20, 
+            color: 'white', 
+            fontSize: 30,
+            backgroundColor: '#00f3ff',
+            padding: '10px 40px',
             borderRadius: 50,
-            fontWeight: 'bold' 
+            color: 'black'
           }}>
-            CYBER ELITE
+            CYBERPUNK
           </div>
         </div>
       </div>
@@ -59,6 +66,13 @@ export default function handler(req) {
     {
       width: 1200,
       height: 630,
+      fonts: [
+        {
+          name: 'Roboto',
+          data: fontData,
+          style: 'normal',
+        },
+      ],
     }
   );
 }
