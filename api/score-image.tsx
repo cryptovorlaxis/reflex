@@ -1,5 +1,5 @@
 import { ImageResponse } from '@vercel/og';
-import React from 'react';
+import React from 'react'; // <-- İŞTE O EKSİK PARÇA
 
 export const config = {
   runtime: 'edge',
@@ -9,56 +9,73 @@ export default async function handler(req) {
   const { searchParams } = new URL(req.url);
   const score = searchParams.get('score') || '0.000';
 
-  // 1. STANDART FONT YÜKLÜYORUZ (Roboto)
-  // Bu olmadan yazı yazılamaz!
-  const fontData = await fetch(
-    'https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxK.ttf'
-  ).then((res) => res.arrayBuffer());
-
   return new ImageResponse(
     (
       <div
         style={{
+          display: 'flex',
           height: '100%',
           width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: '#050505',
-          fontFamily: '"Roboto"', // İndirdiğimiz fontu kullanıyoruz
+          flexDirection: 'column',
+          backgroundColor: '#050505', // Siyah Arka Plan
+          fontFamily: 'monospace',    // Sistem fontu (Risk yok)
         }}
       >
+        {/* Neon Çerçeveli Kutu */}
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            border: '4px solid #00f3ff',
-            borderRadius: 20,
+            border: '4px solid #00f3ff', // Mavi Çerçeve
+            borderRadius: '20px',
             padding: '40px 80px',
             backgroundColor: '#111',
+            boxShadow: '0 0 60px #00f3ff', // Mavi Parlama
           }}
         >
-          <div style={{ color: '#00f3ff', fontSize: 50, marginBottom: 10 }}>
+          {/* Başlık */}
+          <div
+            style={{
+              color: '#00f3ff',
+              fontSize: 50,
+              fontWeight: 'bold',
+              marginBottom: 20,
+              letterSpacing: '-2px',
+            }}
+          >
             REFLEX TEST
           </div>
-          
-          <div style={{ fontSize: 140, color: 'white', lineHeight: 1 }}>
+
+          {/* Skor */}
+          <div
+            style={{
+              fontSize: 160,
+              fontWeight: 'bold',
+              color: 'white',
+              lineHeight: 1,
+              textShadow: '4px 4px 0px #bc13fe', // Mor Gölge
+            }}
+          >
             {score}s
           </div>
 
-          <div style={{ 
-            marginTop: 20, 
-            color: 'white', 
-            fontSize: 30,
-            backgroundColor: '#00f3ff',
-            padding: '10px 40px',
-            borderRadius: 50,
-            color: 'black'
-          }}>
-            CYBERPUNK
+          {/* Etiket */}
+          <div
+            style={{
+              marginTop: 40,
+              backgroundColor: '#00f3ff',
+              color: 'black',
+              fontSize: 30,
+              padding: '10px 50px',
+              borderRadius: 50,
+              fontWeight: 'bold',
+            }}
+          >
+            CYBER ELITE
           </div>
         </div>
       </div>
@@ -66,13 +83,6 @@ export default async function handler(req) {
     {
       width: 1200,
       height: 630,
-      fonts: [
-        {
-          name: 'Roboto',
-          data: fontData,
-          style: 'normal',
-        },
-      ],
     }
   );
 }
