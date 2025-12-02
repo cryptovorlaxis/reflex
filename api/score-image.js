@@ -1,96 +1,57 @@
 import { ImageResponse } from '@vercel/og';
-import React from 'react';
 
 export const config = {
   runtime: 'edge',
 };
 
 export default function handler(req) {
-  const { searchParams } = new URL(req.url);
-  const score = searchParams.get('score') || '0.000';
-
-  // React.createElement kullanarak HTML oluşturuyoruz.
-  // Bu yöntem Vercel'in "JSX'i derleyememe" sorununu kökten çözer.
   return new ImageResponse(
-    React.createElement(
-      'div',
-      {
-        style: {
-          display: 'flex',
-          height: '100%',
+    (
+      <div
+        style={{
+          fontSize: 60,
+          color: 'white',
+          background: 'red', /* DİKKAT: ARKA PLAN KIRMIZI */
           width: '100%',
+          height: '100%',
+          display: 'flex',
+          textAlign: 'center',
           alignItems: 'center',
           justifyContent: 'center',
-          flexDirection: 'column',
-          backgroundColor: '#050505', // Siyah Zemin
-          fontFamily: 'monospace',
-        },
-      },
-      [
-        // Dış Çerçeve (Mavi Neon)
-        React.createElement(
-          'div',
-          {
-            style: {
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '900px',
-              height: '500px',
-              border: '8px solid #00f3ff',
-              borderRadius: '40px',
-              backgroundColor: '#111',
-              boxShadow: '0 0 80px #00f3ff',
-            },
-          },
-          [
-            // Başlık
-            React.createElement(
-              'div',
-              {
-                style: {
-                  fontSize: 60,
-                  color: '#00f3ff',
-                  marginBottom: 20,
-                  fontWeight: 'bold',
-                },
-              },
-              'REFLEX TEST'
-            ),
-            // Skor (Beyaz ve Mor Gölgeli)
-            React.createElement(
-              'div',
-              {
-                style: {
-                  fontSize: 160,
-                  fontWeight: 'bold',
-                  color: 'white',
-                  lineHeight: 1,
-                  textShadow: '5px 5px 0 #bc13fe',
-                },
-              },
-              score + 's'
-            ),
-            // Alt Etiket
-            React.createElement(
-              'div',
-              {
-                style: {
-                  marginTop: 40,
-                  fontSize: 40,
-                  backgroundColor: '#00f3ff',
-                  color: 'black',
-                  padding: '10px 60px',
-                  borderRadius: 50,
-                  fontWeight: 'bold',
-                },
-              },
-              'CYBER ELITE'
-            ),
-          ]
-        ),
-      ]
+        }}
+      >
+        SİSTEM ÇALIŞIYOR
+      </div>
+    ),
+    {
+      width: 1200,
+      height: 630,
+    }
+  );
+}import { ImageResponse } from '@vercel/og';
+
+export const config = {
+  runtime: 'edge',
+};
+
+export default function handler(req) {
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          fontSize: 60,
+          color: 'white',
+          background: 'red', /* DİKKAT: ARKA PLAN KIRMIZI */
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          textAlign: 'center',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        SİSTEM ÇALIŞIYOR
+      </div>
     ),
     {
       width: 1200,
