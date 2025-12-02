@@ -19,11 +19,10 @@ export default function handler(req) {
           alignItems: 'center',
           justifyContent: 'center',
           flexDirection: 'column',
-          backgroundColor: 'black', // Düz Siyah
-          fontFamily: 'sans-serif', // Standart Font
+          backgroundColor: '#050505',
+          fontFamily: 'monospace',
         }}
       >
-        {/* Dış Çerçeve */}
         <div
           style={{
             display: 'flex',
@@ -32,46 +31,27 @@ export default function handler(req) {
             justifyContent: 'center',
             width: '900px',
             height: '500px',
-            border: '10px solid #00FFFF', // Düz Mavi Çizgi
-            borderRadius: '0px', // Köşe yuvarlama bile yok (Garanti olsun)
-            backgroundColor: '#111111',
+            border: '8px solid #00f3ff',
+            borderRadius: '40px',
+            backgroundColor: '#111',
+            boxShadow: '0 0 80px #00f3ff',
           }}
         >
-          {/* Başlık */}
-          <div
-            style={{
-              fontSize: 60,
-              color: '#00FFFF', // Camgöbeği
-              fontWeight: 'bold',
-              marginBottom: 20,
-            }}
-          >
+          <div style={{ fontSize: 60, color: '#00f3ff', marginBottom: 20, fontWeight: 'bold' }}>
             REFLEX TEST
           </div>
-
-          {/* Skor */}
-          <div
-            style={{
-              fontSize: 150,
-              fontWeight: 'bold',
-              color: 'white',
-              lineHeight: 1,
-            }}
-          >
+          <div style={{ fontSize: 160, fontWeight: 'bold', color: 'white', lineHeight: 1, textShadow: '5px 5px 0 #bc13fe' }}>
             {score}s
           </div>
-
-          {/* Alt Etiket */}
-          <div
-            style={{
-              marginTop: 40,
-              fontSize: 30,
-              backgroundColor: '#00FFFF',
-              color: 'black',
-              padding: '10px 50px',
-              fontWeight: 'bold',
-            }}
-          >
+          <div style={{ 
+            marginTop: 40, 
+            fontSize: 40,
+            backgroundColor: '#00f3ff', 
+            color: 'black', 
+            padding: '10px 60px', 
+            borderRadius: 50,
+            fontWeight: 'bold' 
+          }}>
             CYBER ELITE
           </div>
         </div>
