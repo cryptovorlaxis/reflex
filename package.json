@@ -1,7 +1,6 @@
 {
   "name": "reflex-arcade",
   "version": "1.0.0",
-  "type": "module",
   "dependencies": {
     "@vercel/og": "latest",
     "react": "latest",
