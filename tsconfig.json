@@ -5,9 +5,7 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "jsx": "react-jsx",
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
-    "strict": false
+    "allowSyntheticDefaultImports": true
   },
   "include": ["api/**/*"]
 }
