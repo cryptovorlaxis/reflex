@@ -1,11 +1,11 @@
 import { ImageResponse } from '@vercel/og';
-import React from 'react'; // <-- İŞTE O EKSİK PARÇA
+import React from 'react';
 
 export const config = {
   runtime: 'edge',
 };
 
-export default async function handler(req) {
+export default function handler(req) {
   const { searchParams } = new URL(req.url);
   const score = searchParams.get('score') || '0.000';
 
@@ -19,62 +19,42 @@ export default async function handler(req) {
           alignItems: 'center',
           justifyContent: 'center',
           flexDirection: 'column',
-          backgroundColor: '#050505', // Siyah Arka Plan
-          fontFamily: 'monospace',    // Sistem fontu (Risk yok)
+          backgroundColor: '#050505', // Zemin: Simsiyah
+          fontFamily: 'monospace',    // Font: Sistem Monospace (Garanti)
         }}
       >
-        {/* Neon Çerçeveli Kutu */}
+        {/* Neon Kutu (Tek Katman) */}
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            border: '8px solid #00f3ff', // Kalın Mavi Çerçeve
-            borderRadius: '20px',
-            padding: '40px 80px',
+            width: '900px',
+            height: '500px',
+            border: '8px solid #00f3ff', // Mavi Çerçeve
+            borderRadius: '40px',
             backgroundColor: '#111',
-            boxShadow: '0 0 60px #00f3ff', // Mavi Parlama
+            boxShadow: '0 0 80px #00f3ff', // Parlama Efekti
           }}
         >
-          {/* Başlık */}
-          <div
-            style={{
-              color: '#00f3ff',
-              fontSize: 60,
-              fontWeight: 'bold',
-              marginBottom: 20,
-              letterSpacing: '-2px',
-            }}
-          >
+          <div style={{ fontSize: 60, color: '#00f3ff', marginBottom: 20, fontWeight: 'bold' }}>
             REFLEX TEST
           </div>
 
-          {/* Skor */}
-          <div
-            style={{
-              fontSize: 160,
-              fontWeight: 'bold',
-              color: 'white',
-              lineHeight: 1,
-              textShadow: '4px 4px 0px #bc13fe', // Mor Gölge
-            }}
-          >
+          <div style={{ fontSize: 160, fontWeight: 'bold', color: 'white', lineHeight: 1, textShadow: '5px 5px 0 #bc13fe' }}>
             {score}s
           </div>
 
-          {/* Etiket */}
-          <div
-            style={{
-              marginTop: 40,
-              backgroundColor: '#00f3ff',
-              color: 'black',
-              fontSize: 30,
-              padding: '15px 50px',
-              borderRadius: '50px',
-              fontWeight: 'bold',
-            }}
-          >
+          <div style={{ 
+            marginTop: 40, 
+            fontSize: 40,
+            backgroundColor: '#00f3ff', 
+            color: 'black', 
+            padding: '10px 60px', 
+            borderRadius: 50,
+            fontWeight: 'bold' 
+          }}>
             CYBER ELITE
           </div>
         </div>
