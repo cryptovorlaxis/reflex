@@ -1,5 +1,4 @@
 import { ImageResponse } from '@vercel/og';
-import React from 'react';
 
 export const config = {
   runtime: 'edge',
@@ -8,7 +7,7 @@ export const config = {
 export default function handler(req) {
   const { searchParams } = new URL(req.url);
   const score = searchParams.get('score') || '0.000';
-
+  
   return new ImageResponse(
     (
       <div
@@ -19,11 +18,10 @@ export default function handler(req) {
           alignItems: 'center',
           justifyContent: 'center',
           flexDirection: 'column',
-          backgroundColor: '#050505', // Zemin: Simsiyah
-          fontFamily: 'monospace',    // Font: Sistem Monospace (Garanti)
+          backgroundColor: '#050505',
+          fontFamily: 'sans-serif', // monospace yerine sans-serif
         }}
       >
-        {/* Neon Kutu (Tek Katman) */}
         <div
           style={{
             display: 'flex',
@@ -32,20 +30,30 @@ export default function handler(req) {
             justifyContent: 'center',
             width: '900px',
             height: '500px',
-            border: '8px solid #00f3ff', // Mavi Çerçeve
+            border: '8px solid #00f3ff',
             borderRadius: '40px',
             backgroundColor: '#111',
-            boxShadow: '0 0 80px #00f3ff', // Parlama Efekti
+            boxShadow: '0 0 80px #00f3ff',
           }}
         >
-          <div style={{ fontSize: 60, color: '#00f3ff', marginBottom: 20, fontWeight: 'bold' }}>
+          <div style={{ 
+            fontSize: 60, 
+            color: '#00f3ff', 
+            marginBottom: 20, 
+            fontWeight: 'bold',
+            letterSpacing: '4px'
+          }}>
             REFLEX TEST
           </div>
-
-          <div style={{ fontSize: 160, fontWeight: 'bold', color: 'white', lineHeight: 1, textShadow: '5px 5px 0 #bc13fe' }}>
+          <div style={{ 
+            fontSize: 160, 
+            fontWeight: 'bold', 
+            color: 'white', 
+            lineHeight: 1, 
+            textShadow: '5px 5px 0 #bc13fe' 
+          }}>
             {score}s
           </div>
-
           <div style={{ 
             marginTop: 40, 
             fontSize: 40,
@@ -66,3 +74,11 @@ export default function handler(req) {
     }
   );
 }
+```
+
+## 2. **Dosya Konumu Kontrolü**
+Dosyanın şu yolda olduğundan emin ol:
+```
+/pages/api/og.js
+veya
+/app/api/og/route.js (App Router kullanıyorsan)
