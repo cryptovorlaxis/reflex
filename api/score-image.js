@@ -9,7 +9,8 @@ export default function handler(req) {
   const { searchParams } = new URL(req.url);
   const score = searchParams.get('score') || '0.000';
 
-  // Saf JavaScript ile HTML oluşturuyoruz (JSX Yok, Hata Yok)
+  // React.createElement kullanarak HTML oluşturuyoruz.
+  // Bu yöntem Vercel'in "JSX'i derleyememe" sorununu kökten çözer.
   return new ImageResponse(
     React.createElement(
       'div',
@@ -26,7 +27,7 @@ export default function handler(req) {
         },
       },
       [
-        // Dış Çerçeve
+        // Dış Çerçeve (Mavi Neon)
         React.createElement(
           'div',
           {
@@ -37,7 +38,7 @@ export default function handler(req) {
               justifyContent: 'center',
               width: '900px',
               height: '500px',
-              border: '8px solid #00f3ff', // Mavi Çerçeve
+              border: '8px solid #00f3ff',
               borderRadius: '40px',
               backgroundColor: '#111',
               boxShadow: '0 0 80px #00f3ff',
@@ -57,7 +58,7 @@ export default function handler(req) {
               },
               'REFLEX TEST'
             ),
-            // Skor
+            // Skor (Beyaz ve Mor Gölgeli)
             React.createElement(
               'div',
               {
@@ -71,7 +72,7 @@ export default function handler(req) {
               },
               score + 's'
             ),
-            // Etiket
+            // Alt Etiket
             React.createElement(
               'div',
               {
