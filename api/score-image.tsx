@@ -1,4 +1,5 @@
 import { ImageResponse } from '@vercel/og';
+import React from 'react';
 
 export const config = {
   runtime: 'edge',
@@ -7,7 +8,7 @@ export const config = {
 export default function handler(req) {
   const { searchParams } = new URL(req.url);
   const score = searchParams.get('score') || '0.000';
-  
+
   return new ImageResponse(
     (
       <div
@@ -19,7 +20,7 @@ export default function handler(req) {
           justifyContent: 'center',
           flexDirection: 'column',
           backgroundColor: '#050505',
-          fontFamily: 'sans-serif', // monospace yerine sans-serif
+          // fontFamily satırını SİLDİM. Varsayılan font kullanılacak.
         }}
       >
         <div
@@ -36,22 +37,10 @@ export default function handler(req) {
             boxShadow: '0 0 80px #00f3ff',
           }}
         >
-          <div style={{ 
-            fontSize: 60, 
-            color: '#00f3ff', 
-            marginBottom: 20, 
-            fontWeight: 'bold',
-            letterSpacing: '4px'
-          }}>
+          <div style={{ fontSize: 60, color: '#00f3ff', marginBottom: 20, fontWeight: 'bold' }}>
             REFLEX TEST
           </div>
-          <div style={{ 
-            fontSize: 160, 
-            fontWeight: 'bold', 
-            color: 'white', 
-            lineHeight: 1, 
-            textShadow: '5px 5px 0 #bc13fe' 
-          }}>
+          <div style={{ fontSize: 160, fontWeight: 'bold', color: 'white', lineHeight: 1, textShadow: '5px 5px 0 #bc13fe' }}>
             {score}s
           </div>
           <div style={{ 
@@ -74,11 +63,3 @@ export default function handler(req) {
     }
   );
 }
-```
-
-## 2. **Dosya Konumu Kontrolü**
-Dosyanın şu yolda olduğundan emin ol:
-```
-/pages/api/og.js
-veya
-/app/api/og/route.js (App Router kullanıyorsan)
