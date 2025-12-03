@@ -315,7 +315,7 @@
         if (typeof window.shareScore === 'function') {
             window.shareScore(scoreText.innerText);
         } else {
-            // Hata, loglanır ama script durmaz.
+            // Kapsam hatası verirse burası çalışır. Loglanır ama script durmaz.
             console.error("ShareScore fonksiyonu yüklenemedi.");
         }
     });
