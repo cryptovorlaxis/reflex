@@ -207,7 +207,7 @@
 </div>
 
 <script>
-    // BİRİNCİ HATA ÇÖZÜMÜ: SES DEĞİŞKENLERİ TANIMLAMA ve YÜKLEME (Hata alsa bile script durmaz)
+    // SES DEĞİŞKENLERİ TANIMLAMA (Global olarak erişilebilir olmalı)
     let soundReady, soundFail, soundWin, bgMusic;
 
     const btn = document.getElementById("reactionButton");
@@ -419,7 +419,7 @@
 import * as sdk from "https://esm.sh/@farcaster/miniapp-sdk";
 window.farcasterSDK = sdk;
 
-// İKİNCİ HATA ÇÖZÜMÜ: shareScore fonksiyonu global scope'a (window) bağlandı.
+// KAPSAM HATASI ÇÖZÜLDÜ: shareScore fonksiyonu global scope'a (window) bağlandı.
 window.shareScore = async function(score) {
     const rankText = document.getElementById("rankTitle").innerText;
     // API çağrısı, doğru rütbe parametresini kullanıyor.
