@@ -2,293 +2,470 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Reflex Test ⚡ Cyberpunk Elite</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>Reflex Test — Cyberpunk Edition</title>
 
-<!-- SOCIAL META -->
-<meta property="og:title" content="Reflex Test – Cyberpunk Arcade">
-<meta property="og:description" content="Elite reflexes only. Test your speed in the neon void.">
-<meta property="og:image" content="https://reflex-rho.vercel.app/screenshot1.png">
+<!-- FONTS -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700;900&display=swap" rel="stylesheet">
 
-<!-- ✅ FARCASTER MINI APP MANIFEST (DÜZELTİLMİŞ, PARSE EDİLEN VERSİYON) -->
-<meta name="fc:miniapp" content="{
-  &quot;version&quot;: &quot;1&quot;,
-  &quot;imageUrl&quot;: &quot;https://reflex-rho.vercel.app/screenshot1.png&quot;,
-  &quot;button&quot;: {
-    &quot;title&quot;: &quot;⚡ ENTER THE GRID&quot;,
-    &quot;action&quot;: {
-      &quot;type&quot;: &quot;launch_miniapp&quot;,
-      &quot;url&quot;: &quot;https://reflex-rho.vercel.app&quot;,
-      &quot;name&quot;: &quot;Reflex Test&quot;,
-      &quot;splashImageUrl&quot;: &quot;https://reflex-rho.vercel.app/screenshot1.png&quot;,
-      &quot;splashBackgroundColor&quot;: &quot;#050505&quot;
-    }
-  }
-}">
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700;900&display=swap');
 
-    :root {
-        --color-bg: #050505;
-        --glass-bg: rgba(20, 20, 30, 0.85);
-        --glass-border: rgba(255, 255, 255, 0.15);
-        --rank-a: #00f3ff;
-        --rank-c: #bc13fe;
-    }
+/* ===========================================================
+   GLOBAL STYLES
+=========================================================== */
+:root {
+    --cyan: #00eaff;
+    --purple: #bc13fe;
+    --red: #ff003c;
+    --gold: #ffaa00;
+    --white: #ffffff;
+    --dark: #050505;
 
-    /* Safe Area Fix */
-    html, body {
-        margin: 0;
-        padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-        height: 100%;
-        overflow: hidden;
-        font-family: 'Orbitron', sans-serif;
-        background: var(--color-bg);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+    --panel-bg: rgba(15, 15, 25, 0.75);
+    --panel-border: rgba(255, 255, 255, 0.2);
+}
 
-    /* Background Layers (centered, no stretching) */
-    .bg-layer {
-        position: absolute;
-        inset: 0;
-        z-index: -3;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+* {
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+    margin: 0;
+    padding: 0;
+}
 
-    .bg-nebula {
-        background: radial-gradient(circle at 50% 120%, #1a0b2e 0%, #000 70%);
-        transform: scale(1.3); /* TAM ORTA GÖRÜNTÜ */
-        opacity: 0.8;
-    }
+body {
+    background: black;
+    overflow: hidden;
+    font-family: 'Orbitron', sans-serif;
+}
 
-    .stars {
-        background-image: radial-gradient(1px 1px, rgba(255,255,255,0.7), transparent);
-        background-size: 180px 180px;
-        opacity: 0.4;
-        transform: scale(1.2);
-    }
+/* ===========================================================
+   BACKGROUND FX — GRID / STARS / FOG
+=========================================================== */
 
-    .cyber-grid {
-        background-image:
-            linear-gradient(rgba(0, 243, 255, 0.15) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0, 243, 255, 0.15) 1px, transparent 1px);
-        background-size: 50px 50px;
-        opacity: 0.25;
-        transform: scale(1.1);
-    }
+.bg-grid {
+    position: fixed;
+    inset: 0;
+    background: 
+        linear-gradient(rgba(0,255,255,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,255,0.08) 1px, transparent 1px);
+    background-size: 60px 60px;
+    transform: perspective(400px) rotateX(60deg) translateY(-200px);
+    opacity: 0.25;
+    animation: gridMove 20s linear infinite;
+    z-index: -3;
+}
 
-    /* MAIN UI CENTERED */
-    .game-ui {
-        width: 100%;
-        max-width: 420px;
-        padding: 10px;
-        text-align: center;
-        position: relative;
-        z-index: 10;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        align-items: center;
-    }
+@keyframes gridMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 60px; }
+}
 
-    /* LOGO FIX */
-    #gameLogo {
-        width: 220px;
-        height: auto;
-        margin-bottom: 4px;
-        filter: drop-shadow(0 0 18px rgba(0, 243, 255, 0.5));
-    }
+.bg-stars {
+    position: fixed;
+    inset: 0;
+    background-image:
+        radial-gradient(1px 1px at 20px 30px, #fff, transparent),
+        radial-gradient(1px 1px at 120px 80px, #fff, transparent),
+        radial-gradient(1px 1px at 70px 160px, #fff, transparent);
+    background-size: 200px 200px;
+    animation: stars 120s linear infinite;
+    opacity: 0.5;
+    z-index: -2;
+}
 
-    /* Button */
-    #reactionButton {
-        width: 240px;
-        height: 240px;
-        border-radius: 50%;
-        border: 4px solid var(--rank-a);
-        background: radial-gradient(circle, #0a151f 30%, #000 90%);
-        color: var(--rank-a);
-        font-family: 'Rajdhani', sans-serif;
-        font-weight: 700;
-        font-size: 34px;
-        cursor: pointer;
-        transition: 0.15s;
-    }
+@keyframes stars {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-800px); }
+}
 
-    #reactionButton:active {
-        transform: scale(0.94);
-    }
+.bg-fog {
+    position: fixed;
+    inset: 0;
+    background: url('https://i.imgur.com/4NJlQ4Z.png');
+    background-size: cover;
+    mix-blend-mode: screen;
+    opacity: 0.08;
+    animation: fog 20s ease-in-out infinite alternate;
+    z-index: -1;
+}
 
-    /* Score Panel Centered PERFECTLY */
-    .score-panel {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(0.8);
-        opacity: 0;
-        pointer-events: none;
-        background: var(--glass-bg);
-        backdrop-filter: blur(22px);
-        width: 90%;
-        max-width: 360px;
-        padding: 28px;
-        border-radius: 18px;
-        border: 2px solid var(--glass-border);
-        text-align: center;
-        z-index: 50;
-        transition: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
+@keyframes fog {
+    from { transform: translateX(-5%) scale(1.1); }
+    to   { transform: translateX(5%) scale(1.2); }
+}
 
-    .score-panel.visible {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-        pointer-events: auto;
-    }
+/* ===========================================================
+   START SCREEN
+=========================================================== */
 
-    .btn-group {
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;
-    }
+#startScreen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    background: rgba(0,0,0,0.88);
+    z-index: 10;
+    animation: fadeIn 1.2s ease-out forwards;
+}
 
-    .cyber-btn {
-        flex: 1;
-        padding: 12px 10px;
-        border-radius: 8px;
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.3);
-        color: #fff;
-        font-family: 'Orbitron', sans-serif;
-        font-size: 14px;
-        font-weight: 700;
-        cursor: pointer;
-    }
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(1.05); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* LOGO WITH GLOW + SCANLINES */
+.start-logo {
+    width: 380px;
+    filter:
+        drop-shadow(0 0 25px var(--cyan))
+        drop-shadow(0 0 45px var(--purple));
+    animation: logoFlicker 3s infinite steps(2);
+}
+
+@keyframes logoFlicker {
+    0%, 92% { opacity: 1; }
+    93% { opacity: 0.7; }
+    94% { opacity: 1; }
+    96% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.start-btn {
+    padding: 20px 60px;
+    font-size: 24px;
+    font-weight: 900;
+    border-radius: 50px;
+    border: 3px solid var(--cyan);
+    color: var(--cyan);
+    background: rgba(0,0,0,0.3);
+    cursor: pointer;
+    letter-spacing: 3px;
+    transition: 0.2s;
+    text-shadow: 0 0 10px var(--cyan);
+}
+
+.start-btn:hover {
+    background: var(--cyan);
+    color: black;
+    box-shadow: 0 0 25px var(--cyan);
+    transform: scale(1.06);
+}
+
+.start-hint {
+    margin-top: -12px;
+    font-size: 12px;
+    opacity: 0.6;
+    color: white;
+}
+
+/* ===========================================================
+   GAME UI (Initially Hidden)
+=========================================================== */
+
+#gameUI {
+    position: fixed;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+}
+
+.game-panel {
+    padding: 25px;
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 16px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 20px rgba(0,255,255,0.15);
+}
+
+.status-text {
+    font-size: 26px;
+    letter-spacing: 2px;
+    color: var(--purple);
+    text-shadow: 0 0 12px var(--purple);
+}
+
+#reactionButton {
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    font-size: 36px;
+    font-weight: 900;
+    border: 4px solid var(--cyan);
+    color: var(--cyan);
+    background: radial-gradient(circle, #031016 20%, #000 90%);
+    transition: 0.2s;
+    box-shadow: 0 0 35px rgba(0,255,255,0.25);
+}
+
+#reactionButton:active {
+    transform: scale(0.92);
+}
+
+/* MODE COLORS */
+.mode-wait {
+    border-color: var(--gold) !important;
+    color: var(--gold) !important;
+    box-shadow: 0 0 40px rgba(255,170,0,0.5) !important;
+}
+
+.mode-go {
+    border-color: #0aff0a !important;
+    background: radial-gradient(circle, #033003, #000);
+    color: white !important;
+    box-shadow: 0 0 50px #0aff0a !important;
+}
+
+/* ===========================================================
+   SCORE PANEL
+=========================================================== */
+
+#scorePanel {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.score-card {
+    width: 420px;
+    padding: 35px;
+    border-radius: 16px;
+    background: rgba(10,10,20,0.85);
+    border: 2px solid var(--cyan);
+    backdrop-filter: blur(20px);
+    text-align: center;
+    box-shadow: 0 0 35px rgba(0,255,255,0.35);
+    animation: popIn 0.4s ease-out;
+}
+
+@keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.rank-title {
+    font-size: 28px;
+    font-weight: 900;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.score-value {
+    font-size: 80px;
+    font-weight: 900;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.score-label {
+    font-size: 14px;
+    opacity: 0.6;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+}
+
+.score-buttons {
+    display: flex;
+    gap: 14px;
+}
+
+.score-btn {
+    flex: 1;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid var(--cyan);
+    padding: 12px;
+    border-radius: 8px;
+    color: var(--cyan);
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.score-btn:hover {
+    background: var(--cyan);
+    color: black;
+    box-shadow: 0 0 25px var(--cyan);
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="bg-nebula"></div>
-<div class="stars"></div>
-<div class="cyber-grid"></div>
+<div class="bg-grid"></div>
+<div class="bg-stars"></div>
+<div class="bg-fog"></div>
 
-<div class="game-ui">
-    <div id="status">SYSTEM READY</div>
+<!-- =======================================================
+     START SCREEN
+======================================================= -->
+<div id="startScreen">
+    <img src="logo.png" class="start-logo" />
+    <button class="start-btn" id="enterBtn">ENTER THE GRID</button>
+    <div class="start-hint">Neural interface initializing…</div>
+</div>
+
+<!-- =======================================================
+     GAME SCREEN
+======================================================= -->
+<div id="gameUI">
+    <div class="game-panel">
+        <div id="status" class="status-text">SYSTEM READY</div>
+    </div>
+
     <button id="reactionButton">START</button>
 </div>
 
-<div id="scorePanel" class="score-panel">
-    <div id="rankTitle">UNRANKED</div>
-    <div id="score" style="font-size:70px;font-weight:900;">0.000</div>
+<!-- =======================================================
+     SCORE PANEL
+======================================================= -->
+<div id="scorePanel">
+    <div class="score-card">
+        <div id="rankTitle" class="rank-title">UNRANKED</div>
+        <div id="score" class="score-value">0.000</div>
+        <div class="score-label">REACTION TIME (s)</div>
 
-    <div style="display:flex;gap:10px;margin-top:20px;">
-        <button id="againBtn" class="cyber-btn">RETRY</button>
-        <button id="shareBtn" class="cyber-btn">SHARE</button>
+        <div class="score-buttons">
+            <button class="score-btn" id="againBtn">RETRY</button>
+            <button class="score-btn" id="shareBtn">SHARE</button>
+        </div>
     </div>
 </div>
 
+<!-- =======================================================
+     GAME LOGIC
+======================================================= -->
 <script>
-let btn = document.getElementById("reactionButton");
-let scorePanel = document.getElementById("scorePanel");
-let scoreText = document.getElementById("score");
-let statusText = document.getElementById("status");
-let againBtn = document.getElementById("againBtn");
-let shareBtn = document.getElementById("shareBtn");
-let rankTitle = document.getElementById("rankTitle");
+
+const startScreen = document.getElementById("startScreen");
+const gameUI = document.getElementById("gameUI");
+const scorePanel = document.getElementById("scorePanel");
+
+document.getElementById("enterBtn").addEventListener("click", () => {
+    startScreen.style.display = "none";
+    gameUI.style.display = "flex";
+});
+
+/* ------------------------------  
+   ANTI-CHEAT + GAME LOGIC
+------------------------------ */
 
 let gameState = "idle";
-let startTime = 0;
+let goTime = 0;
+let clickLock = false;
 let timeoutID;
+
+const btn = document.getElementById("reactionButton");
+const statusText = document.getElementById("status");
+const scoreText = document.getElementById("score");
+const rankTitle = document.getElementById("rankTitle");
+const againBtn = document.getElementById("againBtn");
+const shareBtn = document.getElementById("shareBtn");
 
 btn.addEventListener("click", () => {
     if (gameState === "idle") startGame();
-    else if (gameState === "wait") fail();
-    else if (gameState === "go") success();
+    else if (gameState === "wait") triggerFail("EARLY TAP");
+    else if (gameState === "go") handleGoClick();
 });
 
-againBtn.addEventListener("click", resetGame);
-shareBtn.addEventListener("click", () => window.shareScore?.(scoreText.innerText));
-
+/* ------------------------------  
+   START GAME
+------------------------------ */
 function startGame() {
     gameState = "wait";
-    statusText.innerText = "WAIT FOR SIGNAL...";
-    btn.innerText = "HOLD";
+    statusText.innerText = "WAIT FOR GREEN";
+    btn.className = "mode-wait";
+    btn.innerText = "WAIT";
 
-    const delay = Math.random() * 3000 + 1500;
+    const randomTime = Math.random() * 3000 + 700;
 
     timeoutID = setTimeout(() => {
         gameState = "go";
+        goTime = Date.now();
+        clickLock = true;
+
         statusText.innerText = "TAP NOW!";
+        btn.className = "mode-go";
         btn.innerText = "TAP!";
-        startTime = Date.now();
-    }, delay);
+
+        setTimeout(() => (clickLock = false), 100);
+
+    }, randomTime);
 }
 
-function fail() {
-    clearTimeout(timeoutID);
+/* ------------------------------  
+   HANDLE TAP ON GO
+------------------------------ */
+function handleGoClick() {
+    const now = Date.now();
+    if (clickLock) return;
+
+    const reaction = now - goTime;
+
+    if (reaction < 50) {
+        triggerFail("TOO FAST");
+        return;
+    }
+
+    triggerSuccess(reaction);
+}
+
+/* ------------------------------  
+   SUCCESS
+------------------------------ */
+function triggerSuccess(ms) {
+    gameState = "finished";
+    const sec = (ms / 1000).toFixed(3);
+
+    scoreText.innerText = sec;
+    applyRank(ms);
+
+    scorePanel.style.display = "flex";
+}
+
+/* ------------------------------  
+   FAIL
+------------------------------ */
+function triggerFail(reason) {
     gameState = "idle";
     statusText.innerText = "SYSTEM FAILURE";
-    btn.innerText = "FAIL";
-    setTimeout(resetGame, 1200);
-}
-
-function success() {
-    const t = (Date.now() - startTime) / 1000;
-    const s = t.toFixed(3);
-
-    scoreText.innerText = s;
-    rankTitle.innerText = getRank(t);
-
-    scorePanel.classList.add("visible");
-    statusText.innerText = "SYNC COMPLETE";
-    btn.innerText = "✔";
-}
-
-function getRank(ms) {
-    if (ms < 0.18) return "THE SINGULARITY 🌌";
-    if (ms < 0.22) return "CYBER DEMON 👹";
-    if (ms < 0.26) return "NEON OPERATIVE ⚡";
-    if (ms < 0.32) return "STREET SAMURAI ⚔️";
-    return "SYSTEM GLITCH 👾";
-}
-
-function resetGame() {
-    gameState = "idle";
-    scorePanel.classList.remove("visible");
-    statusText.innerText = "SYSTEM READY";
+    btn.className = "";
     btn.innerText = "START";
 }
+
+/* ------------------------------  
+   RANK SYSTEM
+------------------------------ */
+function applyRank(ms) {
+    let rank = "UNRANKED";
+
+    if (ms < 130) rank = "CYBER DEITY 🌌";
+    else if (ms < 170) rank = "HYPER REFLEX ⚡";
+    else if (ms < 220) rank = "NEON OPERATIVE 🔷";
+    else if (ms < 280) rank = "STREET SAMURAI 🟡";
+    else if (ms < 350) rank = "ROOKIE RUNNER 🟣";
+    else rank = "GLITCH ENTITY 👾";
+
+    rankTitle.innerText = rank;
+}
+
+againBtn.addEventListener("click", () => {
+    scorePanel.style.display = "none";
+    gameState = "idle";
+    statusText.innerText = "SYSTEM READY";
+    btn.innerText = "START";
+});
+
 </script>
-
-<!-- ✅ FARCASTER MINIAPP SDK (DÜZGÜN IMPORT, DOĞRU FORMAT) -->
-<script type="module">
-import { sdk } from "https://esm.sh/@farcaster/miniapp-sdk";
-
-window.shareScore = async function(score) {
-    const rankText = document.getElementById("rankTitle").innerText;
-
-    const image = `https://reflex-rho.vercel.app/api/score-image?score=${score}&rank=${encodeURIComponent(rankText)}`;
-    const text = `⚡ ${rankText}\nReflex: ${score}s\n\nCan you beat my time?`;
-
-    const url = `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(image)}`;
-
-    try {
-        await sdk.actions.openUrl({ url });
-    } catch {}
-};
-
-setTimeout(async () => {
-    try {
-        await sdk.actions.ready();
-    } catch (e) {
-        console.error("READY ERROR", e);
-    }
-}, 200);
-</script>
-
 </body>
 </html>
