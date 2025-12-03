@@ -207,7 +207,7 @@
 </div>
 
 <script>
-    // SES DEĞİŞKENLERİ TANIMLAMA (Global olarak erişilebilir olmalı)
+    // BİRİNCİ HATA ÇÖZÜMÜ: SES DEĞİŞKENLERİ TANIMLAMA ve YÜKLEME (Hata alsa bile script durmaz)
     let soundReady, soundFail, soundWin, bgMusic;
 
     const btn = document.getElementById("reactionButton");
@@ -221,7 +221,7 @@
     const newRecordBadge = document.getElementById("newRecordBadge");
     const body = document.body;
 
-    // AUDIO YÜKLEME (Hata durumunda scriptin durmaması için try/catch içinde)
+    // AUDIO YÜKLEME (try/catch içinde global değişkenlere atama)
     try {
         soundReady = new Audio("ready.mp3");
         soundFail = new Audio("fail.mp3");
@@ -230,8 +230,8 @@
         bgMusic.loop = true; 
         bgMusic.volume = 0.4;
     } catch (e) {
-        // Dosyalar bulunamazsa uygulamayı durdurmak yerine uyarı verir
-        console.warn("Ses dosyaları yüklenemedi. Sesler çalmayabilir.");
+        // Dosya yükleme hatası oluşsa bile, değişkenler tanımsız kalır ama script devam eder.
+        console.warn("Ses dosyaları yüklenemedi. Uygulama çalışmaya devam ediyor.");
     }
     
     let gameState = "idle";
@@ -250,7 +250,7 @@
     document.body.addEventListener('touchstart', startBackgroundMusic, { once: true });
 
     function startBackgroundMusic() {
-        // Değişkenlerin tanımlı olup olmadığını kontrol et
+        // Ses değişkenlerinin yüklenip yüklenmediğini kontrol et
         if (!bgMusic) return; 
         
         if (!musicStarted) {
@@ -260,6 +260,7 @@
     }
 
     function playSound(sound) {
+        // Ses değişkeninin var olup olmadığını kontrol et
         if(sound) { sound.pause(); sound.currentTime = 0; sound.play().catch(()=>{}); }
     }
     function vibrate(pattern) {
@@ -309,8 +310,17 @@
         }
     });
 
+    // Share butonu artık globaldeki window.shareScore'u kullanacak.
+    shareBtn.addEventListener("click", () => {
+        if (typeof window.shareScore === 'function') {
+            window.shareScore(scoreText.innerText);
+        } else {
+            // Hata, loglanır ama script durmaz.
+            console.error("ShareScore fonksiyonu yüklenemedi.");
+        }
+    });
+
     againBtn.addEventListener("click", resetGame);
-    // shareBtn.addEventListener("click", ...): Bu, aşağıdaki module script'ten çağrılacak.
 
     function startGame() {
         gameState = "wait";
@@ -409,10 +419,10 @@
 import * as sdk from "https://esm.sh/@farcaster/miniapp-sdk";
 window.farcasterSDK = sdk;
 
-
+// İKİNCİ HATA ÇÖZÜMÜ: shareScore fonksiyonu global scope'a (window) bağlandı.
 window.shareScore = async function(score) {
     const rankText = document.getElementById("rankTitle").innerText;
-    // HATA GİDERİLDİ: Rank bilgisi, API'ye gönderiliyor.
+    // API çağrısı, doğru rütbe parametresini kullanıyor.
     const shareImage = `https://reflex-rho.vercel.app/api/score-image?score=${score}&rank=${encodeURIComponent(rankText)}`;
     
     const text = `⚡ ${rankText}\nReflex: ${score}s\n\nCan you beat my time? 👇`;
@@ -426,6 +436,7 @@ setTimeout(() => {
         sdk.actions.ready(); 
     } catch (e) {
         // Hata olması durumunda bile uygulama bloke edilmez
+        console.error("SDK Ready çağrısı başarısız oldu.");
     }
 }, 200);
 
