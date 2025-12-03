@@ -402,7 +402,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
 async function shareScore(score) {
     const rankText = document.getElementById("rankTitle").innerText;
-    const shareImage = `https://reflex-rho.vercel.app/api/score-image?score=${score}`;
+    // HATA GİDERİLDİ: Rank bilgisi, API'ye gönderiliyor.
+    const shareImage = `https://reflex-rho.vercel.app/api/score-image?score=${score}&rank=${encodeURIComponent(rankText)}`;
+    
     const text = `⚡ ${rankText}\nReflex: ${score}s\n\nCan you beat my time? 👇`;
     const composeUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(shareImage)}`;
     try { await sdk.actions.openUrl({ url: composeUrl }); } catch (e) {}
