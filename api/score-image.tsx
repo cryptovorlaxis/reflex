@@ -6,24 +6,26 @@ export const config = {
   runtime: 'edge',
 };
 
-// Bu renkleri CSS'nizdeki renklerle eşleştirdik
+// Rank'a göre rengi döndüren fonksiyon
 function getRankColor(rank) {
   if (rank.includes('SINGULARITY')) return '#ffffff'; // rank-s-plus
   if (rank.includes('DEMON')) return '#ff003c'; // rank-s
   if (rank.includes('OPERATIVE')) return '#00f3ff'; // rank-a
   if (rank.includes('SAMURAI')) return '#ffaa00'; // rank-b
-  return '#bc13fe'; // rank-c (SYSTEM GLITCH)
+  return '#bc13fe'; // rank-c (SYSTEM GLITCH veya UNRANKED GLITCH)
 }
 
 export default function handler(req) {
+  // Gelen isteğin URL'sinden parametreleri al
   const { searchParams } = new URL(req.url);
   
-  // 1. Düzeltme: Rütbe parametresini okuyoruz.
+  // Parametreleri güvenli bir şekilde okuyoruz
   const score = searchParams.get('score') || '0.000';
-  const rank = searchParams.get('rank') || 'UNRANKED GLITCH';
-  
+  const rank = searchParams.get('rank') || 'UNRANKED GLITCH'; // Rank gelmezse varsayılan değer
+
   const neonColor = getRankColor(rank);
 
+  // Görseli ImageResponse ile oluştur
   return new ImageResponse(
     (
       <div
@@ -35,7 +37,7 @@ export default function handler(req) {
           justifyContent: 'center',
           flexDirection: 'column',
           backgroundColor: '#050505',
-          // Font, Vercel/OG'de doğru yüklenmelidir
+          // Vercel/OG için güvenilir bir font kullanıyoruz
           fontFamily: 'system-ui, sans-serif', 
         }}
       >
@@ -47,14 +49,14 @@ export default function handler(req) {
             justifyContent: 'center',
             width: '900px',
             height: '500px',
-            border: `10px solid ${neonColor}`,
+            border: `10px solid ${neonColor}`, // Dinamik Çerçeve Rengi
             borderRadius: '40px',
             backgroundColor: '#111',
-            boxShadow: `0 0 70px ${neonColor}`,
+            boxShadow: `0 0 70px ${neonColor}`, // Dinamik Neon Gölge
             padding: '40px',
           }}
         >
-          {/* 2. Düzeltme: Dinamik Rütbe Başlığı */}
+          {/* Rütbe Başlığı */}
           <div style={{ 
             fontSize: 40, 
             color: neonColor, 
@@ -65,12 +67,13 @@ export default function handler(req) {
             {rank}
           </div>
           
+          {/* Skor Değeri */}
           <div style={{ 
             fontSize: 160, 
             fontWeight: '900', 
             color: 'white', 
             lineHeight: 1, 
-            textShadow: `5px 5px 0 ${neonColor}` 
+            textShadow: `5px 5px 0 ${neonColor}` // Dinamik Gölge Rengi
           }}>
             {score}s
           </div>
