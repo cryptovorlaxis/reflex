@@ -5,25 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>Reflex Test ⚡ Cyberpunk Elite</title>
 
+<!-- SOCIAL META -->
 <meta property="og:title" content="Reflex Test – Cyberpunk Arcade">
 <meta property="og:description" content="Elite reflexes only. Test your speed in the neon void.">
 <meta property="og:image" content="https://reflex-rho.vercel.app/screenshot1.png">
 
-<meta name="fc:miniapp" content='{
-  "version": "1",
-  "imageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
-  "button": {
-    "title": "⚡ ENTER THE GRID",
-    "action": {
-      "type": "launch_miniapp",
-      "url": "https://reflex-rho.vercel.app",
-      "name": "Reflex Test",
-      "splashImageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
-      "splashBackgroundColor": "#050505"
+<!-- ✅ FARCASTER MINI APP MANIFEST (DÜZELTİLMİŞ, PARSE EDİLEN VERSİYON) -->
+<meta name="fc:miniapp" content="{
+  &quot;version&quot;: &quot;1&quot;,
+  &quot;imageUrl&quot;: &quot;https://reflex-rho.vercel.app/screenshot1.png&quot;,
+  &quot;button&quot;: {
+    &quot;title&quot;: &quot;⚡ ENTER THE GRID&quot;,
+    &quot;action&quot;: {
+      &quot;type&quot;: &quot;launch_miniapp&quot;,
+      &quot;url&quot;: &quot;https://reflex-rho.vercel.app&quot;,
+      &quot;name&quot;: &quot;Reflex Test&quot;,
+      &quot;splashImageUrl&quot;: &quot;https://reflex-rho.vercel.app/screenshot1.png&quot;,
+      &quot;splashBackgroundColor&quot;: &quot;#050505&quot;
     }
   }
-}' />
-
+}">
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700;900&display=swap');
 
@@ -31,13 +32,12 @@
         --color-bg: #050505;
         --glass-bg: rgba(20, 20, 30, 0.85);
         --glass-border: rgba(255, 255, 255, 0.15);
-        
-        /* Rank Colors */
-        --rank-s-plus: #ffffff; 
-        --rank-s: #ff003c;      
-        --rank-a: #00f3ff;      
-        --rank-b: #ffaa00;      
-        --rank-c: #bc13fe;      
+
+        --rank-s-plus: #ffffff;
+        --rank-s: #ff003c;
+        --rank-a: #00f3ff;
+        --rank-b: #ffaa00;
+        --rank-c: #bc13fe;
     }
 
     * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
@@ -53,125 +53,48 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        perspective: 1000px; /* 3D efektler için */
     }
 
-    /* --- SHAKE ANIMATIONS --- */
-    .shake-screen { animation: screenShake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
-    @keyframes screenShake {
-        10%, 90% { transform: translate3d(-2px, 0, 0) rotate(-1deg); }
-        20%, 80% { transform: translate3d(4px, 0, 0) rotate(1deg); }
-        30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
-        40%, 60% { transform: translate3d(6px, 0, 0); }
-    }
+    .bg-nebula { position: fixed; inset: 0; z-index: -3; background: radial-gradient(circle at 50% 120%, #1a0b2e 0%, #000 70%); }
+    .stars { position: fixed; inset: 0; z-index: -2; background-image: radial-gradient(1px 1px, #fff, transparent); opacity: 0.3; }
+    .cyber-grid { position: fixed; inset: 0; z-index: -1; background-image: linear-gradient(rgba(0, 243, 255, 0.2) 1px, transparent 1px),linear-gradient(90deg, rgba(0, 243, 255, 0.2) 1px, transparent 1px); background-size: 50px 50px; opacity: 0.25; }
 
-    /* --- GLITCH EFFECT (FAIL) --- */
-    .glitch-mode { filter: drop-shadow(4px 4px 0px red) drop-shadow(-4px -4px 0px blue); }
+    .game-ui { width: 100%; max-width: 420px; padding: 20px; text-align: center; z-index: 5; }
 
-    /* --- BACKGROUNDS --- */
-    .bg-nebula { position: fixed; inset: 0; z-index: -3; background: radial-gradient(circle at 50% 120%, #1a0b2e 0%, #000 70%); animation: pulseBg 8s infinite; }
-    .stars { position: fixed; inset: 0; z-index: -2; background-image: radial-gradient(1px 1px at 20px 30px, #fff, transparent), radial-gradient(1px 1px at 40px 70px, #fff, transparent); background-size: 200px 200px; animation: starsMove 100s linear infinite; opacity: 0.6; }
-    .cyber-grid { position: fixed; top: 0; left: 0; width: 100%; height: 200%; background: linear-gradient(transparent 0%, rgba(188, 19, 254, 0.3) 2%, transparent 3%), linear-gradient(90deg, transparent 0%, rgba(0, 243, 255, 0.2) 2%, transparent 3%); background-size: 80px 80px; transform: perspective(400px) rotateX(60deg) translateY(-100px) translateZ(-200px); opacity: 0.25; animation: gridScroll 20s linear infinite; z-index: -1; }
-    .scanlines { position: fixed; inset: 0; pointer-events: none; z-index: 999; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1)); background-size: 100% 4px; }
-
-    @keyframes gridScroll { 0% { background-position: 0 0; } 100% { background-position: 0 80px; } }
-    @keyframes starsMove { 0% { transform: translateY(0); } 100% { transform: translateY(-1000px); } }
-    @keyframes pulseBg { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
-
-    /* --- UI --- */
-    .game-ui { width: 100%; max-width: 420px; padding: 20px; text-align: center; position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; gap: 20px; }
-
-    #gameLogo { width: 280px; height: auto; opacity: 0.9; filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.3)); transition: 0.5s; }
-    
-    /* --- BEST SCORE INDICATOR --- */
-    .best-score-box {
-        font-family: 'Rajdhani', sans-serif;
-        font-size: 16px; color: #888; letter-spacing: 2px;
-        margin-top: -10px; opacity: 0.8;
-    }
-    .best-score-box span { color: var(--rank-a); font-weight: bold; text-shadow: 0 0 10px var(--rank-a); }
-
-    /* --- MAIN BUTTON --- */
     #reactionButton {
         width: 260px; height: 260px;
         border-radius: 50%;
         border: 4px solid var(--rank-a);
         background: radial-gradient(circle, #0a151f 30%, #000 90%);
         color: var(--rank-a);
-        font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 38px; letter-spacing: 3px;
-        cursor: pointer; position: relative;
-        box-shadow: 0 0 30px rgba(0, 243, 255, 0.2), inset 0 0 50px rgba(0, 243, 255, 0.1);
-        transition: all 0.15s; outline: none; -webkit-tap-highlight-color: transparent;
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 36px;
+        cursor: pointer;
     }
 
-    #reactionButton.mode-wait { border-color: var(--rank-b); color: var(--rank-b); box-shadow: 0 0 50px rgba(255, 170, 0, 0.3); animation: pulseOrange 0.8s infinite alternate; }
-    #reactionButton.mode-go { border-color: #0aff0a; color: #fff; background: radial-gradient(circle, #003300 0%, #000 90%); box-shadow: 0 0 80px #0aff0a, inset 0 0 40px #0aff0a; transform: scale(1.02); }
-    #reactionButton.mode-fail { border-color: var(--rank-c); color: var(--rank-c); box-shadow: 0 0 60px var(--rank-c); animation: shakeButton 0.4s; }
-    #reactionButton:active { transform: scale(0.96); }
-
-    /* --- SCORE PANEL --- */
     .score-panel {
-        background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-        border: 2px solid var(--glass-border); border-radius: 24px;
-        padding: 35px 25px; width: 90%; max-width: 380px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -40%) scale(0.9);
-        opacity: 0; pointer-events: none; z-index: 200;
-        display: flex; flex-direction: column; align-items: center; gap: 15px;
-        transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .score-panel.visible { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: all; }
-
-    /* Ranks */
-    #rankTitle { font-family: 'Rajdhani', sans-serif; font-size: 24px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #fff; }
-    
-    /* Dynamic Styles */
-    .score-panel.rank-s-plus { border-color: var(--rank-s-plus); box-shadow: 0 0 60px rgba(255,255,255,0.5); }
-    .score-panel.rank-s-plus #rankTitle { color: var(--rank-s-plus); text-shadow: 0 0 20px var(--rank-s-plus); }
-    
-    .score-panel.rank-s { border-color: var(--rank-s); box-shadow: 0 0 50px rgba(255, 0, 60, 0.4); }
-    .score-panel.rank-s #rankTitle { color: var(--rank-s); text-shadow: 0 0 20px var(--rank-s); }
-
-    .score-panel.rank-a { border-color: var(--rank-a); box-shadow: 0 0 50px rgba(0, 243, 255, 0.4); }
-    .score-panel.rank-a #rankTitle { color: var(--rank-a); text-shadow: 0 0 20px var(--rank-a); }
-
-    .score-panel.rank-b { border-color: var(--rank-b); box-shadow: 0 0 50px rgba(255, 170, 0, 0.4); }
-    .score-panel.rank-b #rankTitle { color: var(--rank-b); text-shadow: 0 0 20px var(--rank-b); }
-
-    /* .score-panel.rank-c */
-    .score-panel.rank-c { border-color: var(--rank-c); box-shadow: 0 0 50px rgba(188, 19, 254, 0.4); }
-    .score-panel.rank-c #rankTitle { color: var(--rank-c); text-shadow: 0 0 20px var(--rank-c); }
-
-    /* New Record Badge */
-    .new-record-badge {
-        background: var(--rank-s-plus); color: #000;
-        font-size: 12px; font-weight: bold; padding: 4px 10px; border-radius: 4px;
-        margin-bottom: -10px; animation: pulse 0.5s infinite alternate; display: none;
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+        background: rgba(20,20,30,0.8);
+        backdrop-filter: blur(20px);
+        padding: 35px;
+        border-radius: 20px;
+        border: 2px solid var(--glass-border);
+        transition: 0.4s;
+        z-index: 20;
+        width: 90%;
+        max-width: 380px;
+        text-align: center;
+        pointer-events: none;
     }
 
-    #score {
-        font-size: 76px; font-weight: 900; line-height: 1;
-        background: linear-gradient(to bottom, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        filter: drop-shadow(0 0 15px rgba(255,255,255,0.3));
+    .score-panel.visible {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+        pointer-events: auto;
     }
-    
-    .btn-group { display: flex; gap: 15px; width: 100%; margin-top: 15px; }
-    .cyber-btn {
-        flex: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff;
-        padding: 14px; font-family: 'Orbitron', sans-serif; font-weight: 700; text-transform: uppercase; font-size: 14px; cursor: pointer; transition: 0.2s; border-radius: 8px;
-    }
-    .cyber-btn:hover { background: #fff; color: #000; box-shadow: 0 0 30px #fff; }
-
-    /* Particles */
-    .particle { position: absolute; pointer-events: none; background: white; border-radius: 50%; z-index: 100; animation: flyOut 0.6s ease-out forwards; }
-
-    @keyframes pulseOrange { from { opacity: 1; } to { opacity: 0.6; } }
-    @keyframes shakeButton { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
-    @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.1); } }
-    @keyframes flyOut { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; } }
-
-    #status { font-family: 'Rajdhani', sans-serif; font-size: 24px; color: #888; text-transform: uppercase; letter-spacing: 2px; min-height: 30px; font-weight: 600; }
-
 </style>
 </head>
 
@@ -180,269 +103,119 @@
 <div class="bg-nebula"></div>
 <div class="stars"></div>
 <div class="cyber-grid"></div>
-<div class="scanlines"></div>
 
 <div class="game-ui">
-    <div class="logo-container">
-        <img id="gameLogo" src="logo.png" alt="REFLEX">
-    </div>
-
-    <div class="best-score-box">BEST: <span id="bestScoreDisplay">--</span></div>
-
     <div id="status">SYSTEM READY</div>
-
     <button id="reactionButton">START</button>
 </div>
 
 <div id="scorePanel" class="score-panel">
-    <div class="new-record-badge" id="newRecordBadge">NEW RECORD!</div>
-    <div style="font-size: 12px; color: #aaa; letter-spacing: 2px; margin-bottom: -10px; margin-top: 10px;">TIER RANK</div>
     <div id="rankTitle">UNRANKED</div>
-    <div id="score">0.000</div>
-    <div style="font-size: 12px; color: #aaa;">REACTION TIME (s)</div>
-    
-    <div class="btn-group">
+    <div id="score" style="font-size:70px;font-weight:900;">0.000</div>
+
+    <div style="display:flex;gap:10px;margin-top:20px;">
         <button id="againBtn" class="cyber-btn">RETRY</button>
         <button id="shareBtn" class="cyber-btn">SHARE</button>
     </div>
 </div>
 
 <script>
-    // BİRİNCİ HATA ÇÖZÜMÜ: SES DEĞİŞKENLERİ TANIMLAMA ve YÜKLEME (Hata alsa bile script durmaz)
-    let soundReady, soundFail, soundWin, bgMusic;
+let btn = document.getElementById("reactionButton");
+let scorePanel = document.getElementById("scorePanel");
+let scoreText = document.getElementById("score");
+let statusText = document.getElementById("status");
+let againBtn = document.getElementById("againBtn");
+let shareBtn = document.getElementById("shareBtn");
+let rankTitle = document.getElementById("rankTitle");
 
-    const btn = document.getElementById("reactionButton");
-    const statusText = document.getElementById("status");
-    const scorePanel = document.getElementById("scorePanel");
-    const scoreText = document.getElementById("score");
-    const rankTitle = document.getElementById("rankTitle");
-    const againBtn = document.getElementById("againBtn");
-    const shareBtn = document.getElementById("shareBtn");
-    const bestScoreDisplay = document.getElementById("bestScoreDisplay");
-    const newRecordBadge = document.getElementById("newRecordBadge");
-    const body = document.body;
+let gameState = "idle";
+let startTime = 0;
+let timeoutID;
 
-    // AUDIO YÜKLEME (try/catch içinde global değişkenlere atama)
-    // BU KISIMDAKİ GÜVENLİK, SCRİPTİN ÇÖKMESİNİ ÖNLER.
-    try {
-        soundReady = new Audio("ready.mp3");
-        soundFail = new Audio("fail.mp3");
-        soundWin = new Audio("win.mp3");
-        bgMusic = new Audio("music.mp3");
-        bgMusic.loop = true; 
-        bgMusic.volume = 0.4;
-    } catch (e) {
-        // Dosya yükleme hatası oluşsa bile, değişkenler tanımsız kalır ama script devam eder.
-        console.warn("Ses dosyaları yüklenemedi. Uygulama çalışmaya devam ediyor.");
-    }
-    
-    let gameState = "idle";
-    let startTime = 0;
-    let timeoutID;
-    let musicStarted = false;
+btn.addEventListener("click", () => {
+    if (gameState === "idle") startGame();
+    else if (gameState === "wait") fail();
+    else if (gameState === "go") success();
+});
 
-    // --- HIGH SCORE LOGIC ---
-    let bestScore = localStorage.getItem('reflexBestScore') || null;
-    if (bestScore) {
-        bestScoreDisplay.innerText = bestScore + "s";
-    }
+againBtn.addEventListener("click", resetGame);
+shareBtn.addEventListener("click", () => window.shareScore?.(scoreText.innerText));
 
-    // Music Start
-    document.body.addEventListener('click', startBackgroundMusic, { once: true });
-    document.body.addEventListener('touchstart', startBackgroundMusic, { once: true });
+function startGame() {
+    gameState = "wait";
+    statusText.innerText = "WAIT FOR SIGNAL...";
+    btn.innerText = "HOLD";
 
-    function startBackgroundMusic() {
-        // Ses değişkenlerinin yüklenip yüklenmediğini kontrol et
-        if (!bgMusic) return; 
-        
-        if (!musicStarted) {
-            bgMusic.play().then(() => { musicStarted = true; }).catch(e => {});
-        }
-        if(soundReady) soundReady.load();
-    }
+    const delay = Math.random() * 3000 + 1500;
 
-    function playSound(sound) {
-        // Ses değişkeninin var olup olmadığını kontrol et
-        if(sound) { sound.pause(); sound.currentTime = 0; sound.play().catch(()=>{}); }
-    }
-    function vibrate(pattern) {
-        if(navigator.vibrate) navigator.vibrate(pattern);
-    }
-
-    // --- SCREEN SHAKE & GLITCH ---
-    function triggerShake() {
-        body.classList.remove("shake-screen");
-        void body.offsetWidth; // Trigger reflow
-        body.classList.add("shake-screen");
-    }
-
-    // --- PARTICLES ---
-    function spawnParticles(x, y, color) {
-        for (let i = 0; i < 20; i++) {
-            const particle = document.createElement("div");
-            particle.classList.add("particle");
-            document.body.appendChild(particle);
-            const angle = Math.random() * Math.PI * 2;
-            const velocity = Math.random() * 120 + 50;
-            particle.style.left = x + "px"; particle.style.top = y + "px";
-            particle.style.background = color;
-            const size = (Math.random() * 5 + 2) + "px";
-            particle.style.width = size; particle.style.height = size;
-            particle.style.setProperty("--tx", (Math.cos(angle) * velocity) + "px");
-            particle.style.setProperty("--ty", (Math.sin(angle) * velocity) + "px");
-            setTimeout(() => particle.remove(), 600);
-        }
-    }
-
-    btn.addEventListener("click", (e) => {
-        const rect = btn.getBoundingClientRect();
-        const x = rect.left + rect.width / 2;
-        const y = rect.top + rect.height / 2;
-
-        if (gameState === "idle") startGame();
-        else if (gameState === "wait") {
-            triggerFail();
-            spawnParticles(x, y, "#bc13fe");
-            triggerShake();
-        }
-        else if (gameState === "go") {
-            triggerSuccess();
-            spawnParticles(x, y, "#0aff0a");
-            triggerShake();
-        }
-    });
-
-    // Share butonu artık globaldeki window.shareScore'u kullanacak.
-    // Bu listener'ın çalışması, aşağıdaki 'module' script'ten tanımlanan fonksiyona bağlıdır.
-    shareBtn.addEventListener("click", () => {
-        if (typeof window.shareScore === 'function') {
-            window.shareScore(scoreText.innerText);
-        } else {
-            // Hata loglanır ama script durmaz.
-            console.error("ShareScore fonksiyonu yüklenemedi. Modül yüklenmemiş olabilir.");
-        }
-    });
-
-    againBtn.addEventListener("click", resetGame);
-
-    function startGame() {
-        gameState = "wait";
-        scorePanel.classList.remove("visible");
-        newRecordBadge.style.display = "none";
-        body.classList.remove("glitch-mode"); // Reset glitch
-        
-        statusText.innerText = "WAIT FOR SIGNAL...";
-        statusText.style.color = "var(--rank-b)";
-        statusText.style.textShadow = "none";
-        btn.innerText = "HOLD";
-        btn.className = ""; btn.classList.add("mode-wait");
-        
-        const randomTime = Math.random() * 3000 + 1500; 
-        timeoutID = setTimeout(() => {
-            gameState = "go";
-            statusText.innerText = "TAP NOW !!!";
-            statusText.style.color = "#0aff0a";
-            statusText.style.textShadow = "0 0 20px #0aff0a";
-            btn.innerText = "TAP!";
-            btn.className = ""; btn.classList.add("mode-go");
-            playSound(soundReady); vibrate(100);
-            startTime = Date.now();
-        }, randomTime);
-    }
-
-    function triggerFail() {
-        clearTimeout(timeoutID);
-        gameState = "idle"; 
-        
-        // GLITCH EFFECT
-        body.classList.add("glitch-mode");
-        setTimeout(() => body.classList.remove("glitch-mode"), 300);
-
-        statusText.innerText = "SYSTEM FAILURE";
-        statusText.style.color = "var(--rank-c)";
-        statusText.style.textShadow = "0 0 20px var(--rank-c)";
-        
-        btn.innerText = "FAIL";
-        btn.className = ""; btn.classList.add("mode-fail");
-        playSound(soundFail); vibrate([50, 50, 50]);
-        setTimeout(resetGame, 1500);
-    }
-
-    function triggerSuccess() {
-        const time = Date.now() - startTime;
-        const seconds = (time / 1000).toFixed(3);
-        gameState = "finished";
-
-        statusText.innerText = "NEURAL SYNC COMPLETE";
-        statusText.style.color = "var(--rank-a)";
-        btn.innerText = "✔";
-        btn.className = ""; 
-
-        // RÜTBE HESAPLAMA
-        let rankName = "";
-        let rankClass = "";
-        
-        scorePanel.classList.remove("rank-s-plus", "rank-s", "rank-a", "rank-b", "rank-c");
-
-        if (time < 180) { rankName = "THE SINGULARITY 🌌"; rankClass = "rank-s-plus"; } 
-        else if (time < 220) { rankName = "CYBER DEMON 👹"; rankClass = "rank-s"; } 
-        else if (time < 260) { rankName = "NEON OPERATIVE ⚡"; rankClass = "rank-a"; } 
-        else if (time < 320) { rankName = "STREET SAMURAI ⚔️"; rankClass = "rank-b"; } 
-        else { rankName = "SYSTEM GLITCH 👾"; rankClass = "rank-c"; }
-
-        rankTitle.innerText = rankName;
-        scorePanel.classList.add(rankClass);
-
-        // --- HIGH SCORE CHECK ---
-        if (!bestScore || parseFloat(seconds) < parseFloat(bestScore)) {
-            bestScore = seconds;
-            localStorage.setItem('reflexBestScore', bestScore);
-            bestScoreDisplay.innerText = bestScore + "s";
-            newRecordBadge.style.display = "block"; // SHOW BADGE
-        }
-
-        scoreText.innerText = seconds;
-        scorePanel.classList.add("visible");
-        playSound(soundWin); vibrate([100, 50, 100]);
-    }
-
-    function resetGame() {
-        gameState = "idle";
-        statusText.innerText = "SYSTEM READY";
-        statusText.style.color = "#888";
-        statusText.style.textShadow = "none";
-        scorePanel.classList.remove("visible");
-        btn.innerText = "START";
-        btn.className = "";
-        body.classList.remove("glitch-mode");
-    }
-</script>
-
-<script type="module">
-import * as sdk from "https://esm.sh/@farcaster/miniapp-sdk";
-window.farcasterSDK = sdk;
-
-// KAPSAM HATASI ÇÖZÜLDÜ: shareScore fonksiyonu global scope'a (window) bağlandı.
-window.shareScore = async function(score) {
-    const rankText = document.getElementById("rankTitle").innerText;
-    // API çağrısı, doğru rütbe parametresini kullanıyor.
-    const shareImage = `https://reflex-rho.vercel.app/api/score-image?score=${score}&rank=${encodeURIComponent(rankText)}`;
-    
-    const text = `⚡ ${rankText}\nReflex: ${score}s\n\nCan you beat my time? 👇`;
-    const composeUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(shareImage)}`;
-    try { await sdk.actions.openUrl({ url: composeUrl }); } catch (e) {}
+    timeoutID = setTimeout(() => {
+        gameState = "go";
+        statusText.innerText = "TAP NOW!";
+        btn.innerText = "TAP!";
+        startTime = Date.now();
+    }, delay);
 }
 
-// BEYAZ EKRAN HATASI ÇÖZÜMÜ: Sinyali güvenli bir şekilde 200ms sonra gönderiyoruz.
-setTimeout(() => {
+function fail() {
+    clearTimeout(timeoutID);
+    gameState = "idle";
+    statusText.innerText = "SYSTEM FAILURE";
+    btn.innerText = "FAIL";
+    setTimeout(resetGame, 1200);
+}
+
+function success() {
+    const t = (Date.now() - startTime) / 1000;
+    const s = t.toFixed(3);
+
+    scoreText.innerText = s;
+    rankTitle.innerText = getRank(t);
+
+    scorePanel.classList.add("visible");
+    statusText.innerText = "SYNC COMPLETE";
+    btn.innerText = "✔";
+}
+
+function getRank(ms) {
+    if (ms < 0.18) return "THE SINGULARITY 🌌";
+    if (ms < 0.22) return "CYBER DEMON 👹";
+    if (ms < 0.26) return "NEON OPERATIVE ⚡";
+    if (ms < 0.32) return "STREET SAMURAI ⚔️";
+    return "SYSTEM GLITCH 👾";
+}
+
+function resetGame() {
+    gameState = "idle";
+    scorePanel.classList.remove("visible");
+    statusText.innerText = "SYSTEM READY";
+    btn.innerText = "START";
+}
+</script>
+
+<!-- ✅ FARCASTER MINIAPP SDK (DÜZGÜN IMPORT, DOĞRU FORMAT) -->
+<script type="module">
+import { sdk } from "https://esm.sh/@farcaster/miniapp-sdk";
+
+window.shareScore = async function(score) {
+    const rankText = document.getElementById("rankTitle").innerText;
+
+    const image = `https://reflex-rho.vercel.app/api/score-image?score=${score}&rank=${encodeURIComponent(rankText)}`;
+    const text = `⚡ ${rankText}\nReflex: ${score}s\n\nCan you beat my time?`;
+
+    const url = `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(image)}`;
+
     try {
-        sdk.actions.ready(); 
+        await sdk.actions.openUrl({ url });
+    } catch {}
+};
+
+setTimeout(async () => {
+    try {
+        await sdk.actions.ready();
     } catch (e) {
-        // Hata olması durumunda bile uygulama bloke edilmez
-        console.error("SDK Ready çağrısı başarısız oldu.");
+        console.error("READY ERROR", e);
     }
 }, 200);
-
 </script>
 
 </body>
