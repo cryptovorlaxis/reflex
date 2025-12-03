@@ -138,6 +138,7 @@
     .score-panel.rank-b { border-color: var(--rank-b); box-shadow: 0 0 50px rgba(255, 170, 0, 0.4); }
     .score-panel.rank-b #rankTitle { color: var(--rank-b); text-shadow: 0 0 20px var(--rank-b); }
 
+    /* .score-panel.rank-c */
     .score-panel.rank-c { border-color: var(--rank-c); box-shadow: 0 0 50px rgba(188, 19, 254, 0.4); }
     .score-panel.rank-c #rankTitle { color: var(--rank-c); text-shadow: 0 0 20px var(--rank-c); }
 
@@ -207,7 +208,7 @@
 </div>
 
 <script>
-    // SES DEĞİŞKENLERİ TANIMLAMA (Global olarak erişilebilir olmalı)
+    // BİRİNCİ HATA ÇÖZÜMÜ: SES DEĞİŞKENLERİ TANIMLAMA ve YÜKLEME (Hata alsa bile script durmaz)
     let soundReady, soundFail, soundWin, bgMusic;
 
     const btn = document.getElementById("reactionButton");
@@ -222,6 +223,7 @@
     const body = document.body;
 
     // AUDIO YÜKLEME (try/catch içinde global değişkenlere atama)
+    // BU KISIMDAKİ GÜVENLİK, SCRİPTİN ÇÖKMESİNİ ÖNLER.
     try {
         soundReady = new Audio("ready.mp3");
         soundFail = new Audio("fail.mp3");
@@ -311,12 +313,13 @@
     });
 
     // Share butonu artık globaldeki window.shareScore'u kullanacak.
+    // Bu listener'ın çalışması, aşağıdaki 'module' script'ten tanımlanan fonksiyona bağlıdır.
     shareBtn.addEventListener("click", () => {
         if (typeof window.shareScore === 'function') {
             window.shareScore(scoreText.innerText);
         } else {
-            // Kapsam hatası verirse burası çalışır. Loglanır ama script durmaz.
-            console.error("ShareScore fonksiyonu yüklenemedi.");
+            // Hata loglanır ama script durmaz.
+            console.error("ShareScore fonksiyonu yüklenemedi. Modül yüklenmemiş olabilir.");
         }
     });
 
