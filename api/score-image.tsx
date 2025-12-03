@@ -1,13 +1,28 @@
 import { ImageResponse } from '@vercel/og';
 import React from 'react';
 
+// Vercel Edge Runtime ayarı
 export const config = {
   runtime: 'edge',
 };
 
+// Bu renkleri CSS'nizdeki renklerle eşleştirdik
+function getRankColor(rank) {
+  if (rank.includes('SINGULARITY')) return '#ffffff'; // rank-s-plus
+  if (rank.includes('DEMON')) return '#ff003c'; // rank-s
+  if (rank.includes('OPERATIVE')) return '#00f3ff'; // rank-a
+  if (rank.includes('SAMURAI')) return '#ffaa00'; // rank-b
+  return '#bc13fe'; // rank-c (SYSTEM GLITCH)
+}
+
 export default function handler(req) {
   const { searchParams } = new URL(req.url);
+  
+  // 1. Düzeltme: Rütbe parametresini okuyoruz.
   const score = searchParams.get('score') || '0.000';
+  const rank = searchParams.get('rank') || 'UNRANKED GLITCH';
+  
+  const neonColor = getRankColor(rank);
 
   return new ImageResponse(
     (
@@ -20,7 +35,8 @@ export default function handler(req) {
           justifyContent: 'center',
           flexDirection: 'column',
           backgroundColor: '#050505',
-          fontFamily: 'monospace',
+          // Font, Vercel/OG'de doğru yüklenmelidir
+          fontFamily: 'system-ui, sans-serif', 
         }}
       >
         <div
@@ -31,28 +47,41 @@ export default function handler(req) {
             justifyContent: 'center',
             width: '900px',
             height: '500px',
-            border: '8px solid #00f3ff',
+            border: `10px solid ${neonColor}`,
             borderRadius: '40px',
             backgroundColor: '#111',
-            boxShadow: '0 0 80px #00f3ff',
+            boxShadow: `0 0 70px ${neonColor}`,
+            padding: '40px',
           }}
         >
-          <div style={{ fontSize: 60, color: '#00f3ff', marginBottom: 20, fontWeight: 'bold' }}>
-            REFLEX TEST
+          {/* 2. Düzeltme: Dinamik Rütbe Başlığı */}
+          <div style={{ 
+            fontSize: 40, 
+            color: neonColor, 
+            marginBottom: 10, 
+            fontWeight: 'bold', 
+            textTransform: 'uppercase' 
+          }}>
+            {rank}
           </div>
-          <div style={{ fontSize: 160, fontWeight: 'bold', color: 'white', lineHeight: 1, textShadow: '5px 5px 0 #bc13fe' }}>
+          
+          <div style={{ 
+            fontSize: 160, 
+            fontWeight: '900', 
+            color: 'white', 
+            lineHeight: 1, 
+            textShadow: `5px 5px 0 ${neonColor}` 
+          }}>
             {score}s
           </div>
           <div style={{ 
-            marginTop: 40, 
-            fontSize: 40,
-            backgroundColor: '#00f3ff', 
-            color: 'black', 
-            padding: '10px 60px', 
-            borderRadius: 50,
-            fontWeight: 'bold' 
+            marginTop: 10, 
+            fontSize: 30,
+            color: '#aaa',
+            fontWeight: '500', 
+            letterSpacing: 2
           }}>
-            CYBER ELITE
+            REACTION TIME (s)
           </div>
         </div>
       </div>
