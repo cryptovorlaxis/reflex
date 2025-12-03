@@ -207,6 +207,9 @@
 </div>
 
 <script>
+    // SES DEĞİŞKENLERİ TANIMLAMA (Global olarak erişilebilir olmalı)
+    let soundReady, soundFail, soundWin, bgMusic;
+
     const btn = document.getElementById("reactionButton");
     const statusText = document.getElementById("status");
     const scorePanel = document.getElementById("scorePanel");
@@ -218,13 +221,19 @@
     const newRecordBadge = document.getElementById("newRecordBadge");
     const body = document.body;
 
-    // AUDIO
-    const soundReady = new Audio("ready.mp3");
-    const soundFail = new Audio("fail.mp3");
-    const soundWin = new Audio("win.mp3");
-    const bgMusic = new Audio("music.mp3");
-    bgMusic.loop = true; bgMusic.volume = 0.4;
-
+    // AUDIO YÜKLEME (Hata durumunda scriptin durmaması için try/catch içinde)
+    try {
+        soundReady = new Audio("ready.mp3");
+        soundFail = new Audio("fail.mp3");
+        soundWin = new Audio("win.mp3");
+        bgMusic = new Audio("music.mp3");
+        bgMusic.loop = true; 
+        bgMusic.volume = 0.4;
+    } catch (e) {
+        // Dosyalar bulunamazsa uygulamayı durdurmak yerine uyarı verir
+        console.warn("Ses dosyaları yüklenemedi. Sesler çalmayabilir.");
+    }
+    
     let gameState = "idle";
     let startTime = 0;
     let timeoutID;
@@ -241,7 +250,10 @@
     document.body.addEventListener('touchstart', startBackgroundMusic, { once: true });
 
     function startBackgroundMusic() {
-        if (!musicStarted && bgMusic) {
+        // Değişkenlerin tanımlı olup olmadığını kontrol et
+        if (!bgMusic) return; 
+        
+        if (!musicStarted) {
             bgMusic.play().then(() => { musicStarted = true; }).catch(e => {});
         }
         if(soundReady) soundReady.load();
@@ -298,7 +310,7 @@
     });
 
     againBtn.addEventListener("click", resetGame);
-    shareBtn.addEventListener("click", () => shareScore(scoreText.innerText));
+    // shareBtn.addEventListener("click", ...): Bu, aşağıdaki module script'ten çağrılacak.
 
     function startGame() {
         gameState = "wait";
@@ -398,7 +410,7 @@ import * as sdk from "https://esm.sh/@farcaster/miniapp-sdk";
 window.farcasterSDK = sdk;
 
 
-async function shareScore(score) {
+window.shareScore = async function(score) {
     const rankText = document.getElementById("rankTitle").innerText;
     // HATA GİDERİLDİ: Rank bilgisi, API'ye gönderiliyor.
     const shareImage = `https://reflex-rho.vercel.app/api/score-image?score=${score}&rank=${encodeURIComponent(rankText)}`;
