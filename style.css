@@ -470,4 +470,58 @@ body {
     box-shadow: 0 0 40px rgba(0,255,255,0.35);
     background: rgba(0,80,120,0.5);
 }
+/* START SCREEN FULL CENTER */
+#startScreen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 20px;
+}
+
+/* LOGO PERFECT CENTER */
+#logoHolo {
+    width: 260px;
+    max-width: 70%;
+    opacity: 0;
+    animation: introLogo 1.2s ease forwards;
+}
+
+/* GLOW */
+.intro-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 500px;
+    height: 500px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(0,255,255,0.25), transparent 70%);
+    filter: blur(20px);
+    z-index: -1;
+    opacity: 0.8;
+}
+
+/* LOAD LINE */
+.load-line {
+    width: 180px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00eaff, transparent);
+    animation: loadMove 2s infinite linear;
+    opacity: 0.7;
+}
+
+@keyframes loadMove {
+    0% { transform: translateX(-50px); }
+    100% { transform: translateX(50px); }
+}
+
+/* LOGO ANIMATION */
+@keyframes introLogo {
+    0% { opacity: 0; transform: scale(0.85) translateY(20px); filter: blur(10px); }
+    60% { opacity: 1; filter: blur(0px); }
+    100% { transform: scale(1) translateY(0); }
+}
 
