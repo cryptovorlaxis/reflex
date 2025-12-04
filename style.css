@@ -396,3 +396,9 @@ body {
 .halo-core {
     display: none !important;
 }
+/* START SCREEN ALTI DİKDÖRTGEN TEMİZLEME */
+.start-hint,
+.status-panel,
+.game-layout {
+    display: none !important;
+}
