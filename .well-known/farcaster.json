@@ -4,12 +4,12 @@
     "payload": "eyJkb21haW4iOiJyZWZsZXQtcmhvLnZlcmNlbC5hcHAifQ",
     "signature": "vD3G251a5GsYczzk8gKMG2QkTQoIhzJHHUazDGnbbzJ+6WxReVUS4eFtzmiCCmPe85wCT7c8SHGGO5BHey7LMxw="
   },
-  "frame": {
+  "miniapp": { 
     "version": "1",
     "name": "Reflex Test Arcade",
-    "iconUrl": "https://reflex-rho.vercel.app/screenshot1.png",
+    "iconUrl": "https://reflex-rho.vercel.app/icon.png", // 💡 ÖNERİ: icon.png (Kare/1:1) kullanın
     "homeUrl": "https://reflex-rho.vercel.app",
-    "imageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
+    "imageUrl": "https://reflex-rho.vercel.app/screenshot1.png", // 💡 KONTROL: 3:2 en boy oranı mı?
     "buttonTitle": "Start Game",
     "splashImageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
     "splashBackgroundColor": "#0f0f0f",
@@ -19,18 +19,7 @@
     "primaryCategory": "Game",
     "tags": ["reflex", "arcade", "test", "mini-game"]
   },
-  "triggers": [
-    {
-      "type": "cast",
-      "action": {
-        "type": "launch_frame",
-        "name": "Play Reflex",
-        "url": "https://reflex-rho.vercel.app",
-        "splashImageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
-        "splashBackgroundColor": "#0f0f0f"
-      }
-    }
-  ],
+  // "triggers" kaldırıldı. Bunu index.html içinde Embed metatag olarak tanımlayın.
   "version": "1.0",
   "screenshots": [
     "https://reflex-rho.vercel.app/screenshot1.png"
