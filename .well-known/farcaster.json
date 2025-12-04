@@ -7,9 +7,9 @@
   "miniapp": { 
     "version": "1",
     "name": "Reflex Test Arcade",
-    "iconUrl": "https://reflex-rho.vercel.app/icon.png", // 💡 ÖNERİ: icon.png (Kare/1:1) kullanın
+    "iconUrl": "https://reflex-rho.vercel.app/icon.png", 
     "homeUrl": "https://reflex-rho.vercel.app",
-    "imageUrl": "https://reflex-rho.vercel.app/screenshot1.png", // 💡 KONTROL: 3:2 en boy oranı mı?
+    "imageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
     "buttonTitle": "Start Game",
     "splashImageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
     "splashBackgroundColor": "#0f0f0f",
@@ -19,7 +19,6 @@
     "primaryCategory": "Game",
     "tags": ["reflex", "arcade", "test", "mini-game"]
   },
-  // "triggers" kaldırıldı. Bunu index.html içinde Embed metatag olarak tanımlayın.
   "version": "1.0",
   "screenshots": [
     "https://reflex-rho.vercel.app/screenshot1.png"
