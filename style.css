@@ -564,5 +564,153 @@ body {
 }
 
 /* ============================================================
+   V6 — ULTRA FX LAYER (TRON + Cyberpunk + Game Engine Style)
+   Bu efektler oyunu AAA seviyesine taşır.
+============================================================ */
+
+
+/* ------------------------------------------------------------
+   1) GLOBAL CHROMATIC ABERRATION (Holo RGB Split)
+------------------------------------------------------------ */
+
+.fx-aberration {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 255, 255, 0.10) 0%,
+      rgba(255, 0, 255, 0.10) 100%
+    );
+  opacity: 0.25;
+  z-index: 9999;
+  animation: fx-glide 6s ease-in-out infinite alternate;
+}
+
+@keyframes fx-glide {
+  0%   { transform: translateX(-8px); }
+  100% { transform: translateX(8px); }
+}
+
+
+/* ------------------------------------------------------------
+   2) HOLOGRAM STATIC NOISE LAYER (CRT Scan)
+------------------------------------------------------------ */
+
+.fx-noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-size: 3px 3px;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.10) 0 1px,
+      rgba(0,0,0,0.10) 1px 2px
+    );
+  animation: fx-noise-anim 0.08s steps(2) infinite;
+  z-index: 9998;
+}
+
+@keyframes fx-noise-anim {
+  0% { opacity: 0.05; }
+  100% { opacity: 0.09; }
+}
+
+
+/* ------------------------------------------------------------
+   3) NEON VIGNETTE (Outer Glow Rim)
+------------------------------------------------------------ */
+
+.fx-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at center,
+      rgba(0,0,0,0) 40%,
+      rgba(0,30,60,0.35) 100%);
+  z-index: 9997;
+}
+
+
+/* ------------------------------------------------------------
+   4) HORIZON BLOOM FLASH (Pulse Glow)
+------------------------------------------------------------ */
+
+.horizon-bloom {
+  animation: horizon-bloom-key 1.4s ease-out;
+}
+
+@keyframes horizon-bloom-key {
+  0%   { opacity: 0.5; filter: blur(0px); }
+  40%  { opacity: 1; filter: blur(4px); }
+  100% { opacity: 0.6; filter: blur(0px); }
+}
+
+
+/* ------------------------------------------------------------
+   5) REACTOR HEAT DISTORTION (glass-like refract)
+------------------------------------------------------------ */
+
+.reactor-heat {
+  animation: heatwave 1.2s infinite ease-in-out;
+}
+
+@keyframes heatwave {
+  0%   { filter: blur(0px) brightness(1); }
+  50%  { filter: blur(2px) brightness(1.2); }
+  100% { filter: blur(0px) brightness(1); }
+}
+
+
+/* ------------------------------------------------------------
+   6) LIGHT STREAKS (Cinematic Glow Lines)
+------------------------------------------------------------ */
+
+.fx-streaks {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9996;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 255, 255, 0.05) 0px 2px,
+      rgba(0, 0, 0, 0) 2px 6px
+    );
+  opacity: 0.1;
+  animation: streak-flow 4s linear infinite;
+}
+
+@keyframes streak-flow {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(12px); }
+}
+
+
+/* ------------------------------------------------------------
+   7) DEPTH HAZE (soft fog)
+------------------------------------------------------------ */
+
+.fx-haze {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 65%,
+    rgba(0, 70, 120, 0.12),
+    rgba(0, 0, 0, 0.7)
+  );
+  mix-blend-mode: soft-light;
+  z-index: 9995;
+  opacity: 0.25;
+}
+
+/* ============================================================
    END CSS
 ============================================================ */
