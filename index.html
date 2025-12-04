@@ -3,90 +3,147 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Reflex Test — Cyber Steel Edition</title>
+<title>REFLEX — TRON Edition</title>
+
+<link rel="stylesheet" href="style.css" />
 
 <!-- Farcaster MiniApp -->
 <meta name="fc:miniapp" content='{
   "version": "1",
   "imageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
   "button": {
-    "title": "ENTER THE GRID",
+    "title": "ENTER TRON GRID",
     "action": {
       "type": "launch_miniapp",
       "url": "https://reflex-rho.vercel.app",
       "name": "Reflex Test",
       "splashImageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
-      "splashBackgroundColor": "#050505"
+      "splashBackgroundColor": "#03080e"
     }
   }
 }' />
 
-<link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
 
-<!-- ⭐ START SCREEN -->
-<div id="startScreen" class="screen visible">
-  <img src="logo.png" id="startLogo" alt="Reflex Logo" />
+<!-- ===========================================================
+     BACKGROUND — TRON DEEP GRID HORIZON
+=========================================================== -->
+<div class="tron-bg">
+  <div class="grid"></div>
+  <div class="horizon-glow"></div>
+  <div class="scanlines"></div>
+</div>
 
-  <button id="startButton" class="capsule-btn">
+
+<!-- ===========================================================
+     START SCREEN (TRON Halo + Neon Panel)
+=========================================================== -->
+<div id="startScreen" class="screen visible">
+
+  <!-- Büyük TRON Halo -->
+  <div class="halo-container">
+    <div class="halo-ring"></div>
+    <div class="halo-core"></div>
+  </div>
+
+  <!-- Hologram Logo -->
+  <img src="logo.png" id="logoHolo" class="holo-logo" />
+
+  <!-- Start Button -->
+  <button id="startButton" class="tron-start-btn">
     ENTER THE GRID
   </button>
 
-  <div class="start-hint">Tap to begin neural calibration</div>
+  <div class="start-hint">Calibrating neural interface…</div>
+
 </div>
 
 
-<!-- ⭐ GAME SCREEN -->
+
+<!-- ===========================================================
+     GAME SCREEN — TRON REACTOR + STATUS PANEL
+=========================================================== -->
 <div id="gameScreen" class="screen">
-  <div id="statusText" class="status-text">WAIT</div>
 
-  <!-- Steel Tech Hexagon Button -->
-  <div id="hexButton" class="hex-btn">
-    <div class="hex-inner"></div>
-    <div class="hex-border"></div>
-    <div class="hex-glow"></div>
-  </div>
+  <!-- TRON CARD LAYOUT -->
+  <div class="game-layout">
 
-  <div id="bestScoreBox" class="best-score-box">
-    BEST: <span id="bestValue">--</span>
-  </div>
-</div>
+    <!-- LEFT — Reactor Core -->
+    <div class="reactor-core" id="reactorBtn">
+      <div class="reactor-ring ring1"></div>
+      <div class="reactor-ring ring2"></div>
+      <div class="reactor-ring ring3"></div>
+      <div class="reactor-center"></div>
+      <div class="reactor-icon" id="reactorIcon"></div>
+    </div>
 
+    <!-- RIGHT — Status Panel -->
+    <div class="status-panel">
+      <div id="statusText" class="status-text">WAIT</div>
+      <div class="status-sub">REACTION MODULE</div>
 
-<!-- ⭐ SCORE SCREEN -->
-<div id="scoreScreen" class="screen">
-  <div class="score-card">
-    
-    <div id="rankText" class="rank-text">UNRANKED</div>
-    <div id="finalScore" class="final-score">0.000</div>
-
-    <div class="score-subtitle">REACTION TIME (S)</div>
-
-    <div class="score-btn-row">
-      <button id="retryBtn" class="glass-btn">RETRY</button>
-      <button id="shareBtn" class="glass-btn">SHARE</button>
+      <!-- Best score small panel -->
+      <div class="best-mini">
+        BEST: <span id="bestValue">--</span>
+      </div>
     </div>
 
   </div>
+
 </div>
 
 
-<!-- Sounds -->
+
+<!-- ===========================================================
+     SCORE SCREEN — TRON CARD RESULT
+=========================================================== -->
+<div id="scoreScreen" class="screen">
+
+  <div class="score-card">
+
+    <div class="score-left">
+      <div class="score-holo-circle"></div>
+      <div class="score-icon"></div>
+    </div>
+
+    <div class="score-right">
+      <div class="score-label">RANK</div>
+      <div id="rankText" class="rank-text">UNRANKED</div>
+
+      <div class="score-label mt20">REACTION</div>
+      <div id="finalScore" class="final-score">0.000</div>
+    </div>
+
+  </div>
+
+  <div class="score-actions">
+    <button id="retryBtn" class="tron-btn glass">RETRY</button>
+    <button id="shareBtn" class="tron-btn glass">SHARE</button>
+  </div>
+
+</div>
+
+
+
+<!-- ===========================================================
+     SOUNDS
+=========================================================== -->
 <audio id="sndMusic" src="music.mp3" preload="auto" loop></audio>
 <audio id="sndReady" src="ready.mp3" preload="auto"></audio>
 <audio id="sndFail" src="fail.mp3" preload="auto"></audio>
 <audio id="sndWin" src="win.mp3" preload="auto"></audio>
 
+
+<!-- ===========================================================
+     GAME LOGIC
+=========================================================== -->
 <script type="module" src="game.js"></script>
 
-<!-- MiniApp Ready -->
+<!-- Farcaster ready -->
 <script type="module">
 import * as sdk from "https://esm.sh/@farcaster/miniapp-sdk";
-setTimeout(() => {
-  try { sdk.actions.ready(); } catch(e){}
-}, 300);
+setTimeout(()=>{ try { sdk.actions.ready(); } catch(e){} }, 300);
 </script>
 
 </body>
