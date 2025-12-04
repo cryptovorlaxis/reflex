@@ -127,10 +127,11 @@ body {
 #gameLogo {
   width: min(60vw, 330px);
   height: auto;
-  opacity: 0;
+  opacity: 1; /* Hep görünür kalsın */
   filter: drop-shadow(0 0 18px #00f3ff);
-  animation: logoIntro 1.2s ease forwards;
+  animation: logoIntro 1.2s ease; /* forwards gerek değil artık */
 }
+
 
 @keyframes logoIntro {
   0% {
