@@ -17,26 +17,33 @@
   <div class="scanlines"></div>
 </div>
 
-<!-- START SCREEN -->
+<!-- ===========================================================
+     START SCREEN
+=========================================================== -->
 <div id="startScreen" class="screen visible">
 
+  <!-- Logo + Glow -->
   <div class="center-stack">
     <div class="intro-glow"></div>
-
-    <img src="logo.png" id="logoHolo" class="holo-logo">
+    <img src="logo.png" id="logoHolo" class="holo-logo" />
   </div>
 
+  <!-- Loading Line -->
   <div class="load-line"></div>
 
-  <button id="startButton" class="tron-start-btn">ENTER THE GRID</button>
-</div>
-
+  <!-- Start Button -->
+  <button id="startButton" class="tron-start-btn">
+    ENTER THE GRID
+  </button>
 
   <div class="start-hint">Calibrating neural interface…</div>
 
 </div>
 
-<!-- GAME SCREEN -->
+
+<!-- ===========================================================
+     GAME SCREEN
+=========================================================== -->
 <div id="gameScreen" class="screen">
 
   <div class="game-layout">
@@ -61,7 +68,10 @@
 
 </div>
 
-<!-- SCORE SCREEN -->
+
+<!-- ===========================================================
+     SCORE SCREEN
+=========================================================== -->
 <div id="scoreScreen" class="screen">
 
   <div class="score-card">
@@ -70,8 +80,8 @@
     </div>
 
     <div class="score-right">
-      <div class="rank-text" id="rankText">UNRANKED</div>
-      <div class="final-score" id="finalScore">0.000</div>
+      <div id="rankText" class="rank-text">UNRANKED</div>
+      <div id="finalScore" class="final-score">0.000</div>
     </div>
   </div>
 
@@ -82,16 +92,21 @@
 
 </div>
 
+
+<!-- ===========================================================
+     GAME LOGIC
+=========================================================== -->
 <script src="game.js"></script>
 
-  <script type="module">
+<!-- Farcaster Ready -->
+<script type="module">
 import { sdk } from "https://esm.sh/@farcaster/miniapp-sdk";
 
 window.addEventListener("load", async () => {
   try {
-    await sdk.actions.ready();   // 🔥 Splash burada kapanıyor
+    await sdk.actions.ready();
   } catch(e) {
-    console.error("READY ERROR", e);
+    console.error("READY ERROR:", e);
   }
 });
 </script>
