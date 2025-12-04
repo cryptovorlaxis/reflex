@@ -106,7 +106,7 @@ body {
 }
 
 /* ============================================================
-   START SCREEN — CENTERED AAA INTRO
+   START SCREEN — STATIC LOGO
 ============================================================ */
 #startScreen {
   position: absolute;
@@ -122,33 +122,27 @@ body {
 
 .logo-container {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
+/* LOGO: hiçbir animasyon yok, opacity hep 1 */
 #gameLogo {
-  width: min(60vw, 330px);
+  width: min(60vw, 260px);
   height: auto;
-  opacity: 1; /* Hep görünür kalsın */
+  display: block;
+  margin-bottom: 10px;
+  opacity: 1;
   filter: drop-shadow(0 0 18px #00f3ff);
-  animation: logoIntro 1.2s ease; /* forwards gerek değil artık */
 }
 
-
-@keyframes logoIntro {
-  0% {
-    transform: scale(0.85) translateY(20px);
-    filter: blur(10px);
-  }
-  100% {
-    transform: scale(1) translateY(0);
-    filter: blur(0);
-  }
-}
-
-
+/* Artık logo animasyonu kullanmıyoruz, glow sadece arka plan efekti */
 .intro-glow {
   position: absolute;
-  width: 550px;
-  height: 550px;
+  width: 380px;
+  height: 380px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -158,9 +152,9 @@ body {
     rgba(0, 170, 200, 0.1),
     transparent 70%
   );
-  filter: blur(45px);
+  filter: blur(40px);
   z-index: -1;
-  opacity: 0.75;
+  opacity: 0.8;
 }
 
 .load-line {
@@ -203,6 +197,7 @@ body {
   opacity: 0.65;
   color: #b8eafd;
 }
+
 
 /* ============================================================
    GAME SCREEN
