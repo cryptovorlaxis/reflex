@@ -3,523 +3,91 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Reflex Test — Cyberpunk Glitch Edition</title>
+<title>Reflex Test — Cyber Steel Edition</title>
 
-<!-- OG META -->
-<meta property="og:title" content="Reflex Test – Cyberpunk Edition">
-<meta property="og:description" content="Test your reflexes in the neon grid.">
-<meta property="og:image" content="https://reflex-rho.vercel.app/screenshot1.png">
+<!-- Farcaster MiniApp -->
+<meta name="fc:miniapp" content='{
+  "version": "1",
+  "imageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
+  "button": {
+    "title": "ENTER THE GRID",
+    "action": {
+      "type": "launch_miniapp",
+      "url": "https://reflex-rho.vercel.app",
+      "name": "Reflex Test",
+      "splashImageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
+      "splashBackgroundColor": "#050505"
+    }
+  }
+}' />
 
-<style>
-/* RESET */
-body, html {
-    margin: 0;
-    padding: 0;
-    font-family: 'Orbitron', sans-serif;
-    background: black;
-    overflow: hidden;
-    color: white;
-}
-
-/* --- SHARED --- */
-.hidden {
-    display: none !important;
-}
-
-/* SCANLINE EFFECT */
-.scanlines {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: repeating-linear-gradient(
-        to bottom,
-        rgba(255,255,255,0.04),
-        rgba(255,255,255,0.04) 1px,
-        rgba(0,0,0,0.1) 2px
-    );
-    mix-blend-mode: overlay;
-    z-index: 999;
-}
-
-/* --- START SCREEN --- */
-
-.start-screen {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: #050505;
-    overflow: hidden;
-}
-
-/* Background hologram logo */
-.bg-holo-logo {
-    position: absolute;
-    width: 900px;
-    opacity: 0.12;
-    filter: blur(6px) drop-shadow(0 0 40px #00f3ff55);
-    animation: holo-float 6s infinite ease-in-out;
-}
-
-@keyframes holo-float {
-    0% { transform: scale(1) rotate(0deg); }
-    50% { transform: scale(1.04) rotate(1deg); }
-    100% { transform: scale(1) rotate(0deg); }
-}
-
-/* Glitch Intro Logo */
-.main-logo {
-    width: 480px;
-    opacity: 0;
-    animation: glitch-in 1.4s forwards;
-}
-
-@keyframes glitch-in {
-    0% { opacity: 0; transform: scale(0.9); filter: blur(3px); }
-    20% { opacity: 1; transform: scale(1); filter: blur(0); }
-    30% { transform: translate(-4px, 2px); filter: hue-rotate(40deg); }
-    40% { transform: translate(4px, -2px); }
-    60% { transform: translate(-1px, 1px); }
-    80% { transform: translate(1px, -1px); }
-    100% { transform: none; }
-}
-
-/* Glitch Button */
-.glitch-button {
-    margin-top: 50px;
-    padding: 22px 40px;
-    font-size: 24px;
-    font-weight: bold;
-    background: transparent;
-    color: #00f3ff;
-    border: 2px solid #00f3ff;
-    text-shadow: 0 0 10px #00f3ff;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    letter-spacing: 2px;
-    animation: button-glow 2s infinite ease-in-out;
-}
-
-@keyframes button-glow {
-    0% { box-shadow: 0 0 10px #00f3ff; }
-    50% { box-shadow: 0 0 30px #00f3ff; }
-    100% { box-shadow: 0 0 10px #00f3ff; }
-}
-
-/* Glitch slices */
-.glitch-button::before, .glitch-button::after {
-    content: "ENTER THE GRID";
-    position: absolute;
-    inset: 0;
-    left: 0;
-    top: 0;
-    opacity: 0.13;
-    color: #00f3ff;
-    pointer-events: none;
-    animation: glitch-text 0.9s infinite;
-}
-
-.glitch-button::after {
-    color: #ff00ff;
-    animation-duration: 1.2s;
-}
-
-@keyframes glitch-text {
-    0% { transform: translate(0,0); }
-    20% { transform: translate(-3px,2px); }
-    40% { transform: translate(3px,-2px); }
-    60% { transform: translate(-2px,-1px); }
-    80% { transform: translate(1px,1px); }
-    100% { transform: translate(0,0); }
-}
-
-/* --- GAME SCREEN --- */
-
-.game-screen {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: black;
-}
-
-/* Mini hologram logo */
-.mini-logo {
-    width: 180px;
-    opacity: 0;
-    filter: drop-shadow(0 0 15px #00f3ff55);
-    animation: mini-logo-in 1s forwards ease-out;
-}
-
-@keyframes mini-logo-in {
-    0% { opacity: 0; transform: translateY(-60px) scale(0.7); }
-    100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-/* Status Text */
-.status-text {
-    margin-top: 30px;
-    font-size: 26px;
-    color: #00f3ff;
-    text-shadow: 0 0 10px #00f3ff;
-}
-
-/* Reaction Button */
-.reaction-button {
-    margin-top: 50px;
-    width: 260px;
-    height: 260px;
-    border-radius: 50%;
-    border: 4px solid #00f3ff;
-    background: radial-gradient(circle, #0a2230, #000);
-    color: #00f3ff;
-    font-size: 36px;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: 0.2s;
-    box-shadow: 0 0 20px #00f3ff55 inset;
-}
-
-/* WAIT / GO states override colors via JS */
-
-/* --- SCORE PANEL --- */
-
-.score-panel {
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.holo-card {
-    width: 380px;
-    padding: 30px;
-    border: 2px solid #00f3ff;
-    border-radius: 20px;
-    background: rgba(20,20,30,0.8);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 0 40px #00f3ff55;
-    animation: holo-pop 0.6s ease-out forwards;
-    opacity: 0;
-}
-
-@keyframes holo-pop {
-    0% { opacity: 0; transform: scale(0.7); }
-    60% { opacity: 1; transform: scale(1.07); }
-    100% { transform: scale(1); }
-}
-
-.rank-name {
-    text-align: center;
-    font-size: 26px;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
-    color: cyan;
-}
-
-.score-value {
-    font-size: 70px;
-    text-align: center;
-    font-weight: bold;
-    color: white;
-    text-shadow: 0 0 20px #fff;
-}
-
-.button-row {
-    margin-top: 20px;
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-
-.small-btn {
-    padding: 12px 20px;
-    font-size: 16px;
-    border: 2px solid #00f3ff;
-    background: transparent;
-    color: #00f3ff;
-    cursor: pointer;
-    transition: 0.2s;
-    border-radius: 6px;
-}
-.small-btn:hover {
-    background: #00f3ff;
-    color: black;
-}
-
-</style>
+<link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
-<!-- 🔥 START SCREEN -->
-<div id="startScreen" class="start-screen">
+<!-- ⭐ START SCREEN -->
+<div id="startScreen" class="screen visible">
+  <img src="logo.png" id="startLogo" alt="Reflex Logo" />
+
+  <button id="startButton" class="capsule-btn">
+    ENTER THE GRID
+  </button>
+
+  <div class="start-hint">Tap to begin neural calibration</div>
+</div>
+
+
+<!-- ⭐ GAME SCREEN -->
+<div id="gameScreen" class="screen">
+  <div id="statusText" class="status-text">WAIT</div>
+
+  <!-- Steel Tech Hexagon Button -->
+  <div id="hexButton" class="hex-btn">
+    <div class="hex-inner"></div>
+    <div class="hex-border"></div>
+    <div class="hex-glow"></div>
+  </div>
+
+  <div id="bestScoreBox" class="best-score-box">
+    BEST: <span id="bestValue">--</span>
+  </div>
+</div>
+
+
+<!-- ⭐ SCORE SCREEN -->
+<div id="scoreScreen" class="screen">
+  <div class="score-card">
     
-    <!-- Hologram arka plan için dev logo -->
-    <img src="logo.png" class="bg-holo-logo" />
+    <div id="rankText" class="rank-text">UNRANKED</div>
+    <div id="finalScore" class="final-score">0.000</div>
 
-    <!-- Glitch giriş logosu -->
-    <img src="logo.png" class="main-logo" id="mainLogo" />
+    <div class="score-subtitle">REACTION TIME (S)</div>
 
-    <!-- Glitch Button -->
-    <button id="startBtn" class="glitch-button">
-        <span>ENTER THE GRID</span>
-    </button>
-
-    <!-- Scanline efekt layer -->
-    <div class="scanlines"></div>
-</div>
-
-
-<!-- 🔥 GAME SCREEN -->
-<div id="gameScreen" class="game-screen hidden">
-
-    <!-- Küçük hologram logo -->
-    <img src="logo.png" class="mini-logo" id="miniLogo" />
-
-    <div id="statusText" class="status-text">SYSTEM READY</div>
-
-    <button id="reactionBtn" class="reaction-button">START</button>
-</div>
-
-
-<!-- 🔥 SCORE PANEL -->
-<div id="scorePanel" class="score-panel hidden">
-    <div class="holo-card">
-        <div id="rankName" class="rank-name">UNRANKED</div>
-        <div id="scoreValue" class="score-value">0.000s</div>
-
-        <div class="button-row">
-            <button id="tryAgain" class="small-btn">RETRY</button>
-            <button id="shareScore" class="small-btn">SHARE</button>
-        </div>
+    <div class="score-btn-row">
+      <button id="retryBtn" class="glass-btn">RETRY</button>
+      <button id="shareBtn" class="glass-btn">SHARE</button>
     </div>
+
+  </div>
 </div>
 
 
+<!-- Sounds -->
+<audio id="sndMusic" src="music.mp3" preload="auto" loop></audio>
+<audio id="sndReady" src="ready.mp3" preload="auto"></audio>
+<audio id="sndFail" src="fail.mp3" preload="auto"></audio>
+<audio id="sndWin" src="win.mp3" preload="auto"></audio>
+
+<script type="module" src="game.js"></script>
+
+<!-- MiniApp Ready -->
 <script type="module">
-/* ========== Farcaster SDK Import & Ready Fix ========== */
-import { sdk } from "https://esm.sh/@farcaster/miniapp-sdk";
-
-window.addEventListener("DOMContentLoaded", () => {
-    setTimeout(() => {
-        sdk.actions.ready().catch(() => console.warn("ready() error ignored"));
-    }, 350);
-});
-
-/* ========== ELEMENTLER ========== */
-const startScreen = document.getElementById("startScreen");
-const gameScreen  = document.getElementById("gameScreen");
-const scorePanel  = document.getElementById("scorePanel");
-
-const mainLogo = document.getElementById("mainLogo");
-const miniLogo = document.getElementById("miniLogo");
-
-const startBtn = document.getElementById("startBtn");
-const reactionBtn = document.getElementById("reactionBtn");
-
-const statusText = document.getElementById("statusText");
-const rankName = document.getElementById("rankName");
-const scoreValue = document.getElementById("scoreValue");
-
-const tryAgain = document.getElementById("tryAgain");
-const shareScore = document.getElementById("shareScore");
-
-/* ========== SESLER ========== */
-const music = new Audio("/music.mp3");
-music.volume = 0.4;
-music.loop = true;
-
-const sndReady = new Audio("/ready.mp3");
-const sndFail  = new Audio("/fail.mp3");
-const sndWin   = new Audio("/win.mp3");
-
-function playSound(sound) {
-    sound.currentTime = 0;
-    sound.play().catch(()=>{});
-}
-
-/* MiniApp autoplay engelini aşmak için ilk tıkta müzik başlar */
-let musicStarted = false;
-function ensureMusic() {
-    if (!musicStarted) {
-        musicStarted = true;
-        music.play().catch(()=>{});
-    }
-}
-
-/* ========== GAME STATE ========== */
-let gameState = "idle";
-let startTime = 0;
-let timeoutID = null;
-let scoreLocked = false; // anti-fast-tap exploit FIX
-
-/* ========== START SCREEN BUTTON ========== */
-startBtn.addEventListener("click", () => {
-    ensureMusic();
-    startWarpTransition();
-});
-
-/* ========== WARP TRANSITION ========== */
-function startWarpTransition() {
-    // Start screen yok oluyor
-    startScreen.style.transition = "0.6s ease";
-    startScreen.style.opacity = "0";
-
-    // Warp shake effect
-    document.body.style.animation = "screen-warp 0.6s";
-
-    setTimeout(() => {
-        startScreen.classList.add("hidden");
-        showGameScreen();
-    }, 600);
-}
-
-/* Basit warp animasyonu */
-const warpCSS = `
-@keyframes screen-warp {
-    0% { filter: blur(0px); transform: scale(1); }
-    40% { filter: blur(4px); transform: scale(1.06); }
-    100% { filter: blur(0px); transform: scale(1); }
-}`;
-document.head.insertAdjacentHTML("beforeend", `<style>${warpCSS}</style>`);
-
-/* ========== GAME SCREEN AÇILIYOR ========== */
-function showGameScreen() {
-    gameScreen.classList.remove("hidden");
-
-    statusText.textContent = "SYSTEM READY";
-    reactionBtn.textContent = "START";
-
-    gameState = "idle";
-    scoreLocked = false;
-}
-
-/* ========== GAMEPLAY LOGIC ========== */
-reactionBtn.addEventListener("click", () => {
-    ensureMusic();
-
-    if (gameState === "idle") startGame();
-    else if (gameState === "wait") failEarly();
-    else if (gameState === "go") successTap();
-});
-
-/* ========== GAME START ========== */
-function startGame() {
-    gameState = "wait";
-    scoreLocked = false;
-
-    reactionBtn.style.borderColor = "#ffaa00";
-    reactionBtn.style.color = "#ffaa00";
-    reactionBtn.textContent = "HOLD";
-
-    statusText.textContent = "WAIT FOR SIGNAL...";
-    statusText.style.color = "#ffaa00";
-
-    const delay = Math.random() * 3000 + 1500;
-
-    timeoutID = setTimeout(() => {
-        gameState = "go";
-        startTime = Date.now();
-
-        playSound(sndReady);
-
-        reactionBtn.style.borderColor = "#00ff44";
-        reactionBtn.style.color = "#00ff44";
-        reactionBtn.textContent = "TAP!";
-
-        statusText.textContent = "TAP NOW!";
-        statusText.style.color = "#00ff44";
-    }, delay);
-}
-
-/* ========== EARLY FAIL ========== */
-function failEarly() {
-    clearTimeout(timeoutID);
-    gameState = "idle";
-
-    playSound(sndFail);
-
-    reactionBtn.style.borderColor = "#bc13fe";
-    reactionBtn.style.color = "#bc13fe";
-    reactionBtn.textContent = "FAIL";
-
-    statusText.textContent = "SYSTEM FAILURE";
-    statusText.style.color = "#bc13fe";
-
-    setTimeout(() => {
-        reactionBtn.textContent = "START";
-        statusText.textContent = "SYSTEM READY";
-        reactionBtn.style.color = "#00f3ff";
-        reactionBtn.style.borderColor = "#00f3ff";
-    }, 1000);
-}
-
-/* ========== SUCCESS TAP ========== */
-function successTap() {
-    if (scoreLocked) return; // anti-exploit
-    scoreLocked = true;
-
-    const ms = Date.now() - startTime;
-    const sec = (ms / 1000).toFixed(3);
-
-    playSound(sndWin);
-
-    gameState = "finished";
-    showScore(sec);
-}
-
-/* ========== RANK SYSTEM ========== */
-function getRank(ms) {
-    if (ms < 180) return ["CYBER DEITY", "#ffffff"];
-    if (ms < 220) return ["HYPER REFLEX", "#ff003c"];
-    if (ms < 260) return ["NEON OPERATIVE", "#00f3ff"];
-    if (ms < 330) return ["STREET SAMURAI", "#ffaa00"];
-    return ["GLITCH ENTITY", "#bc13fe"];
-}
-
-/* ========== SCORE PANEL ========== */
-function showScore(sec) {
-    gameScreen.classList.add("hidden");
-
-    const ms = sec * 1000;
-    const [rank, color] = getRank(ms);
-
-    rankName.textContent = rank;
-    rankName.style.color = color;
-    scoreValue.textContent = sec + "s";
-
-    scorePanel.classList.remove("hidden");
-}
-
-/* ========== TRY AGAIN ========== */
-tryAgain.addEventListener("click", () => {
-    scorePanel.classList.add("hidden");
-    showGameScreen();
-});
-
-/* ========== SHARE SCORE ========== */
-shareScore.addEventListener("click", async () => {
-    const sec = scoreValue.textContent.replace("s", "");
-    const rank = rankName.textContent;
-
-    const img = `https://reflex-rho.vercel.app/api/score-image?score=${sec}&rank=${encodeURIComponent(rank)}`;
-
-    const text = `⚡ ${rank}\nReflex: ${sec}s\nCan you beat my time?`;
-
-    const compose = `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(img)}`;
-
-    await sdk.actions.openUrl({ url: compose });
-});
+import * as sdk from "https://esm.sh/@farcaster/miniapp-sdk";
+setTimeout(() => {
+  try { sdk.actions.ready(); } catch(e){}
+}, 300);
 </script>
-
 
 </body>
 </html>
