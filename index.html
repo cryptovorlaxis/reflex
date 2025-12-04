@@ -87,14 +87,24 @@
   </div>
 
   <!-- OYUN LOGIĞI -->
-  <script src="game.js"></script>
+<script src="game.js"></script>
 
-  <!-- FARCASTER MINI APP SDK - DOĞRU IMPORT -->
-  <script type="module">
-    import { sdk } from "https://esm.sh/@farcaster/miniapp-sdk";
+<!-- Farcaster Mini App SDK - CDN ile kullanım -->
+<script src="https://cdn.jsdelivr.net/npm/@farcaster/miniapp-sdk/dist/index.min.js"></script>
+<script>
+  // miniapp global değişkeni geliyor: miniapp.sdk.actions.ready()
+  window.addEventListener('load', function () {
+    if (
+      window.miniapp &&
+      window.miniapp.sdk &&
+      window.miniapp.sdk.actions &&
+      typeof window.miniapp.sdk.actions.ready === 'function'
+    ) {
+      // Farcaster splash screen'i kapat
+      window.miniapp.sdk.actions.ready();
+    }
+  });
+</script>
 
-    // global değişken olarak JS tarafına veriyoruz
-    window.farcasterSDK = sdk;
-  </script>
 </body>
 </html>
