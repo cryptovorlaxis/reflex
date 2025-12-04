@@ -369,6 +369,199 @@ body {
   background: rgba(0, 100, 150, 0.5);
   box-shadow: 0 0 30px rgba(0,200,255,0.55);
 }
+/* ============================================================
+   V6 — ULTRA ANIMATION PACK (CSS)
+   TRON Legacy + Cyber HUD + Medium Motion
+============================================================ */
+
+
+/* ------------------------------------------------------------
+   1) Camera Shake (GO hit anında)
+------------------------------------------------------------ */
+@keyframes tron-shake {
+  0%   { transform: translate(0, 0); }
+  20%  { transform: translate(-3px, 2px); }
+  40%  { transform: translate(3px, -2px); }
+  60%  { transform: translate(-2px, -1px); }
+  80%  { transform: translate(2px, 1px); }
+  100% { transform: translate(0, 0); }
+}
+
+.shake-active {
+  animation: tron-shake 0.18s linear;
+}
+
+
+/* ------------------------------------------------------------
+   2) Reactor GO Bloom Overload
+------------------------------------------------------------ */
+.reactor-go {
+  filter: drop-shadow(0 0 30px #0aff0a) drop-shadow(0 0 50px #0aff0a);
+  transform: scale(1.08);
+  transition: 0.12s ease-out;
+}
+
+.reactor-preflash {
+  animation: core-flash 0.3s ease-out;
+}
+
+@keyframes core-flash {
+  0%   { filter: drop-shadow(0 0 5px #0aff0a); }
+  50%  { filter: drop-shadow(0 0 50px #0aff0a); }
+  100% { filter: drop-shadow(0 0 10px #0aff0a); }
+}
+
+
+/* ------------------------------------------------------------
+   3) GO Text — Hologram Glitch Split (3 layer)
+------------------------------------------------------------ */
+.go-holo {
+  position: relative;
+}
+
+.go-holo::before,
+.go-holo::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.go-holo::before {
+  color: #00f3ff;
+  transform: translate(4px, -2px);
+  opacity: 0.7;
+}
+
+.go-holo::after {
+  color: #bc13fe;
+  transform: translate(-4px, 2px);
+  opacity: 0.6;
+}
+
+.go-holo.glitch-active::before {
+  animation: glitch-blue 0.12s linear;
+}
+.go-holo.glitch-active::after {
+  animation: glitch-purple 0.12s linear;
+}
+
+@keyframes glitch-blue {
+  0%   { transform: translate(0, 0); }
+  50%  { transform: translate(5px, -4px); }
+  100% { transform: translate(2px, 0); }
+}
+
+@keyframes glitch-purple {
+  0%   { transform: translate(0, 0); }
+  50%  { transform: translate(-6px, 3px); }
+  100% { transform: translate(-2px, 1px); }
+}
+
+
+/* ------------------------------------------------------------
+   4) Grid Horizon — Shockwave Expansion
+------------------------------------------------------------ */
+.shockwave-active .grid {
+  animation: grid-bloom 0.4s ease-out;
+}
+
+@keyframes grid-bloom {
+  0%   { opacity: 0.6; transform: scale(1); }
+  50%  { opacity: 1; transform: scale(1.06); }
+  100% { opacity: 0.7; transform: scale(1); }
+}
+
+.shockwave-active .horizon-glow {
+  animation: horizon-flash 1s ease-out;
+}
+
+@keyframes horizon-flash {
+  0%   { opacity: 0.6; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+
+/* ------------------------------------------------------------
+   5) Neuron Spark Particles (container)
+------------------------------------------------------------ */
+.spark {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #00f3ff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #00f3ff;
+  pointer-events: none;
+  animation: spark-move 0.5s ease-out forwards;
+}
+
+@keyframes spark-move {
+  from { transform: translate(0,0) scale(1); opacity: 1; }
+  to   { transform: translate(var(--tx), var(--ty)) scale(0.2); opacity: 0; }
+}
+
+
+/* ------------------------------------------------------------
+   6) FAIL — Red System Breach
+------------------------------------------------------------ */
+.screen-breach {
+  animation: breach-flash 0.25s ease-out;
+}
+
+@keyframes breach-flash {
+  0%   { filter: invert(0); }
+  50%  { filter: invert(1); }
+  100% { filter: invert(0); }
+}
+
+.reactor-fail {
+  animation: fail-pulse 0.4s ease-out;
+}
+
+@keyframes fail-pulse {
+  0%   { filter: drop-shadow(0 0 5px #ff004c); }
+  50%  { filter: drop-shadow(0 0 40px #ff004c); }
+  100% { filter: drop-shadow(0 0 10px #ff004c); }
+}
+
+
+/* ------------------------------------------------------------
+   7) Score Panel Elevation — TRON Card Reveal
+------------------------------------------------------------ */
+.score-show {
+  animation: score-reveal 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes score-reveal {
+  0%   { opacity: 0; transform: translateY(20px) scale(0.9); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+
+/* ------------------------------------------------------------
+   8) Hologram Logo Reveal
+------------------------------------------------------------ */
+.logo-reveal {
+  animation: logo-holo 0.8s ease forwards;
+}
+
+@keyframes logo-holo {
+  0%   { opacity: 0; transform: translateY(20px) scale(1.1); }
+  40%  { opacity: 1; transform: translateY(0) scale(1); }
+  80%  { opacity: 1; filter: drop-shadow(0 0 20px #00f3ff); }
+  100% { opacity: 1; filter: drop-shadow(0 0 10px #00c8ff); }
+}
+
+
+/* ------------------------------------------------------------
+   9) Background Parallax Layers
+------------------------------------------------------------ */
+.parallax {
+  will-change: transform;
+  transition: transform 0.2s ease-out;
+}
 
 /* ============================================================
    END CSS
