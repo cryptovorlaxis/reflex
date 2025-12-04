@@ -1,7 +1,7 @@
 // =================================================================
 // game.js — TRON Reflex Mini Game (logo'suz JS)
 // =================================================================
-
+ 
 // Element referansları
 const startButton = document.getElementById("startButton");
 const startScreen = document.getElementById("startScreen");
