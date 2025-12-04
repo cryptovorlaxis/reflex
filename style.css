@@ -108,9 +108,12 @@ body {
 
 .center-stack {
   position: relative;
-  width: 340px;
-  height: 340px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 
 .halo-container {
   position: absolute;
