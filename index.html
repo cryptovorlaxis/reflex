@@ -89,12 +89,15 @@
 
 </div>
 
+<script src="game.js"></script> 
 
+<script type="module">
+import * as sdk from "https://esm.sh/@farcaster/miniapp-sdk";
+// Bu satır, game.js'in SDK'yı kullanmasını sağlar.
+window.farcasterSDK = sdk; 
 
-<!-- JS -->
-<script src="game.js"></script>
-
-
+// Buradaki önceki sdk.actions.ready() çağrısını KESİNLİKLE KALDIRDIĞINIZDAN emin olun!
+</script>
 
 </body>
 </html>
