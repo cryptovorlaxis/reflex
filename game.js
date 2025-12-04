@@ -404,3 +404,30 @@ triggerFail = function (msg) {
   failEffects();
 };
 
+/* Horizon bloom effect */
+function triggerHorizonBloom() {
+  const hz = document.querySelector(".horizon-glow");
+  hz.classList.add("horizon-bloom");
+  setTimeout(() => hz.classList.remove("horizon-bloom"), 1400);
+}
+
+/* Reactor heat */
+function enableReactorHeat() {
+  reactor.classList.add("reactor-heat");
+}
+
+/* GO ultra FX */
+const oldGoFX = goEffects;
+goEffects = function () {
+  oldGoFX();
+  triggerHorizonBloom();
+  enableReactorHeat();
+};
+
+/* Extra FAIL FX */
+const oldFailFX = failEffects;
+failEffects = function () {
+  oldFailFX();
+  triggerHorizonBloom(); // kırmızı breach sonrası glow
+};
+
