@@ -38,11 +38,11 @@ let bestScore = localStorage.getItem("reflex_best_score") || null;
 if (bestScore) bestValue.textContent = bestScore;
 
 const MIN_REACTION_MS = 80; 
-let clickLocked = false;  
+let clickLocked = false;
 
 
 /* ============================================================
-   START SCREEN
+   START BUTTON
 ============================================================ */
 startButton.addEventListener("click", () => {
   playMusic();
@@ -50,18 +50,17 @@ startButton.addEventListener("click", () => {
   resetGame();
 });
 
-/* Allow music only after gesture */
 function playMusic() {
   if (!musicStarted) {
     sndMusic.volume = 0.45;
-    sndMusic.play().catch(()=>{});
+    sndMusic.play().catch(() => {});
     musicStarted = true;
   }
 }
 
 
 /* ============================================================
-   GAME LOOP
+   REACTOR BUTTON CLICK
 ============================================================ */
 reactorBtn.addEventListener("click", () => {
   if (clickLocked) return;
@@ -73,13 +72,9 @@ reactorBtn.addEventListener("click", () => {
 
 
 /* ============================================================
-   BEGIN WAIT — RANDOM DELAY
+   WAIT — RANDOM DELAY
 ============================================================ */
 function beginWait() {
-
-  if (clickLocked) return;
-  clickLocked = true;  // prevent double WAIT triggering
-
   gameState = "wait";
 
   statusText.textContent = "WAIT";
@@ -90,32 +85,26 @@ function beginWait() {
   const delay = Math.random() * 2000 + 1200;
 
   timeoutID = setTimeout(() => {
-
     gameState = "go";
 
     statusText.textContent = "GO";
     statusText.style.color = "#00ff85";
 
     reactorBtn.classList.add("go");
-
-    sndReady.play().catch(()=>{});
+    sndReady.play().catch(() => {});
 
     startTime = performance.now();
 
     goEffects();
-
-    clickLocked = false;  // now allow tap
-
   }, delay);
 }
 
 
 /* ============================================================
-   FAIL EARLY
+   FAIL (EARLY CLICK)
 ============================================================ */
 function failEarly() {
   clearTimeout(timeoutID);
-
   gameState = "idle";
 
   statusText.textContent = "FAIL";
@@ -124,7 +113,7 @@ function failEarly() {
   reactorBtn.classList.remove("go");
   reactorBtn.classList.add("fail");
 
-  sndFail.play().catch(()=>{});
+  sndFail.play().catch(() => {});
 
   failEffects();
 
@@ -147,11 +136,9 @@ function success() {
   const seconds = (reaction / 1000).toFixed(3);
   finalScore.textContent = seconds;
 
-  sndWin.play().catch(()=>{});
+  sndWin.play().catch(() => {});
 
-  /* RANKING */
   let rank = "UNRANKED";
-
   if (reaction < 180) rank = "S+ — THE SINGULARITY";
   else if (reaction < 220) rank = "S — CYBER DEMON";
   else if (reaction < 260) rank = "A — NEON OPERATIVE";
@@ -160,7 +147,6 @@ function success() {
 
   rankText.textContent = rank;
 
-  /* BEST SCORE SAVE */
   if (!bestScore || parseFloat(seconds) < parseFloat(bestScore)) {
     bestScore = seconds;
     localStorage.setItem("reflex_best_score", bestScore);
@@ -195,7 +181,6 @@ retryBtn.addEventListener("click", () => {
 });
 
 shareBtn.addEventListener("click", async () => {
-
   const score = finalScore.textContent;
   const rank = rankText.textContent;
 
@@ -232,46 +217,20 @@ function switchScreen(from, to) {
   from.classList.remove("visible");
   setTimeout(() => {
     to.classList.add("visible");
-  }, 50);
+  }, 60);
 }
 
 
 /* ============================================================
-   FX INTEGRATION — TRON ULTRA
+   PLACEHOLDER FX (Çalışsın diye boş fonksiyonlar)
 ============================================================ */
-function goEffects() {
-  triggerCameraShake();
-  triggerReactorBloom();
-  triggerGoGlitch();
-  triggerShockwave();
-  triggerHorizonBloom();
-  enableReactorHeat();
-}
-
-function successEffects() {
-  const rect = reactorBtn.getBoundingClientRect();
-  const x = rect.left + rect.width / 2;
-  const y = rect.top + rect.height / 2;
-  spawnSparks(x, y);
-  revealScoreCard();
-}
-
-function failEffects() {
-  triggerBreach();
-  triggerHorizonBloom();
-}
+function goEffects(){ }
+function failEffects(){ }
+function successEffects(){ }
 
 
 /* ============================================================
-   INIT FX
+   LOGO REVEAL
 ============================================================ */
+function revealLogo(){ }
 revealLogo();
-enableParallax();
-
-
-/* ============================================================
-   FARCASTER READY (tek ve doğru)
-============================================================ */
-import("https://esm.sh/@farcaster/miniapp-sdk").then((sdk) => {
-  try { sdk.actions.ready(); } catch(e){}
-});
