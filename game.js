@@ -163,44 +163,48 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // SHARE
+  // SHARE → Farcaster'da composeCast ile cast oluştur
   if (shareBtn) {
     shareBtn.addEventListener("click", async () => {
       const scoreText = scoreDisplay.textContent || "0.000";
       const rankText = rankTitle.textContent || "UNRANKED GLITCH";
 
-      const shareUrl = `${window.location.origin}/api/score-image?score=${encodeURIComponent(
+      // Skor görseli URL'i
+      const shareImageUrl = `${window.location.origin}/api/score-image?score=${encodeURIComponent(
         scoreText
       )}&rank=${encodeURIComponent(rankText)}`;
 
-      // 1) Farcaster içindeysek: SDK actions kullan
+      // Mini app URL (oyunun kendisi)
+      const miniAppUrl = window.location.origin;
+
+      const castText = `My reflex time: ${scoreText}s — ${rankText} in REFLEX TEST ⚡️`;
+
+      // 1) Farcaster Mini App içindeysek: composeCast kullan
       if (
         window.miniapp &&
         window.miniapp.sdk &&
-        window.miniapp.sdk.actions
+        window.miniapp.sdk.actions &&
+        typeof window.miniapp.sdk.actions.composeCast === "function"
       ) {
-        const actions = window.miniapp.sdk.actions;
-
-        // openUrl varsa: görseli ayrı sekmede aç
-        if (typeof actions.openUrl === "function") {
-          try {
-            await actions.openUrl(shareUrl);
-            return;
-          } catch (e) {
-            console.warn("miniapp.actions.openUrl failed", e);
-          }
+        try {
+          await window.miniapp.sdk.actions.composeCast({
+            text: castText,
+            // En fazla 2 embed: oyun linki + skor görseli
+            embeds: [miniAppUrl, shareImageUrl],
+          });
+          return; // Farcaster composer açıldı, burada duruyoruz
+        } catch (e) {
+          console.warn("miniapp.sdk.actions.composeCast failed", e);
         }
-
-        // ileride share benzeri başka action eklenirse buraya koyabiliriz
       }
 
-      // 2) Tarayıcı native share destekliyorsa onu dene
+      // 2) Tarayıcı native share varsa
       if (navigator.share) {
         try {
           await navigator.share({
             title: "Reflex Score",
-            text: `My reflex time: ${scoreText}s — ${rankText}`,
-            url: shareUrl,
+            text: castText,
+            url: miniAppUrl,
           });
           return;
         } catch (e) {
@@ -210,15 +214,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // 3) Clipboard fallback
       try {
-        await navigator.clipboard.writeText(shareUrl);
-        alert("Share image URL copied to clipboard!");
+        await navigator.clipboard.writeText(`${castText}  ${miniAppUrl}`);
+        alert("Cast text copied to clipboard!");
         return;
       } catch (e) {
         console.warn("clipboard failed", e);
       }
 
-      // 4) En son çare: yeni sekmede aç
-      window.open(shareUrl, "_blank");
+      // 4) En son çare: oyun linkini aç
+      window.open(miniAppUrl, "_blank");
     });
   }
 });
