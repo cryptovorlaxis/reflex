@@ -22,19 +22,18 @@
     }
   }
 }' />
-
 </head>
+
 <body>
-  
+
+<!-- GLOBAL VFX -->
 <div class="fx-aberration"></div>
 <div class="fx-noise"></div>
 <div class="fx-vignette"></div>
 <div class="fx-streaks"></div>
 <div class="fx-haze"></div>
 
-<!-- ===========================================================
-     BACKGROUND — TRON DEEP GRID HORIZON
-=========================================================== -->
+<!-- BACKGROUND -->
 <div class="tron-bg">
   <div class="grid"></div>
   <div class="horizon-glow"></div>
@@ -43,22 +42,24 @@
 
 
 <!-- ===========================================================
-     START SCREEN (TRON Halo + Neon Panel)
+     START SCREEN (HALO + LOGO + BUTTON)
 =========================================================== -->
-<div id="startScreen" class="screen visible">
 <div id="startScreen" class="screen visible">
 
   <div class="center-stack">
 
+    <!-- HALO -->
     <div class="halo-container">
       <div class="halo-ring"></div>
       <div class="halo-core"></div>
     </div>
 
+    <!-- LOGO -->
     <img src="logo.png" id="logoHolo" class="holo-logo">
 
   </div>
 
+  <!-- BUTTON -->
   <button id="startButton" class="tron-start-btn">
     ENTER THE GRID
   </button>
@@ -66,50 +67,29 @@
   <div class="start-hint">Calibrating neural interface…</div>
 
 </div>
-
-  <!-- Büyük TRON Halo -->
-  <div class="halo-container">
-    <div class="halo-ring"></div>
-    <div class="halo-core"></div>
-  </div>
-
-  <!-- Hologram Logo -->
-  <img src="logo.png" id="logoHolo" class="holo-logo" />
-
-  <!-- Start Button -->
-  <button id="startButton" class="tron-start-btn">
-    ENTER THE GRID
-  </button>
-
-  <div class="start-hint">Calibrating neural interface…</div>
-
-</div>
-
 
 
 <!-- ===========================================================
-     GAME SCREEN — TRON REACTOR + STATUS PANEL
+     GAME SCREEN
 =========================================================== -->
 <div id="gameScreen" class="screen">
 
-  <!-- TRON CARD LAYOUT -->
   <div class="game-layout">
 
-    <!-- LEFT — Reactor Core -->
+    <!-- Reactor Core -->
     <div class="reactor-core" id="reactorBtn">
       <div class="reactor-ring ring1"></div>
       <div class="reactor-ring ring2"></div>
       <div class="reactor-ring ring3"></div>
       <div class="reactor-center"></div>
-      <div class="reactor-icon" id="reactorIcon"></div>
+      <div class="reactor-icon"></div>
     </div>
 
-    <!-- RIGHT — Status Panel -->
+    <!-- Status -->
     <div class="status-panel">
       <div id="statusText" class="status-text">WAIT</div>
       <div class="status-sub">REACTION MODULE</div>
 
-      <!-- Best score small panel -->
       <div class="best-mini">
         BEST: <span id="bestValue">--</span>
       </div>
@@ -120,9 +100,8 @@
 </div>
 
 
-
 <!-- ===========================================================
-     SCORE SCREEN — TRON CARD RESULT
+     SCORE SCREEN
 =========================================================== -->
 <div id="scoreScreen" class="screen">
 
@@ -144,29 +123,22 @@
   </div>
 
   <div class="score-actions">
-    <button id="retryBtn" class="tron-btn glass">RETRY</button>
-    <button id="shareBtn" class="tron-btn glass">SHARE</button>
+    <button id="retryBtn" class="tron-btn">RETRY</button>
+    <button id="shareBtn" class="tron-btn">SHARE</button>
   </div>
 
 </div>
 
 
-
-<!-- ===========================================================
-     SOUNDS
-=========================================================== -->
+<!-- SOUNDS -->
 <audio id="sndMusic" src="music.mp3" preload="auto" loop></audio>
 <audio id="sndReady" src="ready.mp3" preload="auto"></audio>
 <audio id="sndFail" src="fail.mp3" preload="auto"></audio>
 <audio id="sndWin" src="win.mp3" preload="auto"></audio>
 
-
-<!-- ===========================================================
-     GAME LOGIC
-=========================================================== -->
+<!-- JS -->
 <script type="module" src="game.js"></script>
 
-<!-- Farcaster ready -->
 <script type="module">
 import * as sdk from "https://esm.sh/@farcaster/miniapp-sdk";
 setTimeout(()=>{ try { sdk.actions.ready(); } catch(e){} }, 300);
