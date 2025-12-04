@@ -87,24 +87,22 @@
   </div>
 
   <!-- OYUN LOGIĞI -->
-<script src="game.js"></script>
+  <script src="game.js"></script>
 
-<!-- Farcaster Mini App SDK - CDN ile kullanım -->
-<script src="https://cdn.jsdelivr.net/npm/@farcaster/miniapp-sdk/dist/index.min.js"></script>
-<script>
-  // miniapp global değişkeni geliyor: miniapp.sdk.actions.ready()
-  window.addEventListener('load', function () {
-    if (
-      window.miniapp &&
-      window.miniapp.sdk &&
-      window.miniapp.sdk.actions &&
-      typeof window.miniapp.sdk.actions.ready === 'function'
-    ) {
-      // Farcaster splash screen'i kapat
-      window.miniapp.sdk.actions.ready();
-    }
-  });
-</script>
-
+  <!-- FARCASTER MINI APP SDK - CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@farcaster/miniapp-sdk/dist/index.min.js"></script>
+  <script>
+    // Mini app ortamındaysak splash screen'i kapat
+    window.addEventListener("load", function () {
+      if (
+        window.miniapp &&
+        window.miniapp.sdk &&
+        window.miniapp.sdk.actions &&
+        typeof window.miniapp.sdk.actions.ready === "function"
+      ) {
+        window.miniapp.sdk.actions.ready();
+      }
+    });
+  </script>
 </body>
 </html>
