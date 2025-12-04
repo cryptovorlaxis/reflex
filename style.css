@@ -1,180 +1,495 @@
-/* ===============================
-   START SCREEN CLEAN, PREMIUM
-================================*/
+/* ============================================================
+   GLOBAL RESET
+============================================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
 
-/* Tam ekran hizalama */
+body {
+  background: #050505;
+  font-family: 'Orbitron', sans-serif;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+  color: white;
+}
+
+
+/* ============================================================
+   BACKGROUND LAYERS
+============================================================ */
+
+.bg-nebula {
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  background: radial-gradient(circle at 50% 120%, #1a0b2e 0%, #000 70%);
+  animation: pulseBg 8s infinite alternate;
+}
+
+@keyframes pulseBg {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+.stars {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-image:
+    radial-gradient(1px 1px at 20px 30px, #fff, transparent),
+    radial-gradient(1px 1px at 70px 120px, #fff, transparent),
+    radial-gradient(1px 1px at 140px 160px, #fff, transparent);
+  background-size: 200px 200px;
+  opacity: 0.6;
+  animation: starsMove 120s linear infinite;
+}
+
+@keyframes starsMove {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-1200px); }
+}
+
+.cyber-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(transparent 0%, rgba(188,19,254,0.3) 2%, transparent 3%),
+    linear-gradient(90deg, transparent 0%, rgba(0,243,255,0.2) 2%, transparent 3%);
+  background-size: 80px 80px;
+  transform: perspective(400px) rotateX(60deg) translateY(-200px);
+  opacity: 0.25;
+  animation: gridScroll 20s linear infinite;
+}
+
+@keyframes gridScroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 80px; }
+}
+
+.scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 30;
+  background: linear-gradient(
+      to bottom,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0) 50%,
+      rgba(0,0,0,0.15) 50%,
+      rgba(0,0,0,0.15) 100%
+  );
+  background-size: 100% 4px;
+}
+/* ============================================================
+   START SCREEN — PERFECT CENTER INTRO
+============================================================ */
+
 #startScreen {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 24px;
-    text-align: center;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  text-align: center;
+  z-index: 10;
 }
 
-/* Logo gerçek oranında ortalanmış */
-#logoHolo {
-    width: 340px;           /* 713×632 oranına göre ideal */
-    max-width: 75%;
-    aspect-ratio: 713 / 632; /* Oranı kilitle — bozulma yok */
-    object-fit: contain;
-    display: block;
-    margin: 0 auto;
-
-    opacity: 0;
-    animation: introLogo 1.2s ease forwards;
-
-    filter: drop-shadow(0 0 24px #00eaff);
+/* LOGO CONTAINER */
+.logo-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Logo giriş animasyonu */
-@keyframes introLogo {
-    0%   { opacity: 0; transform: scale(0.85) translateY(20px); filter: blur(10px); }
-    50%  { opacity: 1; filter: blur(0px); }
-    100% { transform: scale(1) translateY(0); }
+/* LOGO — 713×632 oranına göre otomatik scale */
+#gameLogo {
+  width: min(55vw, 330px);  /* responsive + max limit */
+  height: auto;
+  aspect-ratio: 713 / 632;
+  opacity: 0;
+  filter: drop-shadow(0 0 18px #00f3ff);
+  animation: logoFadeIn 1.2s ease forwards;
 }
 
-/* Glow arka plan */
+@keyframes logoFadeIn {
+  0% { opacity: 0; transform: scale(0.85) translateY(20px); filter: blur(10px); }
+  60% { opacity: 1; filter: blur(0px); }
+  100% { transform: scale(1) translateY(0); }
+}
+
+/* GLOW BEHIND LOGO */
 .intro-glow {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 550px;
-    height: 550px;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(0,255,255,0.25), transparent 70%);
-    filter: blur(22px);
-    z-index: -1;
-    opacity: 0.9;
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+      circle,
+      rgba(0,255,255,0.22),
+      rgba(0,170,200,0.15),
+      transparent 70%
+  );
+  filter: blur(40px);
+  z-index: -1;
+  opacity: 0.7;
 }
 
-/* İnce yükleme çizgisi */
+/* LOADING LINE — small neon animation */
 .load-line {
-    width: 220px;
-    height: 3px;
-    margin-top: 10px;
-    background: linear-gradient(90deg, transparent, #00eaff, transparent);
-    animation: loadMove 2s infinite linear;
-    opacity: 0.7;
+  width: 200px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #00eaff, transparent);
+  opacity: 0.75;
+  animation: loadMove 2s infinite linear;
 }
 
 @keyframes loadMove {
-    0%   { transform: translateX(-60px); }
-    100% { transform: translateX(60px); }
+  0% { transform: translateX(-60px); }
+  100% { transform: translateX(60px); }
 }
 
-/* Start Button */
-.tron-start-btn {
-    padding: 16px 60px;
-    font-size: 22px;
-    letter-spacing: 2px;
-    color: #dff;
-    background: rgba(0, 40, 60, 0.45);
-    border: 2px solid #00eaff;
-    border-radius: 8px;
-
-    text-shadow: 0 0 12px #00eaff;
-    box-shadow: 0 0 28px rgba(0,255,255,0.25);
-
-    cursor: pointer;
-    transition: 0.25s ease;
+/* START BUTTON — Premium Neon */
+#startButton {
+  padding: 16px 54px;
+  font-size: 22px;
+  letter-spacing: 2px;
+  border-radius: 6px;
+  background: rgba(0, 40, 60, 0.4);
+  border: 2px solid #00eaff;
+  color: #dff;
+  text-shadow: 0 0 12px #00eaff;
+  box-shadow: 0 0 22px rgba(0,255,255,0.25);
+  cursor: pointer;
+  transition: 0.25s ease;
 }
 
-.tron-start-btn:hover {
-    transform: scale(1.06);
-    background: rgba(0,80,120,0.55);
-    box-shadow: 0 0 40px rgba(0,255,255,0.4);
+#startButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px rgba(0,255,255,0.35);
+  background: rgba(0,80,120,0.4);
 }
 
-/* Hint */
+/* HINT TEXT */
 .start-hint {
-    font-size: 14px;
-    opacity: 0.55;
-    margin-top: -4px;
-} 
-
-/* FULLSCREEN SCREEN */
-.screen {
-    position: absolute;
-    inset: 0;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  font-size: 14px;
+  opacity: 0.65;
+  margin-top: -8px;
+  color: #b8eafd;
 }
-.screen.visible { display: flex; }
+/* ============================================================
+   GAME SCREEN — CENTER LAYOUT
+============================================================ */
 
-/* LOGO ORTA */
-#logoHolo {
-    width: 340px;
-    max-width: 80%;
-    aspect-ratio: 713 / 632;
-    object-fit: contain;
-    animation: introLogo 1.2s ease forwards;
-    opacity: 0;
-}
-@keyframes introLogo {
-    0% { opacity:0; transform: scale(0.85) translateY(20px); filter:blur(10px); }
-    50% { opacity:1; filter:blur(0); }
-    100% { transform: scale(1) translateY(0); }
+#gameScreen {
+  position: absolute;
+  inset: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 30px;
 }
 
-/* GLOW */
-.intro-glow {
-    position:absolute;
-    width:550px;
-    height:550px;
-    top:50%;
-    left:50%;
-    transform:translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(0,255,255,0.25), transparent 70%);
-    filter: blur(25px);
-    z-index:-1;
+#gameScreen.visible {
+  display: flex;
+  animation: fadeIn 0.4s ease forwards;
 }
 
-/* LOAD LINE */
-.load-line {
-    width:200px;
-    height:3px;
-    margin-top:14px;
-    background:linear-gradient(90deg, transparent,#00eaff,transparent);
-    animation:load 2s linear infinite;
-    opacity:0.7;
-}
-@keyframes load {
-    0% { transform:translateX(-60px); }
-    100%{ transform:translateX(60px); }
+/* Status text */
+#status {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 26px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: #8ad7ff;
+  text-shadow: 0 0 8px #00eaff;
+  min-height: 30px;
+  margin-top: -10px;
 }
 
-/* BUTTON */
-.tron-start-btn {
-    margin-top:20px;
-    padding:16px 50px;
-    background:rgba(0,50,80,0.4);
-    border:2px solid #00eaff;
-    color:#dff;
-    font-size:22px;
-    border-radius:8px;
-    text-shadow:0 0 10px #00eaff;
-    box-shadow:0 0 20px rgba(0,255,255,0.3);
-    cursor:pointer;
-    transition:0.25s;
+
+/* ============================================================
+   REACTOR CORE — AAA Quality
+============================================================ */
+
+.reactor-core {
+  width: 270px;
+  height: 270px;
+  position: relative;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.15s ease;
 }
 
-.tron-start-btn:hover {
-    transform:scale(1.06);
-    box-shadow:0 0 40px rgba(0,255,255,0.4);
+/* ----- Outer Rings ----- */
+.reactor-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid rgba(0,255,255,0.35);
+  filter: drop-shadow(0 0 12px rgba(0,255,255,0.4));
 }
 
-/* BACKGROUND FIX */
-body {
-    background:#03080e;
-}
-.tron-bg {
-    position:fixed;
-    inset:0;
-    z-index:-10;
+.ring1 { animation: spin1 6s linear infinite; }
+.ring2 { inset: 25px; animation: spin2 4.5s linear infinite reverse; }
+.ring3 { inset: 50px; animation: spin3 3s linear infinite; }
+
+@keyframes spin1 { to { transform: rotate(360deg); } }
+@keyframes spin2 { to { transform: rotate(-360deg); } }
+@keyframes spin3 { to { transform: rotate(360deg); } }
+
+/* ----- Center Glow ----- */
+.reactor-center {
+  position: absolute;
+  inset: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,255,255,0.4), rgba(0,60,100,0.6), rgba(0,20,30,0.9));
+  filter: blur(1px);
 }
 
+/* ----- Icon (Energy Point) ----- */
+.reactor-icon {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #00eaff;
+  box-shadow: 0 0 20px #00eaff;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 10px #00eaff);
+}
+
+
+/* ============================================================
+   REACTOR BUTTON STATES
+============================================================ */
+
+/* WAIT MODE */
+.mode-wait {
+  border-color: #ffaa00 !important;
+  box-shadow: 0 0 25px rgba(255,170,0,0.5) !important;
+  animation: pulseWait 1s infinite alternate;
+}
+@keyframes pulseWait {
+  from { transform: scale(1); }
+  to { transform: scale(1.03); }
+}
+
+/* GO MODE */
+.mode-go {
+  border-color: #00ff00 !important;
+  box-shadow: 0 0 50px #00ff00, inset 0 0 25px #00ff00 !important;
+  background: radial-gradient(circle, #003300 0%, #000 90%);
+  transform: scale(1.06);
+}
+
+/* FAIL MODE */
+.mode-fail {
+  border-color: #bc13fe !important;
+  box-shadow: 0 0 40px #bc13fe !important;
+  animation: shakeFail 0.3s;
+}
+
+@keyframes shakeFail {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+/* ============================================================
+   SCORE SCREEN — ULTRA PREMIUM GLASS PANEL
+============================================================ */
+
+#scoreScreen {
+  position: absolute;
+  inset: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#scoreScreen.visible {
+  display: flex;
+  animation: fadeIn 0.5s ease forwards;
+}
+
+/* MAIN GLASS PANEL */
+.score-panel {
+  background: rgba(15, 20, 30, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border: 2px solid rgba(255,255,255,0.15);
+  border-radius: 22px;
+
+  padding: 35px 30px;
+  width: 90%;
+  max-width: 380px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  pointer-events: none;
+  transition: 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+.score-panel.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* NEW RECORD BADGE */
+.new-record-badge {
+  background: #ffffff;
+  color: #000;
+  padding: 4px 12px;
+  margin-bottom: -6px;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  display: none;
+  animation: popBadge 0.6s ease forwards;
+}
+
+@keyframes popBadge {
+  0% { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+
+/* ============================================================
+   RANK TITLE
+============================================================ */
+
+#rankTitle {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Rank Glow Colors */
+.score-panel.rank-s-plus {
+  border-color: #ffffff;
+  box-shadow: 0 0 45px rgba(255,255,255,0.4);
+}
+.score-panel.rank-s-plus #rankTitle {
+  color: #ffffff;
+  text-shadow: 0 0 14px #ffffff;
+}
+
+.score-panel.rank-s {
+  border-color: #ff003c;
+  box-shadow: 0 0 40px rgba(255,0,60,0.4);
+}
+.score-panel.rank-s #rankTitle {
+  color: #ff003c;
+  text-shadow: 0 0 12px #ff003c;
+}
+
+.score-panel.rank-a {
+  border-color: #00f3ff;
+  box-shadow: 0 0 40px rgba(0,243,255,0.4);
+}
+.score-panel.rank-a #rankTitle {
+  color: #00f3ff;
+  text-shadow: 0 0 12px #00f3ff;
+}
+
+.score-panel.rank-b {
+  border-color: #ffaa00;
+  box-shadow: 0 0 40px rgba(255,170,0,0.4);
+}
+.score-panel.rank-b #rankTitle {
+  color: #ffaa00;
+  text-shadow: 0 0 12px #ffaa00;
+}
+
+.score-panel.rank-c {
+  border-color: #bc13fe;
+  box-shadow: 0 0 40px rgba(188,19,254,0.4);
+}
+.score-panel.rank-c #rankTitle {
+  color: #bc13fe;
+  text-shadow: 0 0 12px #bc13fe;
+}
+
+
+/* ============================================================
+   SCORE TEXT
+============================================================ */
+#score {
+  font-size: 78px;
+  font-weight: 900;
+  line-height: 1;
+  margin: 10px 0 5px 0;
+
+  background: linear-gradient(to bottom, #ffffff, #cccccc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  filter: drop-shadow(0 0 15px rgba(255,255,255,0.25));
+}
+
+
+/* ============================================================
+   BUTTONS (RETRY & SHARE)
+============================================================ */
+
+.btn-group {
+  display: flex;
+  gap: 14px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.cyber-btn {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 14px;
+  border-radius: 10px;
+
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 14px;
+
+  color: white;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.cyber-btn:hover {
+  background: white;
+  color: black;
+  box-shadow: 0 0 25px white;
+}
