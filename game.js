@@ -37,12 +37,12 @@ let timeoutID = null;
 let bestScore = localStorage.getItem("reflex_best_score") || null;
 if (bestScore) bestValue.textContent = bestScore;
 
-const MIN_REACTION_MS = 80; // Anti-cheat
-let clickLocked = false;
+const MIN_REACTION_MS = 80; 
+let clickLocked = false;  
 
 
 /* ============================================================
-   START BUTTON
+   START SCREEN
 ============================================================ */
 startButton.addEventListener("click", () => {
   playMusic();
@@ -50,34 +50,36 @@ startButton.addEventListener("click", () => {
   resetGame();
 });
 
-/* Allow music only after human gesture */
+/* Allow music only after gesture */
 function playMusic() {
   if (!musicStarted) {
     sndMusic.volume = 0.45;
-    sndMusic.play().catch(() => {});
+    sndMusic.play().catch(()=>{});
     musicStarted = true;
   }
 }
 
 
 /* ============================================================
-   GAME LOOP — REACTOR BUTTON
+   GAME LOOP
 ============================================================ */
 reactorBtn.addEventListener("click", () => {
   if (clickLocked) return;
 
   if (gameState === "idle") return beginWait();
-
   if (gameState === "wait") return failEarly();
-
   if (gameState === "go") return success();
 });
 
 
 /* ============================================================
-   WAIT — RANDOM DELAY
+   BEGIN WAIT — RANDOM DELAY
 ============================================================ */
 function beginWait() {
+
+  if (clickLocked) return;
+  clickLocked = true;  // prevent double WAIT triggering
+
   gameState = "wait";
 
   statusText.textContent = "WAIT";
@@ -88,18 +90,22 @@ function beginWait() {
   const delay = Math.random() * 2000 + 1200;
 
   timeoutID = setTimeout(() => {
+
     gameState = "go";
 
     statusText.textContent = "GO";
     statusText.style.color = "#00ff85";
 
     reactorBtn.classList.add("go");
-    sndReady.play().catch(() => {});
+
+    sndReady.play().catch(()=>{});
 
     startTime = performance.now();
 
-    /* TRON Animations */
     goEffects();
+
+    clickLocked = false;  // now allow tap
+
   }, delay);
 }
 
@@ -109,6 +115,7 @@ function beginWait() {
 ============================================================ */
 function failEarly() {
   clearTimeout(timeoutID);
+
   gameState = "idle";
 
   statusText.textContent = "FAIL";
@@ -117,9 +124,8 @@ function failEarly() {
   reactorBtn.classList.remove("go");
   reactorBtn.classList.add("fail");
 
-  sndFail.play().catch(() => {});
+  sndFail.play().catch(()=>{});
 
-  /* FX */
   failEffects();
 
   clickLocked = true;
@@ -136,14 +142,12 @@ function failEarly() {
 function success() {
   const reaction = performance.now() - startTime;
 
-  if (reaction < MIN_REACTION_MS) {
-    return failEarly(); // anti-cheat
-  }
+  if (reaction < MIN_REACTION_MS) return failEarly();
 
   const seconds = (reaction / 1000).toFixed(3);
   finalScore.textContent = seconds;
 
-  sndWin.play().catch(() => {});
+  sndWin.play().catch(()=>{});
 
   /* RANKING */
   let rank = "UNRANKED";
@@ -156,14 +160,13 @@ function success() {
 
   rankText.textContent = rank;
 
-  /* BEST SCORE */
+  /* BEST SCORE SAVE */
   if (!bestScore || parseFloat(seconds) < parseFloat(bestScore)) {
     bestScore = seconds;
     localStorage.setItem("reflex_best_score", bestScore);
     bestValue.textContent = bestScore;
   }
 
-  /* FX */
   successEffects();
 
   switchScreen(gameScreen, scoreScreen);
@@ -192,6 +195,7 @@ retryBtn.addEventListener("click", () => {
 });
 
 shareBtn.addEventListener("click", async () => {
+
   const score = finalScore.textContent;
   const rank = rankText.textContent;
 
@@ -233,7 +237,7 @@ function switchScreen(from, to) {
 
 
 /* ============================================================
-   V6 — ULTRA ANIMATION INTEGRATION
+   FX INTEGRATION — TRON ULTRA
 ============================================================ */
 function goEffects() {
   triggerCameraShake();
@@ -248,7 +252,6 @@ function successEffects() {
   const rect = reactorBtn.getBoundingClientRect();
   const x = rect.left + rect.width / 2;
   const y = rect.top + rect.height / 2;
-
   spawnSparks(x, y);
   revealScoreCard();
 }
@@ -265,11 +268,10 @@ function failEffects() {
 revealLogo();
 enableParallax();
 
+
 /* ============================================================
-   FARCASTER READY (GERÇEK FIX)
+   FARCASTER READY (tek ve doğru)
 ============================================================ */
 import("https://esm.sh/@farcaster/miniapp-sdk").then((sdk) => {
-  try {
-    sdk.actions.ready();
-  } catch (e) {}
+  try { sdk.actions.ready(); } catch(e){}
 });
