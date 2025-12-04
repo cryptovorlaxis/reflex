@@ -1,62 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>REFLEX — TRON Edition</title>
+
+<link rel="stylesheet" href="style.css" />
+</head>
+
 <body>
 
 <!-- BACKGROUND -->
-<div class="tron-bg">
-  <div class="grid"></div>
-  <div class="horizon-glow"></div>
-  <div class="scanlines"></div>
-</div>
+<div class="bg-nebula"></div>
+<div class="stars"></div>
+<div class="cyber-grid"></div>
+<div class="scanlines"></div>
 
-<!-- START SCREEN -->
+<!-- ============================================================
+     START SCREEN
+============================================================ -->
 <div id="startScreen" class="screen visible">
 
   <div class="intro-glow"></div>
 
-  <img src="logo.png" id="logoHolo" />
+  <img src="logo.png" id="gameLogo" />
 
   <div class="load-line"></div>
 
-  <button id="startButton" class="tron-start-btn">ENTER THE GRID</button>
+  <button id="startButton">ENTER THE GRID</button>
 
   <div class="start-hint">Calibrating neural interface…</div>
-
 </div>
 
-<!-- GAME SCREEN -->
+
+<!-- ============================================================
+     GAME SCREEN
+============================================================ -->
 <div id="gameScreen" class="screen">
-  <div class="game-layout">
-    <div class="reactor-core" id="reactorBtn">
+
+  <div id="status">SYSTEM READY</div>
+
+  <div class="best-score-box">
+    BEST: <span id="bestValue">--</span>
+  </div>
+
+  <div class="reactor-core" id="reactorBtn">
       <div class="reactor-ring ring1"></div>
       <div class="reactor-ring ring2"></div>
       <div class="reactor-ring ring3"></div>
       <div class="reactor-center"></div>
       <div class="reactor-icon"></div>
-    </div>
-
-    <div class="status-panel">
-      <div id="statusText" class="status-text">WAIT</div>
-      <div class="status-sub">REACTION MODULE</div>
-      <div class="best-mini">BEST: <span id="bestValue">--</span></div>
-    </div>
   </div>
+
 </div>
 
-<!-- SCORE SCREEN -->
+
+<!-- ============================================================
+     SCORE SCREEN
+============================================================ -->
 <div id="scoreScreen" class="screen">
-  <div class="score-card">
-    <div class="score-left"><div class="score-holo-circle"></div></div>
 
-    <div class="score-right">
-      <div class="rank-text" id="rankText">UNRANKED</div>
-      <div class="final-score" id="finalScore">0.000</div>
-    </div>
+  <div id="scorePanel" class="score-panel">
+
+      <div id="newRecordBadge" class="new-record-badge">NEW RECORD!</div>
+
+      <div style="font-size:12px;color:#aaa;letter-spacing:2px;margin-top:8px;">
+        TIER RANK
+      </div>
+
+      <div id="rankTitle">UNRANKED</div>
+
+      <div id="score">0.000</div>
+
+      <div class="btn-group">
+        <button id="againBtn" class="cyber-btn">RETRY</button>
+        <button id="shareBtn" class="cyber-btn">SHARE</button>
+      </div>
+
   </div>
 
-  <div class="score-actions">
-    <button id="retryBtn" class="tron-btn">RETRY</button>
-    <button id="shareBtn" class="tron-btn">SHARE</button>
-  </div>
 </div>
 
+
+<!-- JS -->
 <script src="game.js"></script>
+
+<script type="module">
+import * as sdk from "https://esm.sh/@farcaster/miniapp-sdk";
+window.farcasterSDK = sdk;
+window.addEventListener("DOMContentLoaded", () => {
+    try { sdk.actions.ready(); } catch (e) {}
+});
+</script>
+
 </body>
+</html>
