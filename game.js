@@ -1,5 +1,5 @@
 // =================================================================
-// game.js — TRON Reflex Mini Game
+// game.js — TRON Reflex Mini Game (logo'suz JS)
 // =================================================================
 
 // Element referansları
@@ -16,7 +16,6 @@ const againBtn = document.getElementById("againBtn");
 const shareBtn = document.getElementById("shareBtn");
 const scorePanel = document.getElementById("scorePanel");
 const scoreScreen = document.getElementById("scoreScreen");
-const gameLogo = document.getElementById("gameLogo"); // 👈 LOGO
 
 // Durum değişkenleri
 let gameState = "INTRO"; // INTRO, WAIT, GO, FAIL, SCORE
@@ -133,24 +132,6 @@ function transitionToGo() {
 document.addEventListener("DOMContentLoaded", () => {
   bestScoreValue.textContent =
     bestScore === 0 ? "--" : formatScore(bestScore);
-
-  // 🔒 LOGO GÖRÜNÜRLÜK KİLİDİ
-  if (gameLogo) {
-    // Başlangıçta zorla görünür yap
-    gameLogo.style.setProperty("opacity", "1", "important");
-    gameLogo.style.setProperty("display", "block", "important");
-
-    // Her 1 saniyede bir tekrar zorla (Farcaster bir şeyle bozsa bile)
-    setInterval(() => {
-      if (!document.body.contains(gameLogo)) {
-        // DOM'dan silinmişse geri tak
-        const container = document.querySelector(".logo-container");
-        if (container) container.prepend(gameLogo);
-      }
-      gameLogo.style.setProperty("opacity", "1", "important");
-      gameLogo.style.setProperty("display", "block", "important");
-    }, 1000);
-  }
 
   // START
   if (startButton) {
