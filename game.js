@@ -16,6 +16,7 @@ const againBtn = document.getElementById("againBtn");
 const shareBtn = document.getElementById("shareBtn");
 const scorePanel = document.getElementById("scorePanel");
 const scoreScreen = document.getElementById("scoreScreen");
+const gameLogo = document.getElementById("gameLogo"); // 👈 LOGO
 
 // Durum değişkenleri
 let gameState = "INTRO"; // INTRO, WAIT, GO, FAIL, SCORE
@@ -133,6 +134,24 @@ document.addEventListener("DOMContentLoaded", () => {
   bestScoreValue.textContent =
     bestScore === 0 ? "--" : formatScore(bestScore);
 
+  // 🔒 LOGO GÖRÜNÜRLÜK KİLİDİ
+  if (gameLogo) {
+    // Başlangıçta zorla görünür yap
+    gameLogo.style.setProperty("opacity", "1", "important");
+    gameLogo.style.setProperty("display", "block", "important");
+
+    // Her 1 saniyede bir tekrar zorla (Farcaster bir şeyle bozsa bile)
+    setInterval(() => {
+      if (!document.body.contains(gameLogo)) {
+        // DOM'dan silinmişse geri tak
+        const container = document.querySelector(".logo-container");
+        if (container) container.prepend(gameLogo);
+      }
+      gameLogo.style.setProperty("opacity", "1", "important");
+      gameLogo.style.setProperty("display", "block", "important");
+    }, 1000);
+  }
+
   // START
   if (startButton) {
     startButton.addEventListener("click", () => {
@@ -163,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // SHARE → Tek görselli cast
+  // SHARE → tek görselli cast
   if (shareBtn) {
     shareBtn.addEventListener("click", async () => {
       const scoreText = scoreDisplay.textContent || "0.000";
@@ -175,7 +194,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const miniAppUrl = window.location.origin;
 
-      // Metnin içine linki gömüyoruz
       const castText = `My reflex time: ${scoreText}s — ${rankText} in REFLEX TEST ⚡️
 
 Play: ${miniAppUrl}`;
@@ -190,7 +208,7 @@ Play: ${miniAppUrl}`;
         try {
           await window.miniapp.sdk.actions.composeCast({
             text: castText,
-            embeds: [shareImageUrl], // SADECE skor görseli
+            embeds: [shareImageUrl],
           });
           return;
         } catch (e) {
