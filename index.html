@@ -16,41 +16,51 @@
 <div class="cyber-grid"></div>
 <div class="scanlines"></div>
 
-<!-- START SCREEN -->
+<!-- ============================================================
+     START SCREEN
+============================================================ -->
 <div id="startScreen" class="screen visible">
 
-  <div class="intro-glow"></div>
+    <div class="logo-container">
 
-  <img src="logo.png" id="gameLogo">
+        <!-- Glow arkada -->
+        <div class="intro-glow"></div>
 
-  <div class="load-line"></div>
+        <!-- Logo tamamen merkezde -->
+        <img src="logo.png" id="gameLogo">
+    </div>
 
-  <button id="startButton" class="tron-start-btn">ENTER THE GRID</button>
+    <div class="load-line"></div>
 
-  <div class="start-hint">Calibrating neural interface…</div>
+    <button id="startButton" class="tron-start-btn">ENTER THE GRID</button>
+
+    <div class="start-hint">Calibrating neural interface…</div>
 
 </div>
+
+
 
 <!-- ============================================================
      GAME SCREEN
 ============================================================ -->
 <div id="gameScreen" class="screen">
 
-  <div id="status">SYSTEM READY</div>
+    <div id="status">SYSTEM READY</div>
 
-  <div class="best-score-box">
-    BEST: <span id="bestValue">--</span>
-  </div>
+    <div class="best-score-box">
+        BEST: <span id="bestValue">--</span>
+    </div>
 
-  <div class="reactor-core" id="reactorBtn">
-      <div class="reactor-ring ring1"></div>
-      <div class="reactor-ring ring2"></div>
-      <div class="reactor-ring ring3"></div>
-      <div class="reactor-center"></div>
-      <div class="reactor-icon"></div>
-  </div>
+    <div class="reactor-core" id="reactorBtn">
+        <div class="reactor-ring ring1"></div>
+        <div class="reactor-ring ring2"></div>
+        <div class="reactor-ring ring3"></div>
+        <div class="reactor-center"></div>
+        <div class="reactor-icon"></div>
+    </div>
 
 </div>
+
 
 
 <!-- ============================================================
@@ -58,26 +68,27 @@
 ============================================================ -->
 <div id="scoreScreen" class="screen">
 
-  <div id="scorePanel" class="score-panel">
+    <div id="scorePanel" class="score-panel">
 
-      <div id="newRecordBadge" class="new-record-badge">NEW RECORD!</div>
+        <div id="newRecordBadge" class="new-record-badge">NEW RECORD!</div>
 
-      <div style="font-size:12px;color:#aaa;letter-spacing:2px;margin-top:8px;">
-        TIER RANK
-      </div>
+        <div style="font-size:12px;color:#aaa;letter-spacing:2px;margin-top:8px;">
+            TIER RANK
+        </div>
 
-      <div id="rankTitle">UNRANKED</div>
+        <div id="rankTitle">UNRANKED</div>
 
-      <div id="score">0.000</div>
+        <div id="score">0.000</div>
 
-      <div class="btn-group">
-        <button id="againBtn" class="cyber-btn">RETRY</button>
-        <button id="shareBtn" class="cyber-btn">SHARE</button>
-      </div>
+        <div class="btn-group">
+            <button id="againBtn" class="cyber-btn">RETRY</button>
+            <button id="shareBtn" class="cyber-btn">SHARE</button>
+        </div>
 
-  </div>
+    </div>
 
 </div>
+
 
 
 <!-- JS -->
