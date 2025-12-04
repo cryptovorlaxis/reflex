@@ -163,23 +163,24 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // SHARE → Farcaster'da composeCast ile cast oluştur
+  // SHARE → Tek görselli cast
   if (shareBtn) {
     shareBtn.addEventListener("click", async () => {
       const scoreText = scoreDisplay.textContent || "0.000";
       const rankText = rankTitle.textContent || "UNRANKED GLITCH";
 
-      // Skor görseli URL'i
       const shareImageUrl = `${window.location.origin}/api/score-image?score=${encodeURIComponent(
         scoreText
       )}&rank=${encodeURIComponent(rankText)}`;
 
-      // Mini app URL (oyunun kendisi)
       const miniAppUrl = window.location.origin;
 
-      const castText = `My reflex time: ${scoreText}s — ${rankText} in REFLEX TEST ⚡️`;
+      // Metnin içine linki gömüyoruz
+      const castText = `My reflex time: ${scoreText}s — ${rankText} in REFLEX TEST ⚡️
 
-      // 1) Farcaster Mini App içindeysek: composeCast kullan
+Play: ${miniAppUrl}`;
+
+      // 1) Farcaster Mini App içindeysek: composeCast (tek embed = skor görseli)
       if (
         window.miniapp &&
         window.miniapp.sdk &&
@@ -189,16 +190,15 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
           await window.miniapp.sdk.actions.composeCast({
             text: castText,
-            // En fazla 2 embed: oyun linki + skor görseli
-            embeds: [miniAppUrl, shareImageUrl],
+            embeds: [shareImageUrl], // SADECE skor görseli
           });
-          return; // Farcaster composer açıldı, burada duruyoruz
+          return;
         } catch (e) {
           console.warn("miniapp.sdk.actions.composeCast failed", e);
         }
       }
 
-      // 2) Tarayıcı native share varsa
+      // 2) Tarayıcı native share
       if (navigator.share) {
         try {
           await navigator.share({
@@ -214,7 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // 3) Clipboard fallback
       try {
-        await navigator.clipboard.writeText(`${castText}  ${miniAppUrl}`);
+        await navigator.clipboard.writeText(castText);
         alert("Cast text copied to clipboard!");
         return;
       } catch (e) {
