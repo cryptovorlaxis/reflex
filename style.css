@@ -120,11 +120,11 @@ body {
   z-index: 10;
 }
 
-/* LOGO artık bir arka plan görseli */
+/* LOGO: sabit genişlik + yükseklik, background olarak */
 .logo-container {
   position: relative;
   width: min(60vw, 260px);
-  aspect-ratio: 1 / 1;
+  height: min(60vw, 260px);   /* 👈 BURASI ÖNEMLİ: aspect-ratio YOK */
   background-image: url("logo.png");
   background-size: contain;
   background-repeat: no-repeat;
@@ -133,9 +133,9 @@ body {
   margin-bottom: 10px;
 }
 
-/* Glow istersen kalsın, istemezsen silebilirsin */
+/* glow istersen kalsın, istersen tamamen kapat */
 .intro-glow {
-  display: none; /* istersen tamamen kapatıyoruz */
+  display: none;
 }
 
 .load-line {
@@ -145,14 +145,9 @@ body {
   animation: loadSlide 2s infinite linear;
   opacity: 0.75;
 }
-
 @keyframes loadSlide {
-  0% {
-    transform: translateX(-60px);
-  }
-  100% {
-    transform: translateX(60px);
-  }
+  0% { transform: translateX(-60px); }
+  100% { transform: translateX(60px); }
 }
 
 #startButton {
@@ -179,6 +174,7 @@ body {
   opacity: 0.65;
   color: #b8eafd;
 }
+
 
 
 
