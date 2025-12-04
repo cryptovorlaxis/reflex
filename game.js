@@ -189,17 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Farcaster'a "hazırım" de
       // (Mini app içindeysek, splash screen bundan sonra kaybolur)
-      try {
-        if (
-          window.farcasterSDK &&
-          window.farcasterSDK.actions &&
-          typeof window.farcasterSDK.actions.ready === "function"
-        ) {
-          await window.farcasterSDK.actions.ready();
-        }
-      } catch (err) {
-        console.error("Farcaster Ready Failed:", err);
-      }
+     
 
       // Oyunu başlat
       startGame();
