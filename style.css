@@ -107,12 +107,17 @@ body {
 ============================================================ */
 
 .center-stack {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%); /* tam merkez */
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none; /* tıklamaya engel olmaz */
 }
+
 
 
 .halo-container {
