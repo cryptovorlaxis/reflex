@@ -406,3 +406,9 @@ body {
   box-shadow: 0 0 25px white;
 }
 
+document.getElementById("startButton").addEventListener("click", () => {
+    document.getElementById("startScreen").style.display = "none";
+    document.getElementById("gameScreen").classList.add("visible");
+});
+
+
