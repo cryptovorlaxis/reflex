@@ -133,6 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
   bestScoreValue.textContent =
     bestScore === 0 ? "--" : formatScore(bestScore);
 
+  // START
   if (startButton) {
     startButton.addEventListener("click", () => {
       startScreen.style.display = "none";
@@ -141,6 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // REACTOR TIKLAMA
   if (reactorBtn) {
     reactorBtn.addEventListener("click", () => {
       if (gameState === "WAIT") {
@@ -153,6 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // TEKRAR
   if (againBtn) {
     againBtn.addEventListener("click", () => {
       resetToGame();
@@ -160,6 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // SHARE
   if (shareBtn) {
     shareBtn.addEventListener("click", async () => {
       const scoreText = scoreDisplay.textContent || "0.000";
@@ -169,12 +173,52 @@ document.addEventListener("DOMContentLoaded", () => {
         scoreText
       )}&rank=${encodeURIComponent(rankText)}`;
 
+      // 1) Farcaster içindeysek: SDK actions kullan
+      if (
+        window.miniapp &&
+        window.miniapp.sdk &&
+        window.miniapp.sdk.actions
+      ) {
+        const actions = window.miniapp.sdk.actions;
+
+        // openUrl varsa: görseli ayrı sekmede aç
+        if (typeof actions.openUrl === "function") {
+          try {
+            await actions.openUrl(shareUrl);
+            return;
+          } catch (e) {
+            console.warn("miniapp.actions.openUrl failed", e);
+          }
+        }
+
+        // ileride share benzeri başka action eklenirse buraya koyabiliriz
+      }
+
+      // 2) Tarayıcı native share destekliyorsa onu dene
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: "Reflex Score",
+            text: `My reflex time: ${scoreText}s — ${rankText}`,
+            url: shareUrl,
+          });
+          return;
+        } catch (e) {
+          console.warn("navigator.share failed", e);
+        }
+      }
+
+      // 3) Clipboard fallback
       try {
         await navigator.clipboard.writeText(shareUrl);
         alert("Share image URL copied to clipboard!");
-      } catch {
-        alert("Share URL: " + shareUrl);
+        return;
+      } catch (e) {
+        console.warn("clipboard failed", e);
       }
+
+      // 4) En son çare: yeni sekmede aç
+      window.open(shareUrl, "_blank");
     });
   }
 });
