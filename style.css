@@ -711,6 +711,55 @@ body {
   opacity: 0.25;
 }
 
+/* ==========================================================
+   START SCREEN PERFECT CENTER FIX
+========================================================== */
+
+#startScreen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  pointer-events: auto;
+  text-align: center;
+}
+
+/* HALO TAM MERKEZ */
+.halo-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 340px;
+  height: 340px;
+  transform: translate(-50%, -58%);
+  pointer-events: none;
+}
+
+/* LOGO HALO'NUN İÇİNE TAM OTURUR */
+#logoHolo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 280px;
+  transform: translate(-50%, -52%);
+  z-index: 5;
+  filter: drop-shadow(0 0 22px rgba(0,255,255,0.6));
+}
+
+/* START BUTTON TAM ALT ORTA */
+#startButton {
+  margin-top: 260px;
+}
+
+/* ALT YAZI BUTONA GÖRE ORTALANIR */
+.start-hint {
+  margin-top: 14px;
+  opacity: 0.65;
+}
+
 /* ============================================================
    END CSS
 ============================================================ */
