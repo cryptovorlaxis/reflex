@@ -1,20 +1,12 @@
-/* ============================================================
-   REFLEX — TRON EDITION
-   FINAL CSS v3 (Stabil + Simetrik + TRON FX)
-   By ChatGPT (Your Brother 😎)
-============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
 
-/* ROOT VARIABLES */
 :root {
-    --tron-blue: #00c8ff;
-    --tron-glow: rgba(0, 255, 255, 0.85);
-    --tron-dark-bg: #03080e;
-    --tron-text: #dff6ff;
-    --tron-accent: #0aff0a;
-    --panel-bg: rgba(0, 30, 50, 0.55);
+    --cyan: #00eaff;
+    --violet: #bc13fe;
+    --bg: #03080e;
 }
 
-/* GLOBAL RESET */
+/* RESET */
 * {
     margin: 0;
     padding: 0;
@@ -22,335 +14,145 @@
 }
 
 body {
-    background: var(--tron-dark-bg);
+    background: var(--bg);
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
     font-family: 'Orbitron', sans-serif;
-    color: var(--tron-text);
-    overflow: hidden;
-    letter-spacing: 0.8px;
-}
-
-/* ============================================================
-   SCREEN MANAGER
-============================================================ */
-
-.screen {
-    position: absolute;
-    inset: 0;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    will-change: opacity, transform;
-}
-
-.screen.visible {
     display: flex;
-    animation: fadeIn 0.6s cubic-bezier(0.25,1,0.5,1);
+    align-items: center;
+    justify-content: center;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ============================================================
-   TRON GRID BACKGROUND
-============================================================ */
-
-.tron-bg {
-    position: fixed;
-    inset: 0;
-    overflow: hidden;
-    z-index: -10;
-}
-
-.grid {
+/* BACKGROUND */
+.bg {
     position: absolute;
     inset: 0;
     background:
-    repeating-linear-gradient(
-        to bottom,
-        rgba(0, 200, 255, 0.1) 0 2px,
-        transparent 2px 50px
-    ),
-    repeating-linear-gradient(
-        to right,
-        rgba(0, 200, 255, 0.1) 0 2px,
-        transparent 2px 50px
-    );
-    transform: perspective(900px) rotateX(70deg);
-    animation: gridMove 25s linear infinite;
+        radial-gradient(circle at 50% 130%, #003b4f, #02040a 70%),
+        linear-gradient(180deg, #00121e 0%, #01040a 100%);
+    opacity: 0.9;
+    z-index: -5;
 }
 
-@keyframes gridMove {
-    0% { transform: perspective(900px) rotateX(70deg) translateY(0); }
-    100% { transform: perspective(900px) rotateX(70deg) translateY(500px); }
+/* UI WRAPPER */
+.ui {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
 }
 
-.horizon-glow {
-    position: absolute;
-    top: 32%;
-    left: 0;
-    right: 0;
-    height: 260px;
-    background: radial-gradient(
-        circle at 50% 0%,
-        rgba(0,180,255,0.7),
-        rgba(0,180,255,0.05) 60%,
-        transparent 100%
-    );
-    filter: blur(8px);
+.status {
+    font-size: 20px;
+    color: #7feaff;
+    text-shadow: 0 0 10px var(--cyan);
 }
 
-/* ============================================================
-   START SCREEN — PERFECT CENTERED
-============================================================ */
-
-#startScreen {
-    z-index: 10;
-    text-align: center;
-}
-
-.center-stack {
+/* TRON REACTOR BUTTON */
+.reactor {
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
     position: relative;
-    width: 400px;
-    height: 400px;
+    cursor: pointer;
+    background: radial-gradient(circle, #022 0%, #000 80%);
+    border: none;
+    outline: none;
 }
 
-/* Halo perfectly centered */
-.halo-container {
-    position: absolute;
-    inset: 0;
-    transform: translateY(-6%);
-    pointer-events: none;
-}
-
-.halo-ring {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border: 5px solid rgba(0,255,255,0.4);
-    box-shadow: 0 0 35px var(--tron-glow);
-    animation: haloPulse 3s ease-in-out infinite;
-}
-
-@keyframes haloPulse {
-    0% { transform: scale(1); opacity: 0.75; }
-    100% { transform: scale(1.06); opacity: 1; }
-}
-
-.halo-core {
-    position: absolute;
-    inset: 55px;
-    border-radius: 50%;
-    background: radial-gradient(
-        circle,
-        rgba(0,255,255,0.25),
-        rgba(0,120,150,0.3) 50%,
-        transparent 100%
-    );
-    filter: blur(3px);
-}
-
-/* Logo */
-#logoHolo {
+.reactor-text {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 260px;
     transform: translate(-50%, -50%);
-    filter: drop-shadow(0 0 25px var(--tron-glow));
-    animation: holoSpawn 1.3s cubic-bezier(0.25,1,0.5,1);
+    font-size: 32px;
+    color: var(--cyan);
+    text-shadow: 0 0 10px var(--cyan);
 }
 
-@keyframes holoSpawn {
-    0% { opacity:0; transform:translate(-50%,-50%) scale(0.8) blur(8px); }
-    60% { opacity:1; transform:translate(-50%,-50%) scale(1.04); }
-    100% { transform:translate(-50%,-50%) scale(1); }
-}
-
-/* Start Button */
-#startButton {
-    margin-top: 380px;
-}
-
-.tron-start-btn {
-    padding: 18px 60px;
-    font-size: 23px;
-    color: var(--tron-text);
-    background: rgba(0,50,80,0.5);
-    border: 3px solid var(--tron-blue);
-    border-radius: 8px;
-    cursor: pointer;
-    text-shadow: 0 0 10px var(--tron-blue);
-    box-shadow: inset 0 0 25px rgba(0,255,255,0.5),
-                0 0 30px rgba(0,255,255,0.4);
-    transition: 0.25s;
-}
-
-.tron-start-btn:hover {
-    background: rgba(0,100,160,0.6);
-    box-shadow: inset 0 0 45px var(--tron-glow),
-                0 0 45px var(--tron-glow);
-    transform: scale(1.05);
-}
-
-.start-hint {
-    margin-top: 12px;
-    font-size: 15px;
-    opacity: 0.7;
-}
-
-
-/* ============================================================
-   GAME SCREEN — REACTOR + STATUS PANEL
-============================================================ */
-
-.game-layout {
-    display: flex;
-    width: 90%;
-    max-width: 900px;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* Reactor */
-.reactor-core {
-    position: relative;
-    width: 280px;
-    height: 280px;
-    cursor: pointer;
-}
-
-/* Rings */
-.ring1, .ring2, .ring3 {
+/* RINGS */
+.ring {
     position: absolute;
     inset: 0;
     border-radius: 50%;
+    border: 3px solid rgba(0,255,255,0.4);
+    animation: spin 8s linear infinite;
 }
 
-.ring1 {
-    border: 4px solid rgba(0,200,255,0.45);
-    animation: spin1 8s linear infinite;
+.r2 {
+    inset: 25px;
+    animation-duration: 5s;
+    animation-direction: reverse;
 }
 
-.ring2 {
-    inset: 22px;
-    border: 3px solid rgba(0,200,255,0.5);
-    animation: spin2 6s linear infinite reverse;
+.r3 {
+    inset: 50px;
+    animation-duration: 3s;
 }
 
-.ring3 {
-    inset: 45px;
-    border: 3px solid rgba(0,200,255,0.4);
-    animation: spin3 4s linear infinite;
+@keyframes spin {
+    from { transform: rotate(0); }
+    to { transform: rotate(360deg); }
 }
 
-@keyframes spin1 { to { transform: rotate(360deg); } }
-@keyframes spin2 { to { transform: rotate(-360deg); } }
-@keyframes spin3 { to { transform: rotate(360deg); } }
-
-.reactor-center {
+.core {
     position: absolute;
-    inset: 70px;
+    inset: 80px;
     border-radius: 50%;
-    background: radial-gradient(circle,
-        rgba(0,255,255,0.4),
-        rgba(0,120,160,0.4) 40%,
-        rgba(0,40,60,0.75)
-    );
-    box-shadow: 0 0 25px var(--tron-glow);
+    background: radial-gradient(circle, rgba(0,255,255,0.4), rgba(0,80,120,0.3), transparent);
 }
 
-/* Status Panel */
-.status-panel {
-    width: 380px;
+/* SCORE PANEL */
+.score-panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+    pointer-events: none;
+    width: 90%;
+    max-width: 340px;
     padding: 28px;
-    background: var(--panel-bg);
-    border: 2px solid var(--tron-blue);
-    border-radius: 10px;
-    backdrop-filter: blur(8px);
-    text-align: left;
+    background: rgba(0, 20, 40, 0.85);
+    border-radius: 16px;
+    border: 2px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
+    text-align: center;
+    transition: 0.3s ease;
+    color: white;
 }
 
-.status-text {
-    font-size: 45px;
-    margin-bottom: 10px;
-    text-shadow: 0 0 10px var(--tron-blue);
+.score-panel.visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    pointer-events: auto;
 }
 
-/* ============================================================
-   SCORE SCREEN — TRON CARD
-============================================================ */
+.rank {
+    font-size: 20px;
+    margin-bottom: 8px;
+}
 
-.score-card {
+.score {
+    font-size: 64px;
+    margin-top: 10px;
+    text-shadow: 0 0 12px var(--cyan);
+}
+
+.panel-buttons {
     display: flex;
-    background: rgba(0,25,40,0.6);
-    backdrop-filter: blur(10px);
-    padding: 40px;
-    border: 3px solid rgba(0,255,255,0.5);
-    border-radius: 12px;
-    box-shadow: 0 0 40px rgba(0,255,255,0.4);
+    gap: 12px;
+    margin-top: 20px;
 }
 
-.final-score {
-    font-size: 50px;
-    text-shadow: 0 0 20px var(--tron-glow);
-}
-
-/* ============================================================
-   VFX — SPARKS / SHAKE / BREACH / GLITCH
-============================================================ */
-
-.shake-active {
-    animation: tron-shake 0.18s linear;
-}
-
-@keyframes tron-shake {
-    20%{transform:translate(-4px,3px);}
-    40%{transform:translate(4px,-3px);}
-    60%{transform:translate(-3px,-2px);}
-    80%{transform:translate(3px,2px);}
-}
-
-.spark {
-    position: absolute;
-    width: 7px;
-    height: 7px;
-    background: var(--tron-glow);
-    border-radius: 50%;
-    animation: spark-move 0.55s ease-out forwards;
-}
-
-@keyframes spark-move {
-    to { transform: translate(var(--tx), var(--ty)) scale(0.1); opacity:0; }
-}
-
-/* Glitch */
-.go-holo::before, .go-holo::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-.go-holo::before { color:#00f3ff; opacity:.7; }
-.go-holo::after  { color:#bc13fe; opacity:.6; }
-
-.go-holo.glitch-active::before {
-    animation: glitch-blue 0.12s;
-}
-.go-holo.glitch-active::after {
-    animation: glitch-purple 0.12s;
-}
-
-@keyframes glitch-blue  { 50%{transform:translate(6px,-4px);} }
-@keyframes glitch-purple{ 50%{transform:translate(-6px,4px);} }
-
-.breach-active {
-    animation: breach 0.25s ease-out;
-}
-
-@keyframes breach {
-    50% { filter: invert(1); }
+.panel-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    font-family: inherit;
+    cursor: pointer;
 }
