@@ -1,8 +1,8 @@
 // =================================================================
-// game.js — TRON Reflex Mini Game + Farcaster entegrasyonu
+// game.js — TRON Reflex Mini Game
 // =================================================================
 
-// 1. Element Referansları
+// Element referansları
 const startButton = document.getElementById("startButton");
 const startScreen = document.getElementById("startScreen");
 const gameScreen = document.getElementById("gameScreen");
@@ -17,68 +17,43 @@ const shareBtn = document.getElementById("shareBtn");
 const scorePanel = document.getElementById("scorePanel");
 const scoreScreen = document.getElementById("scoreScreen");
 
-// 2. Oyun Durumu ve Değişkenler
-// INTRO, WAIT, GO, FAIL, SCORE
-let gameState = "INTRO";
+// Durum değişkenleri
+let gameState = "INTRO"; // INTRO, WAIT, GO, FAIL, SCORE
 let waitTimer = null;
 let goStartTime = 0;
 let bestScore =
   localStorage.getItem("reflexBestScore") != null
     ? parseFloat(localStorage.getItem("reflexBestScore"))
-    : 0.0;
+    : 0;
 
-// 3. Yardımcı Fonksiyonlar
-
+// Yardımcı fonksiyonlar
 function formatScore(ms) {
-  // ms -> saniye
   return (ms / 1000).toFixed(3);
 }
 
 function getRank(ms) {
   const s = ms / 1000;
 
-  if (s <= 0.150) {
-    return {
-      label: "SINGULARITY PROTOCOL",
-      cssClass: "rank-s-plus",
-    };
-  } else if (s <= 0.220) {
-    return {
-      label: "DEMON REACTOR",
-      cssClass: "rank-s",
-    };
-  } else if (s <= 0.300) {
-    return {
-      label: "OPERATIVE",
-      cssClass: "rank-a",
-    };
-  } else if (s <= 0.400) {
-    return {
-      label: "NEON SAMURAI",
-      cssClass: "rank-b",
-    };
-  } else {
-    return {
-      label: "UNRANKED GLITCH",
-      cssClass: "rank-c",
-    };
+  if (s <= 0.15) {
+    return { label: "SINGULARITY PROTOCOL", cssClass: "rank-s-plus" };
+  } else if (s <= 0.22) {
+    return { label: "DEMON REACTOR", cssClass: "rank-s" };
+  } else if (s <= 0.3) {
+    return { label: "OPERATIVE", cssClass: "rank-a" };
+  } else if (s <= 0.4) {
+    return { label: "NEON SAMURAI", cssClass: "rank-b" };
   }
+  return { label: "UNRANKED GLITCH", cssClass: "rank-c" };
 }
 
 function setStatus(text) {
-  if (statusText) {
-    statusText.textContent = text;
-  }
+  if (statusText) statusText.textContent = text;
 }
 
 function updateReactorState(mode) {
   if (!reactorBtn) return;
-
   reactorBtn.classList.remove("mode-wait", "mode-go", "mode-fail");
-
-  if (mode) {
-    reactorBtn.classList.add(mode);
-  }
+  if (mode) reactorBtn.classList.add(mode);
 }
 
 function showScore(ms) {
@@ -86,11 +61,9 @@ function showScore(ms) {
   const scoreStr = formatScore(ms);
   scoreDisplay.textContent = scoreStr;
 
-  // Rank hesapla
   const { label, cssClass } = getRank(ms);
   rankTitle.textContent = label;
 
-  // Score panel rank class'ları reset
   scorePanel.classList.remove(
     "rank-s-plus",
     "rank-s",
@@ -100,7 +73,6 @@ function showScore(ms) {
   );
   scorePanel.classList.add(cssClass);
 
-  // Best score
   let isNewRecord = false;
   if (bestScore === 0 || ms < bestScore) {
     bestScore = ms;
@@ -111,14 +83,8 @@ function showScore(ms) {
   bestScoreValue.textContent =
     bestScore === 0 ? "--" : formatScore(bestScore);
 
-  // NEW RECORD badge
-  if (isNewRecord) {
-    newRecordBadge.style.display = "inline-block";
-  } else {
-    newRecordBadge.style.display = "none";
-  }
+  newRecordBadge.style.display = isNewRecord ? "inline-block" : "none";
 
-  // Score screen göster
   scoreScreen.classList.add("visible");
   scorePanel.classList.add("visible");
 }
@@ -128,7 +94,6 @@ function handleFail(reason) {
   updateReactorState("mode-fail");
   setStatus(reason);
 
-  // Kısa bir süre sonra score screen yerine tekrar oyuna al
   setTimeout(() => {
     resetToGame();
     startGame();
@@ -136,27 +101,19 @@ function handleFail(reason) {
 }
 
 function resetToGame() {
-  // Score ekranını kapat
   scoreScreen.classList.remove("visible");
   scorePanel.classList.remove("visible");
-
-  // Game ekranını açık bırak
   gameScreen.classList.add("visible");
 }
 
-// =================================================================
-// 4. Oyun Döngüsü
-// =================================================================
-
+// Oyun döngüsü
 function startGame() {
-  // Eski timer'ları temizle
   if (waitTimer) clearTimeout(waitTimer);
 
   gameState = "WAIT";
   updateReactorState("mode-wait");
   setStatus("WAIT FOR GREEN...");
 
-  // Rastgele bekleme süresi: 1.5s - 4.5s
   const randomWait = 1500 + Math.random() * 3000;
 
   waitTimer = setTimeout(() => {
@@ -171,39 +128,24 @@ function transitionToGo() {
   setStatus("TAP NOW!");
 }
 
-// =================================================================
-// 5. Event Listeners
-// =================================================================
-
+// Event listeners
 document.addEventListener("DOMContentLoaded", () => {
-  // Best skor göster
   bestScoreValue.textContent =
     bestScore === 0 ? "--" : formatScore(bestScore);
 
-  // START
   if (startButton) {
-    startButton.addEventListener("click", async () => {
-      // Start ekranını kapat, game ekranını aç
+    startButton.addEventListener("click", () => {
       startScreen.style.display = "none";
       gameScreen.classList.add("visible");
-
-      // Farcaster'a "hazırım" de
-      // (Mini app içindeysek, splash screen bundan sonra kaybolur)
-     
-
-      // Oyunu başlat
       startGame();
     });
   }
 
-  // REACTOR TIKLAMA
   if (reactorBtn) {
     reactorBtn.addEventListener("click", () => {
       if (gameState === "WAIT") {
-        // Erken bastı
         handleFail("TOO EARLY!");
       } else if (gameState === "GO") {
-        // Doğru anda bastı
         const now = performance.now();
         const diff = now - goStartTime;
         showScore(diff);
@@ -211,7 +153,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // TEKRAR OYNA
   if (againBtn) {
     againBtn.addEventListener("click", () => {
       resetToGame();
@@ -219,7 +160,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // SHARE
   if (shareBtn) {
     shareBtn.addEventListener("click", async () => {
       const scoreText = scoreDisplay.textContent || "0.000";
@@ -229,8 +169,6 @@ document.addEventListener("DOMContentLoaded", () => {
         scoreText
       )}&rank=${encodeURIComponent(rankText)}`;
 
-      // Farcaster mini app içindeysek, burada cast / share action
-      // kullanabilirsin. Şimdilik sadece linki kopyalıyoruz.
       try {
         await navigator.clipboard.writeText(shareUrl);
         alert("Share image URL copied to clipboard!");
