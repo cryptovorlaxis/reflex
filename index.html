@@ -10,21 +10,23 @@
 
 <body>
 
+<!-- BACKGROUND -->
 <div class="tron-bg">
   <div class="grid"></div>
   <div class="horizon-glow"></div>
   <div class="scanlines"></div>
 </div>
 
+<!-- START SCREEN -->
 <div id="startScreen" class="screen visible">
-  
-  <div class="center-stack">
-    <div class="halo-container">
-      <div class="halo-ring"></div>
-      <div class="halo-core"></div>
-    </div>
 
-    <img src="logo.png" id="logoHolo" class="holo-logo">
+  <div class="center-stack">
+      <div class="halo-container">
+        <div class="halo-ring"></div>
+        <div class="halo-core"></div>
+      </div>
+
+      <img src="logo.png" id="logoHolo" class="holo-logo">
   </div>
 
   <button id="startButton" class="tron-start-btn">
@@ -32,10 +34,14 @@
   </button>
 
   <div class="start-hint">Calibrating neural interface…</div>
+
 </div>
 
+<!-- GAME SCREEN -->
 <div id="gameScreen" class="screen">
+
   <div class="game-layout">
+
     <div class="reactor-core" id="reactorBtn">
       <div class="reactor-ring ring1"></div>
       <div class="reactor-ring ring2"></div>
@@ -47,16 +53,23 @@
     <div class="status-panel">
       <div id="statusText" class="status-text">WAIT</div>
       <div class="status-sub">REACTION MODULE</div>
-      <div class="best-mini">BEST: <span id="bestValue">--</span></div>
+      <div class="best-mini">
+        BEST: <span id="bestValue">--</span>
+      </div>
     </div>
+
   </div>
+
 </div>
 
+<!-- SCORE SCREEN -->
 <div id="scoreScreen" class="screen">
+
   <div class="score-card">
     <div class="score-left">
       <div class="score-holo-circle"></div>
     </div>
+
     <div class="score-right">
       <div class="rank-text" id="rankText">UNRANKED</div>
       <div class="final-score" id="finalScore">0.000</div>
@@ -67,6 +80,7 @@
     <button id="retryBtn" class="tron-btn">RETRY</button>
     <button id="shareBtn" class="tron-btn">SHARE</button>
   </div>
+
 </div>
 
 <script src="game.js"></script>
