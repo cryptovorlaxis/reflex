@@ -214,3 +214,193 @@ function switchScreen(from, to) {
    DONE
 ============================================================ */
 console.log("Cyber Steel Reflex Engine Loaded.");
+
+/* ============================================================
+   V6 — ULTRA ANIMATION PACK (JS ENGINE)
+   TRON Legacy FX + Medium Motion + Impact System
+============================================================ */
+
+
+/* ------------------------------------------------------------
+   CAMERA SHAKE (GO hit)
+------------------------------------------------------------ */
+function triggerCameraShake() {
+  document.body.classList.add("shake-active");
+  setTimeout(() => document.body.classList.remove("shake-active"), 200);
+}
+
+
+/* ------------------------------------------------------------
+   GRID SHOCKWAVE (GO)
+------------------------------------------------------------ */
+function triggerShockwave() {
+  const bg = document.querySelector(".tron-bg");
+  bg.classList.add("shockwave-active");
+
+  setTimeout(() => {
+    bg.classList.remove("shockwave-active");
+  }, 400);
+}
+
+
+/* ------------------------------------------------------------
+   REACTOR BLOOM PULSE (GO)
+------------------------------------------------------------ */
+function triggerReactorBloom() {
+  reactor.classList.add("reactor-preflash");
+
+  setTimeout(() => {
+    reactor.classList.remove("reactor-preflash");
+  }, 300);
+}
+
+
+/* ------------------------------------------------------------
+   GO HOLOGRAM GLITCH
+------------------------------------------------------------ */
+function triggerGoGlitch() {
+  const txt = statusText;
+
+  txt.classList.add("go-holo");
+  txt.setAttribute("data-text", txt.innerText);
+  txt.classList.add("glitch-active");
+
+  setTimeout(() => txt.classList.remove("glitch-active"), 150);
+}
+
+
+/* ------------------------------------------------------------
+   NEON PARTICLE SPARKS (SUCCESS)
+------------------------------------------------------------ */
+function spawnSparks(x, y) {
+  for (let i = 0; i < 28; i++) {
+    const spark = document.createElement("div");
+    spark.classList.add("spark");
+
+    const angle = Math.random() * Math.PI * 2;
+    const velocity = Math.random() * 120 + 40;
+
+    const tx = Math.cos(angle) * velocity + "px";
+    const ty = Math.sin(angle) * velocity + "px";
+
+    spark.style.setProperty("--tx", tx);
+    spark.style.setProperty("--ty", ty);
+
+    spark.style.left = x + "px";
+    spark.style.top = y + "px";
+
+    document.body.appendChild(spark);
+
+    setTimeout(() => spark.remove(), 500);
+  }
+}
+
+
+/* ------------------------------------------------------------
+   FAIL — BREACH RED SHOCK
+------------------------------------------------------------ */
+function triggerBreach() {
+  document.body.classList.add("screen-breach");
+  setTimeout(() => document.body.classList.remove("screen-breach"), 250);
+}
+
+
+/* ------------------------------------------------------------
+   SCORE PANEL — TRON FLOATING CARD
+------------------------------------------------------------ */
+function revealScoreCard() {
+  const card = document.querySelector(".score-card");
+  card.classList.add("score-show");
+  setTimeout(() => card.classList.remove("score-show"), 400);
+}
+
+
+/* ------------------------------------------------------------
+   LOGO HOLOGRAM REVEAL (Start Screen)
+------------------------------------------------------------ */
+function revealLogo() {
+  const logo = document.getElementById("logoHolo");
+  logo.classList.add("logo-reveal");
+}
+
+
+/* ------------------------------------------------------------
+   BACKGROUND PARALLAX (gyro + mouse)
+------------------------------------------------------------ */
+function enableParallax() {
+  const bg = document.querySelector(".tron-bg");
+
+  /* Mouse */
+  document.addEventListener("mousemove", (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 8;
+    const y = (e.clientY / window.innerHeight - 0.5) * 4;
+    bg.style.transform = `translate(${x}px, ${y}px)`;
+  });
+
+  /* Gyro (mobile) */
+  window.addEventListener("deviceorientation", (e) => {
+    const x = (e.gamma / 45) * 10;
+    const y = (e.beta / 45) * 6;
+    bg.style.transform = `translate(${x}px, ${y}px)`;
+  });
+}
+
+
+/* ============================================================
+   BÜTÜN ANİMASYONLARIN OYUNA ENTEGRASYONU
+============================================================ */
+
+/* Start Screen → Logo Reveal */
+revealLogo();
+
+/* Enable Parallax Background */
+enableParallax();
+
+/* GO Transition effects */
+function goEffects() {
+  triggerCameraShake();
+  triggerReactorBloom();
+  triggerGoGlitch();
+  triggerShockwave();
+}
+
+/* Success */
+function successEffects() {
+  const rect = reactor.getBoundingClientRect();
+  const x = rect.left + rect.width / 2;
+  const y = rect.top + rect.height / 2;
+  spawnSparks(x, y);
+  revealScoreCard();
+}
+
+/* Fail */
+function failEffects() {
+  triggerBreach();
+}
+
+
+/* ------------------------------------------------------------
+   BAĞLANTILAR — ŞU ANDA GAME.JS İÇİNDEKİ ORİJİNAL KODLA BİRLEŞİYOR
+------------------------------------------------------------ */
+
+/* GO event override */
+const oldStartGo = startGo;
+startGo = function () {
+  oldStartGo();
+  goEffects();
+};
+
+/* SUCCESS override */
+const oldTriggerSuccess = triggerSuccess;
+triggerSuccess = function () {
+  oldTriggerSuccess();
+  successEffects();
+};
+
+/* FAIL override */
+const oldTriggerFail = triggerFail;
+triggerFail = function (msg) {
+  oldTriggerFail(msg);
+  failEffects();
+};
+
