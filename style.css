@@ -1,26 +1,21 @@
 /* ============================================================
-   GLOBAL
+   GLOBAL RESET
 ============================================================ */
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background: #050505;
-  color: #fff;
-  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: #03080e;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.7px;
   overflow: hidden;
+  color: #dff6ff;
 }
 
-/* ============================================================
-   SCREEN SYSTEM
-============================================================ */
-
+/* Smooth fade screens */
 .screen {
   position: absolute;
   inset: 0;
@@ -28,208 +23,353 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  animation: fadeIn 0.6s ease;
 }
 
 .screen.visible {
   display: flex;
+  animation: fadeIn 0.6s ease forwards;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
 /* ============================================================
-   START SCREEN
+   TRON DEEP GRID BACKGROUND
 ============================================================ */
-
-#startLogo {
-  width: 280px;
-  max-width: 85%;
-  margin-bottom: 40px;
-  filter: drop-shadow(0 0 25px rgba(0,160,255,0.5));
+.tron-bg {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: -10;
 }
 
-.capsule-btn {
-  background: linear-gradient(to right, #0ae0ff, #44ccff);
-  border: none;
-  padding: 18px 40px;
-  border-radius: 40px;
-  color: #000;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: 2px;
+.grid {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+      to bottom,
+      rgba(0, 180, 255, 0.08) 0,
+      rgba(0, 180, 255, 0.08) 2px,
+      transparent 2px,
+      transparent 40px
+    ),
+    repeating-linear-gradient(
+      to right,
+      rgba(0, 180, 255, 0.08) 0,
+      rgba(0, 180, 255, 0.08) 2px,
+      transparent 2px,
+      transparent 40px
+    );
+  transform: perspective(700px) rotateX(65deg);
+  animation: gridMove 20s linear infinite;
+}
+
+@keyframes gridMove {
+  0% { transform: perspective(700px) rotateX(65deg) translateY(0); }
+  100% { transform: perspective(700px) rotateX(65deg) translateY(300px); }
+}
+
+.horizon-glow {
+  position: absolute;
+  top: 30%;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: radial-gradient(
+    circle at 50% 0%,
+    rgba(0, 200, 255, 0.6) 0%,
+    rgba(0, 200, 255, 0.05) 60%,
+    transparent 100%
+  );
+}
+
+.scanlines {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(255,255,255,0.03) 50%, 
+    transparent 50%
+  );
+  background-size: 100% 3px;
+  pointer-events: none;
+  animation: scan 8s linear infinite;
+}
+
+@keyframes scan {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100%; }
+}
+
+/* ============================================================
+   START SCREEN — HALO + HOLO LOGO
+============================================================ */
+.halo-container {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  margin-bottom: 20px;
+}
+
+.halo-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 4px solid rgba(0, 200, 255, 0.4);
+  box-shadow: 0 0 25px rgba(0, 200, 255, 0.5);
+  animation: haloPulse 3s ease-in-out infinite;
+}
+
+@keyframes haloPulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+
+.halo-core {
+  position: absolute;
+  inset: 40px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 255, 255, 0.15) 0%,
+    rgba(0, 100, 155, 0.2) 50%,
+    transparent 100%
+  );
+  filter: blur(3px);
+}
+
+.holo-logo {
+  width: 260px;
+  animation: holoSpawn 1.3s ease forwards;
+  opacity: 0.8;
+  filter: drop-shadow(0 0 12px #00d8ff);
+}
+
+@keyframes holoSpawn {
+  0% { opacity: 0; transform: scale(0.8) translateY(30px); filter: blur(6px);}
+  60% { opacity: 1; transform: scale(1.05) translateY(0); filter: blur(0);}
+  100% { transform: scale(1); }
+}
+
+.tron-start-btn {
+  margin-top: 25px;
+  padding: 16px 50px;
+  font-size: 22px;
+  color: #bff4ff;
+  background: rgba(0, 50, 80, 0.35);
+  border: 2px solid #00c8ff;
+  border-radius: 6px;
   cursor: pointer;
-  box-shadow: 0 0 30px rgba(0,180,255,0.6);
+  text-shadow: 0 0 8px #00d4ff;
+  box-shadow: inset 0 0 20px rgba(0,200,255,0.4), 0 0 20px rgba(0,200,255,0.3);
   transition: 0.2s;
 }
 
-.capsule-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 45px rgba(0,200,255,0.8);
+.tron-start-btn:hover {
+  background: rgba(0, 100, 160, 0.4);
+  box-shadow: inset 0 0 35px rgba(0,200,255,0.6), 0 0 30px rgba(0,200,255,0.4);
 }
 
 .start-hint {
-  margin-top: 20px;
+  margin-top: 10px;
+  font-size: 14px;
   opacity: 0.6;
-  letter-spacing: 1px;
-  font-size: 13px;
 }
 
 /* ============================================================
-   GAME SCREEN
+   GAME SCREEN — REACTOR CORE + STATUS PANEL
 ============================================================ */
+.game-layout {
+  display: flex;
+  width: 90%;
+  max-width: 900px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* -------------------------------
+   Reactor Core
+-------------------------------- */
+.reactor-core {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  cursor: pointer;
+}
+
+.reactor-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.ring1 {
+  border: 3px solid rgba(0, 200, 255, 0.3);
+  animation: spin1 6s linear infinite;
+}
+
+.ring2 {
+  inset: 18px;
+  border: 2px solid rgba(0, 200, 255, 0.4);
+  animation: spin2 4.5s linear infinite reverse;
+}
+
+.ring3 {
+  inset: 35px;
+  border: 2px solid rgba(0, 200, 255, 0.25);
+  animation: spin3 3s linear infinite;
+}
+
+@keyframes spin1 { 
+  0% { transform: rotate(0); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes spin2 { 
+  0% { transform: rotate(0); }
+  100% { transform: rotate(-360deg); }
+}
+
+@keyframes spin3 { 
+  0% { transform: rotate(0); }
+  100% { transform: rotate(360deg); }
+}
+
+.reactor-center {
+  position: absolute;
+  inset: 65px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 255, 255, 0.35) 0%,
+    rgba(0, 120, 170, 0.3) 40%,
+    rgba(0, 40, 60, 0.6) 100%
+  );
+  box-shadow: 0 0 20px rgba(0,200,255,0.4);
+}
+
+/* Minimal geometrik ikon */
+.reactor-icon {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 50px;
+  height: 50px;
+  border: 2px solid #00d8ff;
+  opacity: 0.8;
+  filter: drop-shadow(0 0 8px #00d8ff);
+}
+
+/* -------------------------------
+   STATUS PANEL
+-------------------------------- */
+.status-panel {
+  width: 380px;
+  padding: 25px;
+  background: rgba(0, 30, 50, 0.45);
+  border-left: 2px solid #00c8ff;
+  border-radius: 8px;
+  box-shadow: 0 0 25px rgba(0,200,255,0.3);
+  backdrop-filter: blur(6px);
+}
 
 .status-text {
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: 4px;
-  margin-bottom: 40px;
-  opacity: 0.8;
-  text-transform: uppercase;
+  font-size: 40px;
+  margin-bottom: 10px;
+  color: #7feaff;
+  text-shadow: 0 0 6px #00d4ff;
 }
 
-
-/* ---------------------------
-   STEEL TECH HEXAGON BUTTON
------------------------------- */
-
-.hex-btn {
-  position: relative;
-  width: 220px;
-  height: 190px;
-  cursor: pointer;
-  transition: 0.1s;
+.status-sub {
+  font-size: 14px;
+  opacity: 0.6;
 }
 
-.hex-btn:active {
-  transform: scale(0.96);
-}
-
-/* metal yüzey */
-.hex-inner {
-  position: absolute;
-  inset: 0;
-  clip-path: polygon(
-    25% 0%, 75% 0%,
-    100% 50%, 75% 100%,
-    25% 100%, 0% 50%
-  );
-  background: linear-gradient(145deg, #1b1e22, #0d1014);
-  border: 2px solid #4eaaff;
-  box-shadow: inset 0 0 25px rgba(0,150,255,0.2);
-}
-
-/* dış çerçeve */
-.hex-border {
-  position: absolute;
-  inset: -6px;
-  clip-path: polygon(
-    25% 0%, 75% 0%,
-    100% 50%, 75% 100%,
-    25% 100%, 0% 50%
-  );
-  border: 4px solid #67c2ff;
-  filter: drop-shadow(0 0 18px #2bbcff);
-}
-
-/* glow */
-.hex-glow {
-  position: absolute;
-  inset: 0;
-  clip-path: inherit;
-  background: radial-gradient(circle, rgba(0,180,255,0.4), rgba(0,180,255,0) 70%);
-  opacity: 0;
-  transition: 0.15s ease;
-}
-
-.hex-btn.go .hex-glow {
-  opacity: 1;
-  filter: blur(4px);
-}
-
-.hex-btn.fail .hex-border {
-  border-color: #ff3b6b;
-  filter: drop-shadow(0 0 18px #ff3560);
-}
-
-.hex-btn.fail .hex-inner {
-  background: linear-gradient(145deg, #3b0a0f, #160003);
-}
-
-
-/* -----------------------------------------------------------
-   BEST SCORE
------------------------------------------------------------- */
-
-.best-score-box {
-  margin-top: 35px;
+.best-mini {
+  margin-top: 30px;
   font-size: 16px;
-  opacity: 0.7;
-  letter-spacing: 2px;
+  opacity: 0.75;
 }
 
-.best-score-box span {
-  color: #44ccff;
-  text-shadow: 0 0 12px #44ccff;
-}
+
+
 
 /* ============================================================
-   SCORE SCREEN
+   SCORE SCREEN — TRON CARD
 ============================================================ */
-
 .score-card {
-  background: rgba(255,255,255,0.06);
-  padding: 35px 40px;
-  border-radius: 22px;
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(150,200,255,0.2);
-  box-shadow: 0 0 45px rgba(0,200,255,0.25);
-  text-align: center;
-  width: 85%;
-  max-width: 360px;
+  display: flex;
+  background: rgba(0, 25, 40, 0.45);
+  padding: 30px;
+  border-radius: 10px;
+  border: 2px solid rgba(0,200,255,0.4);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 25px rgba(0,200,255,0.3);
+}
+
+.score-left {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin-right: 25px;
+}
+
+.score-holo-circle {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid rgba(0,200,255,0.4);
+  animation: spin1 6s linear infinite;
+}
+
+.score-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.score-label {
+  font-size: 13px;
+  opacity: 0.6;
 }
 
 .rank-text {
-  font-size: 22px;
-  color: #61c9ff;
-  letter-spacing: 3px;
-  margin-bottom: 12px;
+  font-size: 32px;
+  margin-bottom: 15px;
+  text-shadow: 0 0 8px #00d8ff;
 }
 
 .final-score {
-  font-size: 75px;
-  font-weight: 900;
-  margin-bottom: 10px;
-  letter-spacing: 1px;
+  font-size: 40px;
+  text-shadow: 0 0 8px #00eaff;
 }
 
-.score-subtitle {
-  font-size: 12px;
-  opacity: 0.7;
-  margin-bottom: 25px;
-}
+.mt20 { margin-top: 20px; }
 
-.score-btn-row {
+.score-actions {
+  margin-top: 30px;
   display: flex;
-  gap: 15px;
+  gap: 20px;
 }
 
-.glass-btn {
-  flex: 1;
-  padding: 12px 0;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.25);
-  border-radius: 10px;
-  color: #fff;
-  font-weight: 600;
+.tron-btn {
+  padding: 14px 40px;
+  font-size: 18px;
+  background: rgba(0, 40, 60, 0.5);
+  border: 2px solid #00c8ff;
+  color: #c8f7ff;
   cursor: pointer;
+  border-radius: 6px;
+  box-shadow: 0 0 15px rgba(0,200,255,0.25);
   transition: 0.2s;
 }
 
-.glass-btn:hover {
-  background: #fff;
-  color: #000;
-  box-shadow: 0 0 25px #fff;
+.tron-btn:hover {
+  background: rgba(0, 100, 150, 0.5);
+  box-shadow: 0 0 30px rgba(0,200,255,0.55);
 }
+
+/* ============================================================
+   END CSS
+============================================================ */
