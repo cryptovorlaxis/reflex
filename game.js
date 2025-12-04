@@ -1,382 +1,252 @@
-/* ============================================================
-   GLOBAL RESET
-============================================================ */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
+// =================================================================
+// game.js — TRON Reflex Mini Game + Farcaster entegrasyonu
+// =================================================================
+
+// 1. Element Referansları
+const startButton = document.getElementById("startButton");
+const startScreen = document.getElementById("startScreen");
+const gameScreen = document.getElementById("gameScreen");
+const reactorBtn = document.getElementById("reactorBtn");
+const statusText = document.getElementById("status");
+const scoreDisplay = document.getElementById("score");
+const bestScoreValue = document.getElementById("bestValue");
+const rankTitle = document.getElementById("rankTitle");
+const newRecordBadge = document.getElementById("newRecordBadge");
+const againBtn = document.getElementById("againBtn");
+const shareBtn = document.getElementById("shareBtn");
+const scorePanel = document.getElementById("scorePanel");
+const scoreScreen = document.getElementById("scoreScreen");
+
+// 2. Oyun Durumu ve Değişkenler
+// INTRO, WAIT, GO, FAIL, SCORE
+let gameState = "INTRO";
+let waitTimer = null;
+let goStartTime = 0;
+let bestScore =
+  localStorage.getItem("reflexBestScore") != null
+    ? parseFloat(localStorage.getItem("reflexBestScore"))
+    : 0.0;
+
+// 3. Yardımcı Fonksiyonlar
+
+function formatScore(ms) {
+  // ms -> saniye
+  return (ms / 1000).toFixed(3);
 }
 
-body {
-  background: #050505;
-  font-family: 'Orbitron', sans-serif;
-  overflow: hidden;
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  perspective: 1000px;
-  color: white;
+function getRank(ms) {
+  const s = ms / 1000;
+
+  if (s <= 0.150) {
+    return {
+      label: "SINGULARITY PROTOCOL",
+      cssClass: "rank-s-plus",
+    };
+  } else if (s <= 0.220) {
+    return {
+      label: "DEMON REACTOR",
+      cssClass: "rank-s",
+    };
+  } else if (s <= 0.300) {
+    return {
+      label: "OPERATIVE",
+      cssClass: "rank-a",
+    };
+  } else if (s <= 0.400) {
+    return {
+      label: "NEON SAMURAI",
+      cssClass: "rank-b",
+    };
+  } else {
+    return {
+      label: "UNRANKED GLITCH",
+      cssClass: "rank-c",
+    };
+  }
 }
 
-/* ============================================================
-   BACKGROUND FX
-============================================================ */
-
-.bg-nebula {
-  position: fixed;
-  inset: 0;
-  z-index: -3;
-  background: radial-gradient(circle at 50% 120%, #1a0b2e 0%, #000 70%);
-  animation: nebulaPulse 8s ease-in-out infinite;
-}
-@keyframes nebulaPulse {
-  0%,100% { opacity: .85; }
-  50%     { opacity: 1; }
+function setStatus(text) {
+  if (statusText) {
+    statusText.textContent = text;
+  }
 }
 
-.stars {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  opacity: 0.6;
-  background-image:
-    radial-gradient(1px 1px at 20px 30px, #fff, transparent),
-    radial-gradient(1px 1px at 70px 120px, #fff, transparent),
-    radial-gradient(1px 1px at 150px 180px, #fff, transparent);
-  background-size: 200px 200px;
-  animation: starsDrift 120s linear infinite;
-}
-@keyframes starsDrift {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-1400px); }
+function updateReactorState(mode) {
+  if (!reactorBtn) return;
+
+  reactorBtn.classList.remove("mode-wait", "mode-go", "mode-fail");
+
+  if (mode) {
+    reactorBtn.classList.add(mode);
+  }
 }
 
-.cyber-grid {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  opacity: .25;
-  background:
-    linear-gradient(transparent 0%, rgba(188,19,254,0.3) 2%, transparent 3%),
-    linear-gradient(90deg, transparent 0%, rgba(0,243,255,0.2) 2%, transparent 3%);
-  background-size: 80px 80px;
-  transform: perspective(400px) rotateX(60deg) translateY(-200px);
-  animation: gridMove 22s linear infinite;
-}
-@keyframes gridMove {
-  0% { background-position: 0 0; }
-  100% { background-position: 0 80px; }
-}
+function showScore(ms) {
+  gameState = "SCORE";
+  const scoreStr = formatScore(ms);
+  scoreDisplay.textContent = scoreStr;
 
-.scanlines {
-  position: fixed;
-  inset: 0;
-  z-index: 999;
-  pointer-events: none;
-  background: linear-gradient(
-    rgba(255,255,255,0) 0%,
-    rgba(0,0,0,0.12) 50%,
-    rgba(255,255,255,0) 50%
+  // Rank hesapla
+  const { label, cssClass } = getRank(ms);
+  rankTitle.textContent = label;
+
+  // Score panel rank class'ları reset
+  scorePanel.classList.remove(
+    "rank-s-plus",
+    "rank-s",
+    "rank-a",
+    "rank-b",
+    "rank-c"
   );
-  background-size: 100% 4px;
+  scorePanel.classList.add(cssClass);
+
+  // Best score
+  let isNewRecord = false;
+  if (bestScore === 0 || ms < bestScore) {
+    bestScore = ms;
+    localStorage.setItem("reflexBestScore", String(ms));
+    isNewRecord = true;
+  }
+
+  bestScoreValue.textContent =
+    bestScore === 0 ? "--" : formatScore(bestScore);
+
+  // NEW RECORD badge
+  if (isNewRecord) {
+    newRecordBadge.style.display = "inline-block";
+  } else {
+    newRecordBadge.style.display = "none";
+  }
+
+  // Score screen göster
+  scoreScreen.classList.add("visible");
+  scorePanel.classList.add("visible");
 }
 
-/* ============================================================
-   START SCREEN — CENTERED AAA INTRO
-============================================================ */
-#startScreen {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 26px;
-  text-align: center;
-  z-index: 10;
+function handleFail(reason) {
+  gameState = "FAIL";
+  updateReactorState("mode-fail");
+  setStatus(reason);
+
+  // Kısa bir süre sonra score screen yerine tekrar oyuna al
+  setTimeout(() => {
+    resetToGame();
+    startGame();
+  }, 900);
 }
 
-#gameLogo {
-  width: min(60vw, 330px);
-  aspect-ratio: 713 / 632;
-  height: auto;
-  opacity: 0;
-  filter: drop-shadow(0 0 18px #00f3ff);
-  animation: logoIntro 1.2s ease forwards;
+function resetToGame() {
+  // Score ekranını kapat
+  scoreScreen.classList.remove("visible");
+  scorePanel.classList.remove("visible");
+
+  // Game ekranını açık bırak
+  gameScreen.classList.add("visible");
 }
 
-@keyframes logoIntro {
-  0% { opacity: 0; transform: scale(.85) translateY(20px); filter: blur(10px); }
-  60% { opacity: 1; filter: blur(0); }
-  100% { transform: scale(1) translateY(0); }
+// =================================================================
+// 4. Oyun Döngüsü
+// =================================================================
+
+function startGame() {
+  // Eski timer'ları temizle
+  if (waitTimer) clearTimeout(waitTimer);
+
+  gameState = "WAIT";
+  updateReactorState("mode-wait");
+  setStatus("WAIT FOR GREEN...");
+
+  // Rastgele bekleme süresi: 1.5s - 4.5s
+  const randomWait = 1500 + Math.random() * 3000;
+
+  waitTimer = setTimeout(() => {
+    transitionToGo();
+  }, randomWait);
 }
 
-.intro-glow {
-  position: absolute;
-  width: 550px;
-  height: 550px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(0,255,255,0.22), rgba(0,170,200,0.10), transparent 70%);
-  filter: blur(45px);
-  z-index: -1;
-  opacity: 0.75;
+function transitionToGo() {
+  gameState = "GO";
+  goStartTime = performance.now();
+  updateReactorState("mode-go");
+  setStatus("TAP NOW!");
 }
 
-.load-line {
-  width: 200px;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, #00eaff, transparent);
-  animation: loadSlide 2s infinite linear;
-  opacity: .75;
-}
-@keyframes loadSlide {
-  0% { transform: translateX(-60px); }
-  100% { transform: translateX(60px); }
-}
+// =================================================================
+// 5. Event Listeners
+// =================================================================
 
-#startButton {
-  padding: 16px 50px;
-  font-size: 22px;
-  background: rgba(0,40,60,.45);
-  border: 2px solid #00eaff;
-  border-radius: 6px;
-  letter-spacing: 2px;
-  color: #dff;
-  cursor: pointer;
-  text-shadow: 0 0 12px #00eaff;
-  box-shadow: 0 0 22px rgba(0,255,255,0.25);
-  transition: .25s ease;
-}
-#startButton:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 40px rgba(0,255,255,0.35);
-  background: rgba(0,80,120,0.45);
-}
+document.addEventListener("DOMContentLoaded", () => {
+  // Best skor göster
+  bestScoreValue.textContent =
+    bestScore === 0 ? "--" : formatScore(bestScore);
 
-.start-hint {
-  font-size: 14px;
-  opacity: .65;
-  color: #b8eafd;
-}
+  // START
+  if (startButton) {
+    startButton.addEventListener("click", async () => {
+      // Start ekranını kapat, game ekranını aç
+      startScreen.style.display = "none";
+      gameScreen.classList.add("visible");
 
-/* ============================================================
-   GAME SCREEN
-============================================================ */
+      // Farcaster'a "hazırım" de
+      // (Mini app içindeysek, splash screen bundan sonra kaybolur)
+      try {
+        if (
+          window.farcasterSDK &&
+          window.farcasterSDK.actions &&
+          typeof window.farcasterSDK.actions.ready === "function"
+        ) {
+          await window.farcasterSDK.actions.ready();
+        }
+      } catch (err) {
+        console.error("Farcaster Ready Failed:", err);
+      }
 
-#gameScreen {
-  position: absolute;
-  inset: 0;
-  display: none;
-  flex-direction: column;
-  gap: 26px;
-  align-items: center;
-  justify-content: center;
-}
-#gameScreen.visible {
-  display: flex;
-  animation: fadeIn .5s ease forwards;
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(.96); }
-  to   { opacity: 1; transform: scale(1); }
-}
+      // Oyunu başlat
+      startGame();
+    });
+  }
 
-#status {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 26px;
-  letter-spacing: 2px;
-  font-weight: 700;
-  color: #8ad7ff;
-  text-shadow: 0 0 8px #00eaff;
-  min-height: 32px;
-}
+  // REACTOR TIKLAMA
+  if (reactorBtn) {
+    reactorBtn.addEventListener("click", () => {
+      if (gameState === "WAIT") {
+        // Erken bastı
+        handleFail("TOO EARLY!");
+      } else if (gameState === "GO") {
+        // Doğru anda bastı
+        const now = performance.now();
+        const diff = now - goStartTime;
+        showScore(diff);
+      }
+    });
+  }
 
-/* ============================================================
-   REACTOR BUTTON
-============================================================ */
+  // TEKRAR OYNA
+  if (againBtn) {
+    againBtn.addEventListener("click", () => {
+      resetToGame();
+      startGame();
+    });
+  }
 
-.reactor-core {
-  width: 270px;
-  height: 270px;
-  position: relative;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: .15s ease;
-}
+  // SHARE
+  if (shareBtn) {
+    shareBtn.addEventListener("click", async () => {
+      const scoreText = scoreDisplay.textContent || "0.000";
+      const rankText = rankTitle.textContent || "UNRANKED GLITCH";
 
-.reactor-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 3px solid rgba(0,255,255,0.35);
-  filter: drop-shadow(0 0 12px rgba(0,255,255,0.4));
-}
-.ring1 { animation: spin1 7s linear infinite; }
-.ring2 { inset: 25px; animation: spin2 5s linear infinite reverse; }
-.ring3 { inset: 50px; animation: spin3 3s linear infinite; }
+      const shareUrl = `${window.location.origin}/api/score-image?score=${encodeURIComponent(
+        scoreText
+      )}&rank=${encodeURIComponent(rankText)}`;
 
-@keyframes spin1 { to { transform: rotate(360deg); } }
-@keyframes spin2 { to { transform: rotate(-360deg); } }
-@keyframes spin3 { to { transform: rotate(360deg); } }
-
-.reactor-center {
-  position: absolute;
-  inset: 80px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,255,255,0.4), rgba(0,60,100,0.6), rgba(0,20,30,0.9));
-}
-
-.reactor-icon {
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: 2px solid #00eaff;
-  box-shadow: 0 0 20px #00eaff;
-}
-
-/* STATES */
-.mode-wait {
-  border-color: #ffaa00 !important;
-  box-shadow: 0 0 28px rgba(255,170,0,0.55) !important;
-  animation: pulseWait 1s infinite alternate;
-}
-@keyframes pulseWait {
-  from { transform: scale(1); }
-  to   { transform: scale(1.03); }
-}
-
-.mode-go {
-  border-color: #00ff00 !important;
-  background: radial-gradient(circle, #003300, #000);
-  transform: scale(1.07);
-  box-shadow: 0 0 50px #00ff00, inset 0 0 30px #00ff00 !important;
-}
-
-.mode-fail {
-  border-color: #bc13fe !important;
-  box-shadow: 0 0 40px #bc13fe !important;
-  animation: failShake .25s;
-}
-@keyframes failShake {
-  0%,100% { transform: translateX(0); }
-  25%     { transform: translateX(-8px); }
-  75%     { transform: translateX(8px); }
-}
-
-/* ============================================================
-   SCORE SCREEN
-============================================================ */
-
-#scoreScreen {
-  position: absolute;
-  inset: 0;
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-#scoreScreen.visible {
-  display: flex;
-  animation: fadeIn .5s ease forwards;
-}
-
-.score-panel {
-  background: rgba(15,20,30,0.75);
-  backdrop-filter: blur(20px);
-  border: 2px solid rgba(255,255,255,0.15);
-  border-radius: 22px;
-  padding: 35px 30px;
-  max-width: 380px;
-  width: 90%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  opacity: 0;
-  transform: translateY(20px) scale(.95);
-  pointer-events: none;
-  transition: .4s cubic-bezier(.34,1.56,.64,1);
-}
-
-.score-panel.visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  pointer-events: auto;
-}
-
-.new-record-badge {
-  background: #fff;
-  color: #000;
-  padding: 4px 12px;
-  border-radius: 5px;
-  font-size: 13px;
-  font-weight: 900;
-  display: none;
-}
-
-#rankTitle {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 26px;
-  font-weight: 900;
-  text-align: center;
-  letter-spacing: 2px;
-}
-
-.score-panel.rank-s-plus { border-color:#fff; box-shadow:0 0 45px rgba(255,255,255,.4); }
-.score-panel.rank-s-plus #rankTitle { color:#fff; text-shadow:0 0 16px #fff; }
-
-.score-panel.rank-s { border-color:#ff003c; box-shadow:0 0 40px rgba(255,0,60,.4); }
-.score-panel.rank-s #rankTitle { color:#ff003c; text-shadow:0 0 14px #ff003c; }
-
-.score-panel.rank-a { border-color:#00f3ff; box-shadow:0 0 40px rgba(0,243,255,.4); }
-.score-panel.rank-a #rankTitle { color:#00f3ff; text-shadow:0 0 14px #00f3ff; }
-
-.score-panel.rank-b { border-color:#ffaa00; box-shadow:0 0 40px rgba(255,170,0,.4); }
-.score-panel.rank-b #rankTitle { color:#ffaa00; text-shadow:0 0 14px #ffaa00; }
-
-.score-panel.rank-c { border-color:#bc13fe; box-shadow:0 0 40px rgba(188,19,254,.4); }
-.score-panel.rank-c #rankTitle { color:#bc13fe; text-shadow:0 0 14px #bc13fe; }
-
-#score {
-  font-size: 78px;
-  font-weight: 900;
-  background: linear-gradient(to bottom,#fff,#ccc);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  filter: drop-shadow(0 0 12px rgba(255,255,255,0.28));
-}
-
-.btn-group {
-  display: flex;
-  width: 100%;
-  gap: 14px;
-  margin-top: 14px;
-}
-
-.cyber-btn {
-  flex: 1;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.25);
-  padding: 14px;
-  border-radius: 10px;
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 700;
-  color: white;
-  cursor: pointer;
-  transition: .25s;
-  text-transform: uppercase;
-}
-.cyber-btn:hover {
-  background: white;
-  color: black;
-  box-shadow: 0 0 25px white;
-}
+      // Farcaster mini app içindeysek, burada cast / share action
+      // kullanabilirsin. Şimdilik sadece linki kopyalıyoruz.
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        alert("Share image URL copied to clipboard!");
+      } catch {
+        alert("Share URL: " + shareUrl);
+      }
+    });
+  }
+});
