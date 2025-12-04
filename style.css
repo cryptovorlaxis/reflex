@@ -1,484 +1,8 @@
-/* ============================================================
-   GLOBAL RESET
-============================================================ */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* ===============================
+   START SCREEN CLEAN, PREMIUM
+================================*/
 
-body {
-  background: #03080e;
-  font-family: 'Orbitron', sans-serif;
-  overflow: hidden;
-  color: #dff6ff;
-}
-
-/* SCREENS */
-.screen {
-  position: absolute;
-  inset: 0;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.screen.visible {
-  display: flex;
-  animation: fadeIn 0.6s ease forwards;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.97); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-
-/* ============================================================
-   BACKGROUND GRID
-============================================================ */
-.tron-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -10;
-  overflow: hidden;
-}
-
-.grid {
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-      to bottom,
-      rgba(0, 180, 255, 0.08) 0,
-      rgba(0, 180, 255, 0.08) 2px,
-      transparent 2px,
-      transparent 40px
-    ),
-    repeating-linear-gradient(
-      to right,
-      rgba(0, 180, 255, 0.08) 0,
-      rgba(0, 180, 255, 0.08) 2px,
-      transparent 2px,
-      transparent 40px
-    );
-  transform: perspective(700px) rotateX(65deg);
-  animation: gridMove 20s linear infinite;
-}
-
-@keyframes gridMove {
-  0% { transform: perspective(700px) rotateX(65deg) translateY(0); }
-  100% { transform: perspective(700px) rotateX(65deg) translateY(300px); }
-}
-
-.horizon-glow {
-  position: absolute;
-  top: 28%;
-  left: 0;
-  right: 0;
-  height: 200px;
-  background: radial-gradient(
-    circle at 50% 0%,
-    rgba(0, 200, 255, 0.55),
-    transparent 70%
-  );
-}
-
-.scanlines {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    rgba(255,255,255,0.03) 50%,
-    transparent 50%
-  );
-  background-size: 100% 3px;
-  animation: scan 8s linear infinite;
-  pointer-events: none;
-}
-
-@keyframes scan {
-  0% { background-position: 0 0; }
-  100% { background-position: 0 100%; }
-}
-
-
-/* ============================================================
-   START SCREEN — HALO / LOGO / BUTTON
-============================================================ */
-
-.center-stack {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -55%); /* tam merkez */
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none; /* tıklamaya engel olmaz */
-}
-
-
-
-.halo-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 340px;
-  height: 340px;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-
-.halo-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 4px solid rgba(0, 255, 255, 0.45);
-  box-shadow: 0 0 25px rgba(0,255,255,0.4);
-  animation: haloPulse 3s ease-in-out infinite;
-}
-
-@keyframes haloPulse {
-  0%,100% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.08); opacity: 1; }
-}
-
-.halo-core {
-  position: absolute;
-  inset: 50px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,255,255,0.25), transparent 80%);
-}
-
-.holo-logo {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 230px;
-  transform: translate(-50%, -50%);
-  filter: drop-shadow(0 0 15px #00eaff);
-  animation: logoIn 1s ease forwards;
-}
-
-@keyframes logoIn {
-  0% { opacity: 0; transform: translate(-50%,-50%) scale(0.8); }
-  100%{ opacity: 1; transform: translate(-50%,-50%) scale(1); }
-}
-
-.tron-start-btn {
-  margin-top: 330px;
-  padding: 16px 50px;
-  font-size: 22px;
-  color: #bff4ff;
-  background: rgba(0, 50, 80, 0.35);
-  border: 2px solid #00c8ff;
-  border-radius: 6px;
-  cursor: pointer;
-  text-shadow: 0 0 8px #00d4ff;
-  box-shadow: inset 0 0 20px rgba(0,200,255,0.4), 0 0 20px rgba(0,200,255,0.3);
-  transition: 0.2s;
-}
-
-.tron-start-btn:hover {
-  background: rgba(0, 100, 160, 0.4);
-  transform: scale(1.04);
-}
-
-.start-hint {
-  margin-top: 10px;
-  font-size: 14px;
-  opacity: 0.6;
-}
-
-
-/* ============================================================
-   GAME SCREEN — LAYOUT
-============================================================ */
-.game-layout {
-  display: flex;
-  width: 90%;
-  max-width: 940px;
-  justify-content: space-between;
-  align-items: center;
-}
-
-
-/* ============================================================
-   REACTOR CORE BUTTON
-============================================================ */
-.reactor-core {
-  position: relative;
-  width: 260px;
-  height: 260px;
-  cursor: pointer;
-}
-
-.reactor-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 3px solid rgba(0,255,255,0.35);
-}
-
-.ring1 { animation: spin1 7s linear infinite; }
-.ring2 { inset: 25px; animation: spin2 5s linear infinite reverse; }
-.ring3 { inset: 50px; animation: spin3 3s linear infinite; }
-
-@keyframes spin1 { to { transform: rotate(360deg); } }
-@keyframes spin2 { to { transform: rotate(-360deg); } }
-@keyframes spin3 { to { transform: rotate(360deg); } }
-
-.reactor-center {
-  position: absolute;
-  inset: 75px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,255,255,0.4), rgba(0,60,100,0.5), rgba(0,30,50,0.8));
-}
-
-.reactor-icon {
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  width: 55px;
-  height: 55px;
-  border: 2px solid #00eaff;
-  opacity: 0.8;
-  filter: drop-shadow(0 0 8px #00eaff);
-}
-
-
-/* ============================================================
-   STATUS PANEL
-============================================================ */
-.status-panel {
-  width: 380px;
-  padding: 25px;
-  background: rgba(0, 20, 40, 0.45);
-  border-left: 2px solid #00c8ff;
-  border-radius: 8px;
-  box-shadow: 0 0 25px rgba(0,200,255,0.3);
-  backdrop-filter: blur(6px);
-}
-
-.status-text {
-  font-size: 40px;
-  margin-bottom: 10px;
-  color: #7feaff;
-}
-
-.status-sub {
-  font-size: 14px;
-  opacity: 0.6;
-}
-
-.best-mini {
-  margin-top: 30px;
-  font-size: 16px;
-  opacity: 0.75;
-}
-
-
-/* ============================================================
-   SCORE SCREEN
-============================================================ */
-.score-card {
-  display: flex;
-  background: rgba(0, 25, 40, 0.45);
-  padding: 30px;
-  border-radius: 10px;
-  border: 2px solid rgba(0,200,255,0.4);
-  backdrop-filter: blur(8px);
-}
-
-.score-left {
-  width: 150px;
-  height: 150px;
-  margin-right: 25px;
-  position: relative;
-}
-
-.score-holo-circle {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 3px solid rgba(0,200,255,0.4);
-  animation: spin1 6s linear infinite;
-}
-
-.score-right {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.rank-text {
-  font-size: 32px;
-  margin-bottom: 15px;
-}
-
-.final-score {
-  font-size: 40px;
-  text-shadow: 0 0 8px #00eaff;
-}
-
-.score-actions {
-  margin-top: 25px;
-  display: flex;
-  gap: 20px;
-}
-
-.tron-btn {
-  padding: 14px 40px;
-  font-size: 18px;
-  background: rgba(0, 40, 60, 0.5);
-  border: 2px solid #00c8ff;
-  color: #c8f7ff;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: 0.2s;
-}
-
-.tron-btn:hover {
-  background: rgba(0,100,150,0.5);
-  transform: scale(1.05);
-}
-
-
-/* ============================================================
-   GLOBAL FX LAYERS
-============================================================ */
-
-.fx-aberration,
-.fx-noise,
-.fx-vignette,
-.fx-streaks,
-.fx-haze {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 999;
-}
-
-.fx-aberration {
-  background: linear-gradient(
-    90deg,
-    rgba(0,255,255,0.1),
-    rgba(255,0,255,0.1)
-  );
-  mix-blend-mode: screen;
-  opacity: 0.25;
-}
-
-.fx-noise {
-  background-size: 3px 3px;
-  background-image: repeating-linear-gradient(
-    45deg,
-    rgba(255,255,255,0.1) 0 1px,
-    rgba(0,0,0,0.1) 1px 2px
-  );
-  opacity: 0.07;
-}
-
-.fx-vignette {
-  background: radial-gradient(circle, transparent 60%, #000a 100%);
-}
-
-.fx-streaks {
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(0,255,255,0.05) 0px 2px,
-    transparent 2px 8px
-  );
-  opacity: 0.1;
-}
-
-.fx-haze {
-  background: radial-gradient(circle at 50% 60%, rgba(0,50,100,0.2), transparent);
-  opacity: 0.25;
-}
-
-/* START SCREEN HALO KAPATMA */
-.halo-container,
-.halo-ring,
-.halo-core {
-    display: none !important;
-}
-/* START SCREEN ALTI DİKDÖRTGEN TEMİZLEME */
-.start-hint,
-.status-panel,
-.game-layout {
-    display: none !important;
-}
-
-/* -----------------------------------------
-   AAA TRON INTRO — Minimal Premium
-------------------------------------------*/
-
-/* GİRİŞ ARKAPLAN PARLAMA */
-.intro-glow {
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    width: 600px;
-    height: 600px;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(
-        circle,
-        rgba(0,255,255,0.20) 0%,
-        rgba(0,150,200,0.10) 30%,
-        transparent 70%
-    );
-    filter: blur(20px);
-    z-index: -1;
-}
-
-/* LOGO */
-#logoHolo {
-    width: 260px;
-    opacity: 0;
-    animation: introLogo 1.2s ease forwards;
-}
-@keyframes introLogo {
-    0% { opacity: 0; transform: scale(0.88) translateY(20px); filter: blur(10px); }
-    60% { opacity: 1; filter: blur(0px); }
-    100% { transform: scale(1) translateY(0); }
-}
-
-/* YÜKLEME ÇİZGİSİ (ince neon çizgi) */
-.load-line {
-    width: 180px;
-    height: 2px;
-    margin-top: 18px;
-    background: linear-gradient(90deg, transparent, #00eaff, transparent);
-    animation: loadMove 2s infinite linear;
-    opacity: 0.6;
-}
-@keyframes loadMove {
-    0% { transform: translateX(-40px); }
-    100% { transform: translateX(40px); }
-}
-
-/* BUTON — Premium Neon */
-.tron-start-btn {
-    margin-top: 30px;
-    padding: 16px 54px;
-    font-size: 22px;
-    letter-spacing: 2px;
-    background: rgba(0, 40, 60, 0.4);
-    border: 2px solid #00eaff;
-    border-radius: 6px;
-    color: #dff;
-    text-shadow: 0 0 12px #00eaff;
-    box-shadow: 0 0 22px rgba(0,255,255,0.2);
-    transition: 0.25s ease;
-}
-.tron-start-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 40px rgba(0,255,255,0.35);
-    background: rgba(0,80,120,0.5);
-}
-/* START SCREEN FULL CENTER */
+/* Tam ekran hizalama */
 #startScreen {
     position: absolute;
     inset: 0;
@@ -486,50 +10,87 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 24px;
     text-align: center;
-    gap: 20px;
 }
 
-/* LOGO PERFECT CENTER */
+/* Logo gerçek oranında ortalanmış */
 #logoHolo {
-    width: 260px;
-    max-width: 70%;
+    width: 340px;           /* 713×632 oranına göre ideal */
+    max-width: 75%;
+    aspect-ratio: 713 / 632; /* Oranı kilitle — bozulma yok */
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+
     opacity: 0;
     animation: introLogo 1.2s ease forwards;
+
+    filter: drop-shadow(0 0 24px #00eaff);
 }
 
-/* GLOW */
+/* Logo giriş animasyonu */
+@keyframes introLogo {
+    0%   { opacity: 0; transform: scale(0.85) translateY(20px); filter: blur(10px); }
+    50%  { opacity: 1; filter: blur(0px); }
+    100% { transform: scale(1) translateY(0); }
+}
+
+/* Glow arka plan */
 .intro-glow {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 500px;
-    height: 500px;
+    width: 550px;
+    height: 550px;
     transform: translate(-50%, -50%);
     background: radial-gradient(circle, rgba(0,255,255,0.25), transparent 70%);
-    filter: blur(20px);
+    filter: blur(22px);
     z-index: -1;
-    opacity: 0.8;
+    opacity: 0.9;
 }
 
-/* LOAD LINE */
+/* İnce yükleme çizgisi */
 .load-line {
-    width: 180px;
-    height: 2px;
+    width: 220px;
+    height: 3px;
+    margin-top: 10px;
     background: linear-gradient(90deg, transparent, #00eaff, transparent);
     animation: loadMove 2s infinite linear;
     opacity: 0.7;
 }
 
 @keyframes loadMove {
-    0% { transform: translateX(-50px); }
-    100% { transform: translateX(50px); }
+    0%   { transform: translateX(-60px); }
+    100% { transform: translateX(60px); }
 }
 
-/* LOGO ANIMATION */
-@keyframes introLogo {
-    0% { opacity: 0; transform: scale(0.85) translateY(20px); filter: blur(10px); }
-    60% { opacity: 1; filter: blur(0px); }
-    100% { transform: scale(1) translateY(0); }
+/* Start Button */
+.tron-start-btn {
+    padding: 16px 60px;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: #dff;
+    background: rgba(0, 40, 60, 0.45);
+    border: 2px solid #00eaff;
+    border-radius: 8px;
+
+    text-shadow: 0 0 12px #00eaff;
+    box-shadow: 0 0 28px rgba(0,255,255,0.25);
+
+    cursor: pointer;
+    transition: 0.25s ease;
 }
 
+.tron-start-btn:hover {
+    transform: scale(1.06);
+    background: rgba(0,80,120,0.55);
+    box-shadow: 0 0 40px rgba(0,255,255,0.4);
+}
+
+/* Hint */
+.start-hint {
+    font-size: 14px;
+    opacity: 0.55;
+    margin-top: -4px;
+}
