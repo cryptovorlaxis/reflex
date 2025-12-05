@@ -3,10 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>REFLEX — TRON Edition</title>
 
+  <!-- === CSS === -->
   <link rel="stylesheet" href="style.css" />
+
+  <!-- === FARCaster MiniApp SDK (CDN) === -->
+  <script type="module">
+    import * as sdk from "https://esm.sh/@farcaster/miniapp-sdk";
+    window.farcasterSDK = sdk;
+  </script>
+
+  <!-- ========================================================= -->
+  <!-- 🔥 OG (Open Graph) — Link Preview Düzeltme -->
+  <!-- Bu bölüm tap-button.png görselinin çıkmasını %100 engeller -->
+  <!-- ========================================================= -->
+
+  <meta property="og:title" content="Reflex Test Arcade" />
+  
+  <meta property="og:description" content="Tap when the reactor turns green. Test your reflexes in this neon-speed mini challenge!" />
+
+  <!-- 👇 PREVIEW GÖRSELİ (1200x630) -->
+  <meta property="og:image" content="https://reflex-rho.vercel.app/screenshot1.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter için de aynı görsel -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Reflex Test Arcade" />
+  <meta name="twitter:description" content="Tap when the reactor turns green. Can you beat your reflex limits?" />
+  <meta name="twitter:image" content="https://reflex-rho.vercel.app/screenshot1.png" />
+
+  <!-- ========================================================= -->
+  <!-- OPTIONAL: Theme Color (Warpcast mini-app loaders için güzel) -->
+  <!-- ========================================================= -->
+  <meta name="theme-color" content="#0f0f0f" />
 </head>
+
 
 <body>
 
