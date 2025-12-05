@@ -121,7 +121,7 @@ function startGame() {
   setStatus("STANDBY…");
 
   // Sadece gerçek GO için random bekleme
-  const randomWait = 1500 + Math.random() * 3000;
+  const randomWait = 2500 + Math.random() * 4500;
 
   waitTimer = setTimeout(() => {
     transitionToGo();
