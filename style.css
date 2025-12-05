@@ -193,13 +193,22 @@ body {
    REACTOR BUTTON
 ============================================================ */
 .reactor-core {
-  width: 270px;
-  height: 270px;
+  width: 260px;
+  height: 260px;
   position: relative;
   border-radius: 50%;
   cursor: pointer;
   transition: 0.15s ease;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 4px solid #00eaff;
+  box-shadow: 0 0 30px rgba(0, 234, 255, 0.6);
+  background: radial-gradient(circle, #021018, #000);
 }
+
 
 .reactor-ring {
   position: absolute;
