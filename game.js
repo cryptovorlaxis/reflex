@@ -1,5 +1,5 @@
 // =================================================================
-// game.js — TRON Reflex Mini Game (Tier: DIAMOND → PLATINUM → GOLD → SILVER → BRONZE)
+// TRON Reflex Mini Game — FINAL GAME.JS (Diamond → Platinum → Gold → Silver → Bronze)
 // =================================================================
 
 // Element referansları
@@ -17,81 +17,71 @@ const shareBtn = document.getElementById("shareBtn");
 const scorePanel = document.getElementById("scorePanel");
 const scoreScreen = document.getElementById("scoreScreen");
 
-// Durum değişkenleri
-let gameState = "INTRO"; // INTRO, WAIT, GO, FAIL, SCORE
+// Oyun durum değişkenleri
+let gameState = "INTRO";
 let waitTimer = null;
 let goStartTime = 0;
-let bestScore =
-  localStorage.getItem("reflexBestScore") != null
-    ? parseFloat(localStorage.getItem("reflexBestScore"))
-    : 0;
 
-// Yardımcı fonksiyonlar
+let bestScore = localStorage.getItem("reflexBestScore")
+  ? parseFloat(localStorage.getItem("reflexBestScore"))
+  : 0;
+
+// Yardımcı
 function formatScore(ms) {
   return (ms / 1000).toFixed(3);
 }
 
-/**
- * Yeni tier sistemi:
- * DIAMOND  ≤ 0.160 s
- * PLATINUM 0.160–0.210 s
- * GOLD     0.210–0.260 s
- * SILVER   0.260–0.330 s
- * BRONZE   > 0.330 s
- */
+// TIER sistemi
 function getRank(ms) {
   const s = ms / 1000;
 
-  if (s <= 0.16) {
+  if (s <= 0.16)
     return { label: "DIAMOND", cssClass: "rank-diamond" };
-  } else if (s <= 0.21) {
+  if (s <= 0.21)
     return { label: "PLATINUM", cssClass: "rank-platinum" };
-  } else if (s <= 0.26) {
+  if (s <= 0.26)
     return { label: "GOLD", cssClass: "rank-gold" };
-  } else if (s <= 0.33) {
+  if (s <= 0.33)
     return { label: "SILVER", cssClass: "rank-silver" };
-  }
+
   return { label: "BRONZE", cssClass: "rank-bronze" };
 }
 
 function setStatus(text) {
-  if (statusText) statusText.textContent = text;
+  statusText.textContent = text;
 }
 
-function updateReactorState(mode) {
-  if (!reactorBtn) return;
+function updateReactorState(stateClass) {
   reactorBtn.classList.remove("mode-wait", "mode-go", "mode-fail");
-  if (mode) reactorBtn.classList.add(mode);
+  if (stateClass) reactorBtn.classList.add(stateClass);
 }
 
+// SCORE PANELİ AÇ
 function showScore(ms) {
   gameState = "SCORE";
+
   const scoreStr = formatScore(ms);
   scoreDisplay.textContent = scoreStr;
 
   const { label, cssClass } = getRank(ms);
   rankTitle.textContent = label;
 
-  // Eski rank class'larını temizle
+  // Eski sınıfları temizle
   scorePanel.classList.remove(
-    "rank-s-plus",
-    "rank-s",
-    "rank-a",
-    "rank-b",
-    "rank-c",
     "rank-diamond",
     "rank-platinum",
     "rank-gold",
     "rank-silver",
     "rank-bronze"
   );
-  // Yeni tier class'ını ekle
   scorePanel.classList.add(cssClass);
 
+  // BEST SCORE DOĞRU HAL (milisaniye formatı ile karşılaştırma)
   let isNewRecord = false;
+
   if (bestScore === 0 || ms < bestScore) {
     bestScore = ms;
-    localStorage.setItem("reflexBestScore", String(ms));
+    localStorage.setItem("reflexBestScore", String(ms)); // ms olarak kaydedilir
     isNewRecord = true;
   }
 
@@ -100,6 +90,7 @@ function showScore(ms) {
 
   newRecordBadge.style.display = isNewRecord ? "inline-block" : "none";
 
+  // Panel aç
   scoreScreen.classList.add("visible");
   scorePanel.classList.add("visible");
 }
@@ -121,13 +112,13 @@ function resetToGame() {
   gameScreen.classList.add("visible");
 }
 
-// Oyun döngüsü
+// OYUN AKIŞI
 function startGame() {
   if (waitTimer) clearTimeout(waitTimer);
 
   gameState = "WAIT";
   updateReactorState("mode-wait");
-  setStatus("STANDBY…"); // Eskiden: WAIT FOR GREEN...
+  setStatus("STANDBY…");
 
   const randomWait = 1500 + Math.random() * 3000;
 
@@ -139,21 +130,23 @@ function startGame() {
 function transitionToGo() {
   gameState = "GO";
   goStartTime = performance.now();
+
   updateReactorState("mode-go");
-  setStatus("GO!"); // Eskiden: TAP NOW!
+  setStatus("GO!");
 }
 
-// Event listeners
+// EVENT LİSTENERLAR
 document.addEventListener("DOMContentLoaded", () => {
   bestScoreValue.textContent =
     bestScore === 0 ? "--" : formatScore(bestScore);
 
-  // START
+  // START BUTTON
   if (startButton) {
-    startButton.textContent = "INITIATE REACTOR"; // ENTER THE GRID yerine
+    startButton.textContent = "INITIATE REACTOR";
+
     const hint = document.querySelector(".start-hint");
     if (hint) {
-      hint.textContent = "Booting reflex engine…"; // Calibrating neural interface… yerine
+      hint.textContent = "Booting reflex engine…";
     }
 
     startButton.addEventListener("click", () => {
@@ -163,7 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // REACTOR TIKLAMA
+  // TAP BUTTON
   if (reactorBtn) {
     reactorBtn.addEventListener("click", () => {
       if (gameState === "WAIT") {
@@ -176,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // TEKRAR
+  // AGAIN
   if (againBtn) {
     againBtn.addEventListener("click", () => {
       resetToGame();
@@ -184,7 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // SHARE → tek görselli cast
+  // SHARE — tek görsel embed
   if (shareBtn) {
     shareBtn.addEventListener("click", async () => {
       const scoreText = scoreDisplay.textContent || "0.000";
@@ -196,11 +189,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const miniAppUrl = window.location.origin;
 
-      const castText = `My reflex time: ${scoreText}s — ${rankText} tier in REFLEX TEST ⚡️
+      const castText = `My reflex time: ${scoreText}s — ${rankText} tier ⚡️
+Try your skill: ${miniAppUrl}`;
 
-Play: ${miniAppUrl}`;
-
-      // 1) Farcaster Mini App içindeysek: composeCast (tek embed = skor görseli)
+      // Farcaster composeCast (mini app)
       if (
         window.miniapp &&
         window.miniapp.sdk &&
@@ -213,12 +205,12 @@ Play: ${miniAppUrl}`;
             embeds: [shareImageUrl],
           });
           return;
-        } catch (e) {
-          console.warn("miniapp.sdk.actions.composeCast failed", e);
+        } catch (err) {
+          console.warn("composeCast error:", err);
         }
       }
 
-      // 2) Tarayıcı native share
+      // Web share
       if (navigator.share) {
         try {
           await navigator.share({
@@ -227,22 +219,16 @@ Play: ${miniAppUrl}`;
             url: miniAppUrl,
           });
           return;
-        } catch (e) {
-          console.warn("navigator.share failed", e);
-        }
+        } catch (err) {}
       }
 
-      // 3) Clipboard fallback
+      // Clipboard fall-back
       try {
         await navigator.clipboard.writeText(castText);
-        alert("Cast text copied to clipboard!");
-        return;
-      } catch (e) {
-        console.warn("clipboard failed", e);
+        alert("Copied to clipboard!");
+      } catch (err) {
+        window.open(miniAppUrl, "_blank");
       }
-
-      // 4) En son çare: oyun linkini aç
-      window.open(miniAppUrl, "_blank");
     });
   }
 });
