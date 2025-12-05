@@ -123,7 +123,7 @@ body {
 .logo-container {
   position: relative;
   width: min(60vw, 260px);
-  height: min(60vw, 260px);
+  height: min(60vw, 260px); /* 👈 BURASI ÖNEMLİ: aspect-ratio YOK */
   background-image: url("logo.png");
   background-size: contain;
   background-repeat: no-repeat;
@@ -341,16 +341,15 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* Arka planı hafif karart */
+  /* EKLEDİK: arka planı hafif karart */
   background: rgba(0, 0, 0, 0.82);
 }
-
 #scoreScreen.visible {
   display: flex;
   animation: fadeIn 0.5s ease forwards;
 }
 
-/* SCORE PANEL (ANA KART) */
+/* === SCORE PANEL ANA STİLİ === */
 .score-panel {
   background: #05070f; /* opak, koyu */
   border: 2px solid rgba(255, 255, 255, 0.16);
@@ -377,6 +376,16 @@ body {
   pointer-events: auto;
 }
 
+/* Rank başlığı */
+#rankTitle {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 26px;
+  font-weight: 900;
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+/* New record rozeti */
 .new-record-badge {
   background: #fff;
   color: #000;
@@ -387,58 +396,50 @@ body {
   display: none;
 }
 
-#rankTitle {
-  font-family: "Rajdhani", sans-serif;
-  font-size: 26px;
-  font-weight: 900;
-  text-align: center;
-  letter-spacing: 2px;
+/* Eski rank-s-plus / rank-s / ... sınıfları yerine: */
+.score-panel.rank-diamond { 
+  border-color: #3cf4ff; 
+  box-shadow: 0 0 45px rgba(60, 244, 255, 0.5); 
+}
+.score-panel.rank-diamond #rankTitle { 
+  color: #3cf4ff; 
+  text-shadow: 0 0 16px #3cf4ff; 
 }
 
-/* Tier renk sınıfları */
-.score-panel.rank-diamond {
-  border-color: #3cf4ff;
-  box-shadow: 0 0 45px rgba(60, 244, 255, 0.5);
+.score-panel.rank-platinum { 
+  border-color: #E5E4E2; 
+  box-shadow: 0 0 40px rgba(229,228,226,0.5); 
 }
-.score-panel.rank-diamond #rankTitle {
-  color: #3cf4ff;
-  text-shadow: 0 0 16px #3cf4ff;
-}
-
-.score-panel.rank-platinum {
-  border-color: #E5E4E2;
-  box-shadow: 0 0 40px rgba(229,228,226,0.5);
-}
-.score-panel.rank-platinum #rankTitle {
-  color: #E5E4E2;
-  text-shadow: 0 0 14px #E5E4E2;
+.score-panel.rank-platinum #rankTitle { 
+  color: #E5E4E2; 
+  text-shadow: 0 0 14px #E5E4E2; 
 }
 
-.score-panel.rank-gold {
-  border-color: #FFD700;
-  box-shadow: 0 0 40px rgba(255,215,0,0.5);
+.score-panel.rank-gold { 
+  border-color: #FFD700; 
+  box-shadow: 0 0 40px rgba(255,215,0,0.5); 
 }
-.score-panel.rank-gold #rankTitle {
-  color: #FFD700;
-  text-shadow: 0 0 14px #FFD700;
-}
-
-.score-panel.rank-silver {
-  border-color: #C0C0C0;
-  box-shadow: 0 0 40px rgba(192,192,192,0.5);
-}
-.score-panel.rank-silver #rankTitle {
-  color: #C0C0C0;
-  text-shadow: 0 0 14px #C0C0C0;
+.score-panel.rank-gold #rankTitle { 
+  color: #FFD700; 
+  text-shadow: 0 0 14px #FFD700; 
 }
 
-.score-panel.rank-bronze {
-  border-color: #CD7F32;
-  box-shadow: 0 0 40px rgba(205,127,50,0.5);
+.score-panel.rank-silver { 
+  border-color: #C0C0C0; 
+  box-shadow: 0 0 40px rgba(192,192,192,0.5); 
 }
-.score-panel.rank-bronze #rankTitle {
-  color: #CD7F32;
-  text-shadow: 0 0 14px #CD7F32;
+.score-panel.rank-silver #rankTitle { 
+  color: #C0C0C0; 
+  text-shadow: 0 0 14px #C0C0C0; 
+}
+
+.score-panel.rank-bronze { 
+  border-color: #CD7F32; 
+  box-shadow: 0 0 40px rgba(205,127,50,0.5); 
+}
+.score-panel.rank-bronze #rankTitle { 
+  color: #CD7F32; 
+  text-shadow: 0 0 14px #CD7F32; 
 }
 
 /* SCORE SAYISI */
