@@ -73,10 +73,11 @@
 
   <script src="game.js"></script>
 
-  <script type="module">
-    import * as sdk from "https://esm.sh/@farcaster/miniapp-sdk";
-    window.farcasterSDK = sdk;
-  </script>
+<script type="module">
+  import { sdk } from "https://esm.sh/@farcaster/miniapp-sdk";
+  window.miniapp = { sdk };
+</script>
+
 
 </body>
 </html>
