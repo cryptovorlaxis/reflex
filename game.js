@@ -76,19 +76,41 @@ function showScore(ms) {
   );
   scorePanel.classList.add(cssClass);
 
-  // BEST SCORE DOĞRU HAL (milisaniye formatı ile karşılaştırma)
+ // BEST SCORE yükleme
+let bestScore = localStorage.getItem("reflexBestScore")
+  ? parseFloat(localStorage.getItem("reflexBestScore"))
+  : null;
+
+function loadBestScore() {
+  if (bestScore === null) {
+    bestScoreValue.textContent = "--";
+  } else {
+    bestScoreValue.textContent = (bestScore / 1000).toFixed(3);
+  }
+}
+
+// SHOW SCORE içinde:
+function showScore(ms) {
+  ...
   let isNewRecord = false;
 
-  if (bestScore === 0 || ms < bestScore) {
+  if (bestScore === null || ms < bestScore) {
     bestScore = ms;
-    localStorage.setItem("reflexBestScore", String(ms)); // ms olarak kaydedilir
+    localStorage.setItem("reflexBestScore", String(ms));
     isNewRecord = true;
   }
 
-  bestScoreValue.textContent =
-    bestScore === 0 ? "--" : formatScore(bestScore);
+  bestScoreValue.textContent = (bestScore / 1000).toFixed(3);
 
   newRecordBadge.style.display = isNewRecord ? "inline-block" : "none";
+  ...
+}
+
+// DOM READY:
+document.addEventListener("DOMContentLoaded", () => {
+  loadBestScore();
+});
+
 
   // Panel aç
   scoreScreen.classList.add("visible");
