@@ -5,51 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>REFLEX — TRON Edition</title>
 
-  <!-- BURASI ÖNEMLİ: css dosyasının adı ve yolu -->
   <link rel="stylesheet" href="style.css" />
 </head>
 
-
 <body>
+
   <!-- BACKGROUND -->
   <div class="bg-nebula"></div>
   <div class="stars"></div>
   <div class="cyber-grid"></div>
   <div class="scanlines"></div>
 
-<!-- ============================================================
-     START SCREEN
-============================================================ -->
-<div id="startScreen" class="screen visible">
+  <!-- ============================================================
+       START SCREEN
+  ============================================================ -->
+  <div id="startScreen" class="screen visible">
 
-  <div class="logo-container"></div>  <!-- ARTIK IMG YOK -->
+    <div class="logo-container"></div>
 
-  <div class="load-line"></div>
+    <div class="load-line"></div>
 
-  <button id="startButton" class="tron-start-btn">ENTER THE GRID</button>
+    <button id="startButton" class="tron-start-btn">INITIATE REACTOR</button>
 
-  <div class="start-hint">Calibrating neural interface…</div>
+    <div class="start-hint">Booting reflex engine…</div>
 
-</div>
-
+  </div>
 
   <!-- ============================================================
        GAME SCREEN
   ============================================================ -->
   <div id="gameScreen" class="screen">
+
     <div id="status">SYSTEM READY</div>
 
     <div class="best-score-box">
       BEST: <span id="bestValue">--</span>
     </div>
 
+    <!-- 🔥 TAP BUTONU: ARTIK GÖRSEL -->
     <div class="reactor-core" id="reactorBtn">
-      <div class="reactor-ring ring1"></div>
-      <div class="reactor-ring ring2"></div>
-      <div class="reactor-ring ring3"></div>
-      <div class="reactor-center"></div>
-      <div class="reactor-icon"></div>
+      <img src="tap-button.png" alt="Tap Now" class="tap-img" />
     </div>
+
   </div>
 
   <!-- ============================================================
@@ -57,18 +54,9 @@
   ============================================================ -->
   <div id="scoreScreen" class="screen">
     <div id="scorePanel" class="score-panel">
-      <div id="newRecordBadge" class="new-record-badge">
-        NEW RECORD!
-      </div>
+      <div id="newRecordBadge" class="new-record-badge">NEW RECORD!</div>
 
-      <div
-        style="
-          font-size: 12px;
-          color: #aaa;
-          letter-spacing: 2px;
-          margin-top: 8px;
-        "
-      >
+      <div style="font-size:12px;color:#aaa;letter-spacing:2px;margin-top:8px;">
         TIER RANK
       </div>
 
@@ -83,23 +71,12 @@
     </div>
   </div>
 
-  <!-- OYUN LOGIĞI -->
   <script src="game.js"></script>
 
-  <!-- FARCASTER MINI APP SDK - CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@farcaster/miniapp-sdk/dist/index.min.js"></script>
-  <script>
-    // Mini app ortamındaysak splash screen'i kapat
-    window.addEventListener("load", function () {
-      if (
-        window.miniapp &&
-        window.miniapp.sdk &&
-        window.miniapp.sdk.actions &&
-        typeof window.miniapp.sdk.actions.ready === "function"
-      ) {
-        window.miniapp.sdk.actions.ready();
-      }
-    });
+  <script type="module">
+    import * as sdk from "https://esm.sh/@farcaster/miniapp-sdk";
+    window.farcasterSDK = sdk;
   </script>
+
 </body>
 </html>
