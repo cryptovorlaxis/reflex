@@ -1,5 +1,5 @@
 // =================================================================
-// TRON Reflex Mini Game — FINAL GAME.JS (Diamond → Platinum → Gold → Silver → Bronze)
+// TRON Reflex Mini Game — FINAL CLEAN VERSION
 // =================================================================
 
 // Element referansları
@@ -17,33 +17,28 @@ const shareBtn = document.getElementById("shareBtn");
 const scorePanel = document.getElementById("scorePanel");
 const scoreScreen = document.getElementById("scoreScreen");
 
-// Oyun durum değişkenleri
+// Oyun durumları
 let gameState = "INTRO";
 let waitTimer = null;
 let goStartTime = 0;
 
+// Best score başlangıç
 let bestScore = localStorage.getItem("reflexBestScore")
   ? parseFloat(localStorage.getItem("reflexBestScore"))
-  : 0;
+  : null;
 
-// Yardımcı
+// Format
 function formatScore(ms) {
   return (ms / 1000).toFixed(3);
 }
 
-// TIER sistemi
+// Tier sistemi
 function getRank(ms) {
   const s = ms / 1000;
-
-  if (s <= 0.16)
-    return { label: "DIAMOND", cssClass: "rank-diamond" };
-  if (s <= 0.21)
-    return { label: "PLATINUM", cssClass: "rank-platinum" };
-  if (s <= 0.26)
-    return { label: "GOLD", cssClass: "rank-gold" };
-  if (s <= 0.33)
-    return { label: "SILVER", cssClass: "rank-silver" };
-
+  if (s <= 0.16) return { label: "DIAMOND", cssClass: "rank-diamond" };
+  if (s <= 0.21) return { label: "PLATINUM", cssClass: "rank-platinum" };
+  if (s <= 0.26) return { label: "GOLD", cssClass: "rank-gold" };
+  if (s <= 0.33) return { label: "SILVER", cssClass: "rank-silver" };
   return { label: "BRONZE", cssClass: "rank-bronze" };
 }
 
@@ -51,22 +46,29 @@ function setStatus(text) {
   statusText.textContent = text;
 }
 
-function updateReactorState(stateClass) {
+function updateReactorState(cls) {
   reactorBtn.classList.remove("mode-wait", "mode-go", "mode-fail");
-  if (stateClass) reactorBtn.classList.add(stateClass);
+  if (cls) reactorBtn.classList.add(cls);
 }
 
-// SCORE PANELİ AÇ
+// BEST SCORE göster
+function loadBestScore() {
+  if (bestScore === null) {
+    bestScoreValue.textContent = "--";
+  } else {
+    bestScoreValue.textContent = formatScore(bestScore);
+  }
+}
+
+// SCORE ekranını göster
 function showScore(ms) {
   gameState = "SCORE";
 
-  const scoreStr = formatScore(ms);
-  scoreDisplay.textContent = scoreStr;
+  scoreDisplay.textContent = formatScore(ms);
 
   const { label, cssClass } = getRank(ms);
   rankTitle.textContent = label;
 
-  // Eski sınıfları temizle
   scorePanel.classList.remove(
     "rank-diamond",
     "rank-platinum",
@@ -76,22 +78,6 @@ function showScore(ms) {
   );
   scorePanel.classList.add(cssClass);
 
- // BEST SCORE yükleme
-let bestScore = localStorage.getItem("reflexBestScore")
-  ? parseFloat(localStorage.getItem("reflexBestScore"))
-  : null;
-
-function loadBestScore() {
-  if (bestScore === null) {
-    bestScoreValue.textContent = "--";
-  } else {
-    bestScoreValue.textContent = (bestScore / 1000).toFixed(3);
-  }
-}
-
-// SHOW SCORE içinde:
-function showScore(ms) {
-  ...
   let isNewRecord = false;
 
   if (bestScore === null || ms < bestScore) {
@@ -100,19 +86,9 @@ function showScore(ms) {
     isNewRecord = true;
   }
 
-  bestScoreValue.textContent = (bestScore / 1000).toFixed(3);
-
+  bestScoreValue.textContent = formatScore(bestScore);
   newRecordBadge.style.display = isNewRecord ? "inline-block" : "none";
-  ...
-}
 
-// DOM READY:
-document.addEventListener("DOMContentLoaded", () => {
-  loadBestScore();
-});
-
-
-  // Panel aç
   scoreScreen.classList.add("visible");
   scorePanel.classList.add("visible");
 }
@@ -134,7 +110,7 @@ function resetToGame() {
   gameScreen.classList.add("visible");
 }
 
-// OYUN AKIŞI
+// Oyun akışı
 function startGame() {
   if (waitTimer) clearTimeout(waitTimer);
 
@@ -157,19 +133,15 @@ function transitionToGo() {
   setStatus("GO!");
 }
 
-// EVENT LİSTENERLAR
+// EVENTLER
 document.addEventListener("DOMContentLoaded", () => {
-  bestScoreValue.textContent =
-    bestScore === 0 ? "--" : formatScore(bestScore);
+  loadBestScore();
 
-  // START BUTTON
   if (startButton) {
     startButton.textContent = "INITIATE REACTOR";
 
     const hint = document.querySelector(".start-hint");
-    if (hint) {
-      hint.textContent = "Booting reflex engine…";
-    }
+    if (hint) hint.textContent = "Booting reflex engine…";
 
     startButton.addEventListener("click", () => {
       startScreen.style.display = "none";
@@ -178,7 +150,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // TAP BUTTON
   if (reactorBtn) {
     reactorBtn.addEventListener("click", () => {
       if (gameState === "WAIT") {
@@ -191,7 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // AGAIN
   if (againBtn) {
     againBtn.addEventListener("click", () => {
       resetToGame();
@@ -199,7 +169,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // SHARE — tek görsel embed
   if (shareBtn) {
     shareBtn.addEventListener("click", async () => {
       const scoreText = scoreDisplay.textContent || "0.000";
@@ -214,12 +183,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const castText = `My reflex time: ${scoreText}s — ${rankText} tier ⚡️
 Try your skill: ${miniAppUrl}`;
 
-      // Farcaster composeCast (mini app)
+      // Farcaster
       if (
         window.miniapp &&
         window.miniapp.sdk &&
-        window.miniapp.sdk.actions &&
-        typeof window.miniapp.sdk.actions.composeCast === "function"
+        window.miniapp.sdk.actions?.composeCast
       ) {
         try {
           await window.miniapp.sdk.actions.composeCast({
@@ -227,9 +195,7 @@ Try your skill: ${miniAppUrl}`;
             embeds: [shareImageUrl],
           });
           return;
-        } catch (err) {
-          console.warn("composeCast error:", err);
-        }
+        } catch (e) {}
       }
 
       // Web share
@@ -241,14 +207,14 @@ Try your skill: ${miniAppUrl}`;
             url: miniAppUrl,
           });
           return;
-        } catch (err) {}
+        } catch (e) {}
       }
 
-      // Clipboard fall-back
+      // Clipboard fallback
       try {
         await navigator.clipboard.writeText(castText);
         alert("Copied to clipboard!");
-      } catch (err) {
+      } catch (e) {
         window.open(miniAppUrl, "_blank");
       }
     });
