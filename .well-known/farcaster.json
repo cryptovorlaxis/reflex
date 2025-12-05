@@ -15,8 +15,8 @@
     "splashBackgroundColor": "#0f0f0f",
     "webhookUrl": "https://reflex-rho.vercel.app/api/webhook",
     "description": "Tap as fast as you can when the button turns green! Test your reflexes in this neon arcade minigame.",
-    "tagline": "Test Your Speed. Beat the Clock.",
-    "primaryCategory": "Game",
+    "tagline": "Test Your Speed!",
+    "primaryCategory": "games",
     "tags": ["reflex", "arcade", "test", "mini-game"]
   },
   "version": "1.0",
