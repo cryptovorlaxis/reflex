@@ -70,16 +70,18 @@ async function ensureBaseNetwork(provider) {
   try {
     current = await provider.request({ method: "eth_chainId" });
     if (current === BASE_CHAIN_ID_HEX) return;
-  } catch (e) {}
+  } catch (e) {
+    console.warn("chainId okunamadı, switch denenecek:", e);
+  }
 
   try {
     await provider.request({
       method: "wallet_switchEthereumChain",
-      params: [{ chainId: BASE_CHAIN_ID_HEX }]
+      params: [{ chainId: BASE_CHAIN_ID_HEX }],
     });
     return;
   } catch (err) {
-    if (err.code === 4902) {
+    if (err && err.code === 4902) {
       await provider.request({
         method: "wallet_addEthereumChain",
         params: [
@@ -88,9 +90,9 @@ async function ensureBaseNetwork(provider) {
             chainName: "Base",
             nativeCurrency: { name: "Ethereum", symbol: "ETH", decimals: 18 },
             rpcUrls: ["https://mainnet.base.org"],
-            blockExplorerUrls: ["https://basescan.org"]
-          }
-        ]
+            blockExplorerUrls: ["https://basescan.org"],
+          },
+        ],
       });
       return;
     }
@@ -116,10 +118,11 @@ function getRank(ms) {
 }
 
 function setStatus(t) {
-  statusText.textContent = t;
+  if (statusText) statusText.textContent = t;
 }
 
 function updateReactorState(cls) {
+  if (!reactorBtn) return;
   reactorBtn.classList.remove("mode-wait", "mode-go", "mode-fail");
   if (cls) reactorBtn.classList.add(cls);
 }
@@ -132,15 +135,21 @@ function showScore(ms) {
   gameState = "SCORE";
 
   const scoreStr = formatScore(ms);
-  scoreDisplay.textContent = scoreStr;
+  if (scoreDisplay) scoreDisplay.textContent = scoreStr;
 
   const { label, cls } = getRank(ms);
-  rankTitle.textContent = label;
+  if (rankTitle) rankTitle.textContent = label;
 
-  scorePanel.classList.remove(
-    "rank-diamond","rank-platinum","rank-gold","rank-silver","rank-bronze"
-  );
-  scorePanel.classList.add(cls);
+  if (scorePanel) {
+    scorePanel.classList.remove(
+      "rank-diamond",
+      "rank-platinum",
+      "rank-gold",
+      "rank-silver",
+      "rank-bronze"
+    );
+    scorePanel.classList.add(cls);
+  }
 
   // Best score güncelle
   let isNew = false;
@@ -148,11 +157,15 @@ function showScore(ms) {
     bestScore = ms;
     isNew = true;
   }
-  bestScoreValue.textContent = bestScore === null ? "--" : formatScore(bestScore);
-  newRecordBadge.style.display = isNew ? "inline-block" : "none";
+  if (bestScoreValue) {
+    bestScoreValue.textContent = bestScore === null ? "--" : formatScore(bestScore);
+  }
+  if (newRecordBadge) {
+    newRecordBadge.style.display = isNew ? "inline-block" : "none";
+  }
 
-  scoreScreen.classList.add("visible");
-  scorePanel.classList.add("visible");
+  if (scoreScreen) scoreScreen.classList.add("visible");
+  if (scorePanel) scorePanel.classList.add("visible");
 }
 
 function handleFail(msg) {
@@ -167,9 +180,9 @@ function handleFail(msg) {
 }
 
 function resetToGame() {
-  scoreScreen.classList.remove("visible");
-  scorePanel.classList.remove("visible");
-  gameScreen.classList.add("visible");
+  if (scoreScreen) scoreScreen.classList.remove("visible");
+  if (scorePanel) scorePanel.classList.remove("visible");
+  if (gameScreen) gameScreen.classList.add("visible");
 }
 
 // ================================================================
@@ -208,13 +221,16 @@ async function handleShare() {
   if (isSharing) return;
   isSharing = true;
 
-  const originalText = shareBtn.textContent;
-  shareBtn.disabled = true;
-  shareBtn.textContent = "PROCESSING…";
+  const originalText = shareBtn ? shareBtn.textContent : "";
+
+  if (shareBtn) {
+    shareBtn.disabled = true;
+    shareBtn.textContent = "PROCESSING…";
+  }
 
   try {
-    const scoreText = scoreDisplay.textContent || "0.000";
-    const rankText = rankTitle.textContent || "BRONZE";
+    const scoreText = scoreDisplay?.textContent || "0.000";
+    const rankText = rankTitle?.textContent || "BRONZE";
 
     const shareImageUrl = `${window.location.origin}/api/score-image?score=${encodeURIComponent(
       scoreText
@@ -229,14 +245,22 @@ Play: ${miniAppUrl}`;
     const provider = await getEthereumProvider();
     await ensureBaseNetwork(provider);
 
+    // from adresini al (önemli!)
+    const accounts = await provider.request({ method: "eth_accounts" });
+    if (!accounts || accounts.length === 0) {
+      throw new Error("Wallet adresi bulunamadı (eth_accounts boş döndü).");
+    }
+    const from = accounts[0];
+
     const txParams = {
+      from,
       to: PAYMENT_RECEIVER,
-      value: PAYMENT_AMOUNT_WEI_HEX
+      value: PAYMENT_AMOUNT_WEI_HEX,
     };
 
     await provider.request({
       method: "eth_sendTransaction",
-      params: [txParams]
+      params: [txParams],
     });
 
     // ---- 2) CAST ----
@@ -244,7 +268,7 @@ Play: ${miniAppUrl}`;
     if (sdk?.actions?.composeCast) {
       await sdk.actions.composeCast({
         text: castText,
-        embeds: [shareImageUrl]
+        embeds: [shareImageUrl],
       });
       return;
     }
@@ -254,22 +278,28 @@ Play: ${miniAppUrl}`;
       await navigator.share({
         title: "Reflex Score",
         text: castText,
-        url: miniAppUrl
+        url: miniAppUrl,
       });
       return;
     }
 
     // ---- 4) Fallback: Clipboard ----
-    await navigator.clipboard.writeText(castText);
-    alert("Copied to clipboard!");
+    if (navigator.clipboard) {
+      await navigator.clipboard.writeText(castText);
+      alert("Copied to clipboard!");
+      return;
+    }
 
+    window.open(miniAppUrl, "_blank");
   } catch (err) {
     console.error("Share sırasında hata:", err);
     alert("Payment or share failed / cancelled.");
   } finally {
     isSharing = false;
-    shareBtn.disabled = false;
-    shareBtn.textContent = originalText;
+    if (shareBtn) {
+      shareBtn.disabled = false;
+      shareBtn.textContent = originalText || "SHARE";
+    }
   }
 }
 
@@ -277,34 +307,49 @@ Play: ${miniAppUrl}`;
 // INIT
 // ================================================================
 
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
+  // Farcaster Mini App ready()
   callMiniAppReady();
 
-  bestScoreValue.textContent = "--";
+  if (bestScoreValue) bestScoreValue.textContent = "--";
 
   // START
-  startButton.addEventListener("click", () => {
-    startScreen.style.display = "none";
-    gameScreen.classList.add("visible");
-    startGame();
-  });
+  if (startButton) {
+    const hint = document.querySelector(".start-hint");
+    if (hint) hint.textContent = "Wait for the signal…";
+
+    startButton.textContent = "START TEST";
+    startButton.addEventListener("click", () => {
+      if (startScreen) startScreen.style.display = "none";
+      if (gameScreen) gameScreen.classList.add("visible");
+      startGame();
+    });
+  }
 
   // TAP
-  reactorBtn.addEventListener("click", () => {
-    if (gameState === "WAIT") {
-      handleFail("TOO EARLY!");
-    } else if (gameState === "GO") {
-      const diff = performance.now() - goStartTime;
-      showScore(diff);
-    }
-  });
+  if (reactorBtn) {
+    reactorBtn.addEventListener("click", () => {
+      if (gameState === "WAIT") {
+        handleFail("TOO EARLY!");
+      } else if (gameState === "GO") {
+        const diff = performance.now() - goStartTime;
+        showScore(diff);
+      }
+    });
+  }
 
   // AGAIN
-  againBtn.addEventListener("click", () => {
-    resetToGame();
-    startGame();
-  });
+  if (againBtn) {
+    againBtn.addEventListener("click", () => {
+      resetToGame();
+      startGame();
+    });
+  }
 
   // SHARE → Payment + Cast
-  shareBtn.addEventListener("click", handleShare);
+  if (shareBtn) {
+    shareBtn.addEventListener("click", () => {
+      handleShare();
+    });
+  }
 });
