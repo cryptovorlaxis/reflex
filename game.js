@@ -120,21 +120,35 @@ function startGame() {
   updateReactorState("mode-wait");
   setStatus("STANDBY…");
 
+  // GO'nun geleceği toplam bekleme süresi (1.5s – 4.5s)
   const randomWait = 1500 + Math.random() * 3000;
 
-  // Flash GO’dan 50–120 ms önce gelsin
-  const fakeFlashTime = randomWait - (50 + Math.random() * 70);
+  // Her elde FAKE olsun mu? (şimdilik %70 elde fake flash)
+  const useFake = Math.random() < 0.7;
 
-  // FAKE FLASH (kullanıcıyı kandıran erken ışık)
-  setTimeout(() => {
-    if (gameState === "WAIT") flashScreen();
-  }, fakeFlashTime);
+  if (useFake) {
+    // GO'dan 350–700 ms ÖNCE fake flash
+    const gapBeforeGo = 350 + Math.random() * 350; // 350–700 ms
+    let fakeFlashTime = randomWait - gapBeforeGo;
 
-  // Normal GO geçişi
+    // Negatif olmasın diye güvenlik
+    if (fakeFlashTime < 0) fakeFlashTime = randomWait * 0.4;
+
+    setTimeout(() => {
+      // Hâlâ WAIT modundaysak fake flash yap
+      if (gameState === "WAIT") {
+        flashScreen();                 // sahte ışık
+        statusText.textContent = "HOLD…"; // psikolojik baskı :D
+      }
+    }, fakeFlashTime);
+  }
+
+  // Gerçek GO zamanı
   waitTimer = setTimeout(() => {
     transitionToGo();
   }, randomWait);
 }
+
 
 
 function transitionToGo() {
