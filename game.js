@@ -130,6 +130,10 @@ function transitionToGo() {
 
 // EVENTLER
 document.addEventListener("DOMContentLoaded", () => {
+  if (window.miniapp?.sdk?.actions?.ready) {
+  window.miniapp.sdk.actions.ready().catch(()=>{});
+}
+
   // Başlangıçta BEST
   if (bestScoreValue) bestScoreValue.textContent = "--";
 
