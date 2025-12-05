@@ -344,11 +344,16 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  /* EKLEDİK: arka planı hafif karart */
+  background: rgba(0, 0, 0, 0.82);
 }
+
 #scoreScreen.visible {
   display: flex;
-  animation: fadeIn 0.5s ease forwards;
+  animation: fadeIn .5s ease forwards;
 }
+
 
 /* Eski rank-s-plus / rank-s / ... sınıfları yerine: */
 
