@@ -1,229 +1,188 @@
-// ================================================================
-// REFLEX — TRON EDITION
-// Simple reflex game + pay-on-share (Base 0.001 ETH)
-// ================================================================
+// =================================================================
+// TRON Reflex Mini Game — SIMPLE BEST SCORE VERSION (NO FLASH)
+// + Pay-on-share (0.001 ETH on Base network)
+// =================================================================
 
-// ---------------------------
-// Element Referansları
-// ---------------------------
+// ---- Element referansları ----
+const startButton = document.getElementById("startButton");
 const startScreen = document.getElementById("startScreen");
 const gameScreen = document.getElementById("gameScreen");
-const scoreScreen = document.getElementById("scoreScreen");
-
-const startButton = document.getElementById("startButton");
 const reactorBtn = document.getElementById("reactorBtn");
-
 const statusText = document.getElementById("status");
-const bestScoreValue = document.getElementById("bestValue");
-
-const scorePanel = document.getElementById("scorePanel");
 const scoreDisplay = document.getElementById("score");
+const bestScoreValue = document.getElementById("bestValue");
 const rankTitle = document.getElementById("rankTitle");
 const newRecordBadge = document.getElementById("newRecordBadge");
-
 const againBtn = document.getElementById("againBtn");
 const shareBtn = document.getElementById("shareBtn");
+const scorePanel = document.getElementById("scorePanel");
+const scoreScreen = document.getElementById("scoreScreen");
 
-// ---------------------------
-// Oyun State Değişkenleri
-// ---------------------------
-let gameState = "INTRO"; // INTRO | WAIT | GO | SCORE | FAIL
+// ---- Oyun state ----
+let gameState = "INTRO"; // INTRO, WAIT, GO, SCORE, FAIL
 let waitTimer = null;
-let failTimer = null;
-let goStartTime = null; // performance.now() zamanı
-let bestScore = null; // ms cinsinden
+let goStartTime = 0;
 
-// Share sırasında tekrar tıklamayı engellemek için
+// ---- Best score (oturum içi) ----
+let bestScore = null;
+
+// ---- Pay-then-share kontrol ----
 let isSharing = false;
 
-// Ödeme bilgileri (Base ağında ETH)
+// ---- Payment yapılandırması ----
 const PAYMENT_RECEIVER = "0xb614b629466d9ce515410cb423960f980ecc6f73";
-const PAYMENT_AMOUNT_WEI_HEX = "0x38d7ea4c68000"; // 0.001 ETH (1e15 wei)
-const BASE_CHAIN_ID_HEX = "0x2105"; // 8453 (Base mainnet)
+const PAYMENT_AMOUNT_WEI_HEX = "0x38d7ea4c68000"; // 0.001 ETH
+const BASE_CHAIN_ID_HEX = "0x2105"; // 8453 Base Mainnet
 
 // ================================================================
-// Mini App SDK HELPER
+// Mini App SDK helperları
 // ================================================================
 
 function getMiniAppSDK() {
-  // Önce window.miniapp.sdk, yoksa window.farcasterSDK.sdk
-  if (window.miniapp && window.miniapp.sdk) {
-    return window.miniapp.sdk;
-  }
-  if (window.farcasterSDK && window.farcasterSDK.sdk) {
-    return window.farcasterSDK.sdk;
-  }
+  if (window.miniapp?.sdk) return window.miniapp.sdk;
+  if (window.farcasterSDK?.sdk) return window.farcasterSDK.sdk;
   return null;
 }
 
-// ready() çağrısını güvenli yapan helper
 async function callMiniAppReady() {
   try {
     const sdk = getMiniAppSDK();
-    if (sdk && sdk.actions && typeof sdk.actions.ready === "function") {
+    if (sdk?.actions?.ready) {
       await sdk.actions.ready();
     }
   } catch (err) {
-    // Uyarı ver, ama oyunu bozma
-    console.warn("Mini app ready() çağrısı başarısız:", err);
+    console.warn("ready() çağrısı başarısız:", err);
   }
 }
 
-// Wallet provider alma helper
 async function getEthereumProvider() {
   const sdk = getMiniAppSDK();
-  if (!sdk || !sdk.wallet || typeof sdk.wallet.getEthereumProvider !== "function") {
-    throw new Error("Ethereum wallet provider bu mini app hostunda desteklenmiyor.");
+  if (!sdk?.wallet?.getEthereumProvider) {
+    throw new Error("Ethereum provider desteklenmiyor.");
   }
   const provider = await sdk.wallet.getEthereumProvider();
-  if (!provider) {
-    throw new Error("Ethereum provider alınamadı.");
-  }
+  if (!provider) throw new Error("Provider alınamadı.");
   return provider;
 }
 
-// Base ağına geçiş helper
 async function ensureBaseNetwork(provider) {
+  let current = null;
   try {
-    const currentChainId = await provider.request({ method: "eth_chainId" });
-    if (currentChainId === BASE_CHAIN_ID_HEX) {
-      return; // Zaten Base'de
-    }
-  } catch (err) {
-    console.warn("chainId okunamadı, direkt switch denenecek:", err);
-  }
+    current = await provider.request({ method: "eth_chainId" });
+    if (current === BASE_CHAIN_ID_HEX) return;
+  } catch (e) {}
 
   try {
     await provider.request({
       method: "wallet_switchEthereumChain",
-      params: [{ chainId: BASE_CHAIN_ID_HEX }],
+      params: [{ chainId: BASE_CHAIN_ID_HEX }]
     });
     return;
-  } catch (switchError) {
-    // 4902 → chain tanımlı değilse addEthereumChain deneyebiliriz
-    if (switchError && switchError.code === 4902) {
-      try {
-        await provider.request({
-          method: "wallet_addEthereumChain",
-          params: [
-            {
-              chainId: BASE_CHAIN_ID_HEX,
-              chainName: "Base",
-              nativeCurrency: {
-                name: "Ethereum",
-                symbol: "ETH",
-                decimals: 18,
-              },
-              rpcUrls: ["https://mainnet.base.org"],
-              blockExplorerUrls: ["https://basescan.org"],
-            },
-          ],
-        });
-        return;
-      } catch (addError) {
-        console.error("Base ağı eklenemedi:", addError);
-        throw addError;
-      }
+  } catch (err) {
+    if (err.code === 4902) {
+      await provider.request({
+        method: "wallet_addEthereumChain",
+        params: [
+          {
+            chainId: BASE_CHAIN_ID_HEX,
+            chainName: "Base",
+            nativeCurrency: { name: "Ethereum", symbol: "ETH", decimals: 18 },
+            rpcUrls: ["https://mainnet.base.org"],
+            blockExplorerUrls: ["https://basescan.org"]
+          }
+        ]
+      });
+      return;
     }
-
-    console.error("Base ağına geçilemedi:", switchError);
-    throw switchError;
+    throw err;
   }
 }
 
 // ================================================================
-// Ekran & UI Helper Fonksiyonları
+// Yardımcı fonksiyonlar
 // ================================================================
-
-function showScreen(screen) {
-  // Tüm ekranları gizle
-  [startScreen, gameScreen, scoreScreen].forEach((el) => {
-    if (!el) return;
-    el.classList.remove("visible");
-  });
-
-  // Hedef ekranı göster
-  if (screen === "START" && startScreen) {
-    startScreen.classList.add("visible");
-  } else if (screen === "GAME" && gameScreen) {
-    gameScreen.classList.add("visible");
-  } else if (screen === "SCORE" && scoreScreen) {
-    scoreScreen.classList.add("visible");
-  }
-}
-
-function setStatus(text) {
-  if (statusText) {
-    statusText.textContent = text;
-  }
-}
-
-function updateReactorState(modeClass) {
-  if (!reactorBtn) return;
-
-  reactorBtn.classList.remove("mode-wait", "mode-go", "mode-fail");
-
-  if (modeClass) {
-    reactorBtn.classList.add(modeClass);
-  }
-}
 
 function formatScore(ms) {
-  const seconds = ms / 1000;
-  return seconds.toFixed(3); // "0.187"
+  return (ms / 1000).toFixed(3);
 }
 
-// Rank mapping
 function getRank(ms) {
   const s = ms / 1000;
-
-  if (s <= 0.16) return "DIAMOND";
-  if (s <= 0.21) return "PLATINUM";
-  if (s <= 0.26) return "GOLD";
-  if (s <= 0.33) return "SILVER";
-  return "BRONZE";
+  if (s <= 0.16) return { label: "DIAMOND", cls: "rank-diamond" };
+  if (s <= 0.21) return { label: "PLATINUM", cls: "rank-platinum" };
+  if (s <= 0.26) return { label: "GOLD", cls: "rank-gold" };
+  if (s <= 0.33) return { label: "SILVER", cls: "rank-silver" };
+  return { label: "BRONZE", cls: "rank-bronze" };
 }
 
-// Rank classlarını güncelle
-function applyRankClass(rank) {
-  if (!scorePanel) return;
+function setStatus(t) {
+  statusText.textContent = t;
+}
 
-  scorePanel.classList.remove(
-    "rank-diamond",
-    "rank-platinum",
-    "rank-gold",
-    "rank-silver",
-    "rank-bronze"
-  );
-
-  const lower = rank.toLowerCase();
-  if (lower.includes("diamond")) scorePanel.classList.add("rank-diamond");
-  else if (lower.includes("platinum")) scorePanel.classList.add("rank-platinum");
-  else if (lower.includes("gold")) scorePanel.classList.add("rank-gold");
-  else if (lower.includes("silver")) scorePanel.classList.add("rank-silver");
-  else scorePanel.classList.add("rank-bronze");
+function updateReactorState(cls) {
+  reactorBtn.classList.remove("mode-wait", "mode-go", "mode-fail");
+  if (cls) reactorBtn.classList.add(cls);
 }
 
 // ================================================================
-// Oyun Akışı Fonksiyonları
+// Score ekranı
+// ================================================================
+
+function showScore(ms) {
+  gameState = "SCORE";
+
+  const scoreStr = formatScore(ms);
+  scoreDisplay.textContent = scoreStr;
+
+  const { label, cls } = getRank(ms);
+  rankTitle.textContent = label;
+
+  scorePanel.classList.remove(
+    "rank-diamond","rank-platinum","rank-gold","rank-silver","rank-bronze"
+  );
+  scorePanel.classList.add(cls);
+
+  // Best score güncelle
+  let isNew = false;
+  if (bestScore === null || ms < bestScore) {
+    bestScore = ms;
+    isNew = true;
+  }
+  bestScoreValue.textContent = bestScore === null ? "--" : formatScore(bestScore);
+  newRecordBadge.style.display = isNew ? "inline-block" : "none";
+
+  scoreScreen.classList.add("visible");
+  scorePanel.classList.add("visible");
+}
+
+function handleFail(msg) {
+  gameState = "FAIL";
+  updateReactorState("mode-fail");
+  setStatus(msg);
+
+  setTimeout(() => {
+    resetToGame();
+    startGame();
+  }, 900);
+}
+
+function resetToGame() {
+  scoreScreen.classList.remove("visible");
+  scorePanel.classList.remove("visible");
+  gameScreen.classList.add("visible");
+}
+
+// ================================================================
+// Oyun akışı
 // ================================================================
 
 function startGame() {
-  // Timer temizliği
-  if (waitTimer) {
-    clearTimeout(waitTimer);
-    waitTimer = null;
-  }
-  if (failTimer) {
-    clearTimeout(failTimer);
-    failTimer = null;
-  }
+  if (waitTimer) clearTimeout(waitTimer);
 
   gameState = "WAIT";
   updateReactorState("mode-wait");
   setStatus("FOCUS…");
 
-  // Rastgele bekleme: 1500–4500 ms
   const randomWait = 1500 + Math.random() * 3000;
 
   waitTimer = setTimeout(() => {
@@ -241,214 +200,111 @@ function transitionToGo() {
   setStatus("STRIKE!");
 }
 
-function handleFail(message) {
-  if (waitTimer) {
-    clearTimeout(waitTimer);
-    waitTimer = null;
-  }
-
-  gameState = "FAIL";
-  updateReactorState("mode-fail");
-  setStatus(message || "FAIL");
-
-  failTimer = setTimeout(() => {
-    showScreen("GAME");
-    startGame();
-  }, 900);
-}
-
-function showScore(ms) {
-  if (waitTimer) {
-    clearTimeout(waitTimer);
-    waitTimer = null;
-  }
-
-  gameState = "SCORE";
-
-  const scoreText = formatScore(ms);
-  if (scoreDisplay) {
-    scoreDisplay.textContent = scoreText;
-  }
-
-  const rank = getRank(ms);
-  if (rankTitle) {
-    rankTitle.textContent = rank + " TIER";
-  }
-  applyRankClass(rank);
-
-  // Best score (oturum içi)
-  let isNewRecord = false;
-  if (bestScore === null || ms < bestScore) {
-    bestScore = ms;
-    isNewRecord = true;
-  }
-
-  if (bestScoreValue) {
-    bestScoreValue.textContent = bestScore === null ? "--" : formatScore(bestScore);
-  }
-
-  if (newRecordBadge) {
-    newRecordBadge.style.display = isNewRecord ? "inline-block" : "none";
-  }
-
-  // Score ekranını göster
-  showScreen("SCORE");
-}
-
-// SCORE ekranından oyuna dönüş
-function resetToGame() {
-  gameState = "INTRO";
-  showScreen("GAME");
-  setStatus("SYSTEM READY");
-  updateReactorState(null);
-}
-
 // ================================================================
-// PAY-THEN-SHARE AKIŞI
+// Pay → sonra Share
 // ================================================================
 
-async function handleShareClick() {
+async function handleShare() {
   if (isSharing) return;
   isSharing = true;
 
-  const originalText = shareBtn ? shareBtn.textContent : "";
-  if (shareBtn) {
-    shareBtn.disabled = true;
-    shareBtn.textContent = "PROCESSING…";
-  }
+  const originalText = shareBtn.textContent;
+  shareBtn.disabled = true;
+  shareBtn.textContent = "PROCESSING…";
 
   try {
-    // 1) Skor ve rank bilgilerini oku
-    const scoreText = scoreDisplay && scoreDisplay.textContent
-      ? scoreDisplay.textContent
-      : "0.000";
-    const rankText = rankTitle && rankTitle.textContent
-      ? rankTitle.textContent
-      : "UNRANKED";
+    const scoreText = scoreDisplay.textContent || "0.000";
+    const rankText = rankTitle.textContent || "BRONZE";
 
-    const sdk = getMiniAppSDK();
-    const miniAppUrl = window.location.origin;
-
-    // Paylaşım görseli (OG image endpoint)
-    const shareImageUrl = `${miniAppUrl}/api/score-image?score=${encodeURIComponent(
+    const shareImageUrl = `${window.location.origin}/api/score-image?score=${encodeURIComponent(
       scoreText
     )}&rank=${encodeURIComponent(rankText)}`;
 
-    const castText = `My reflex time: ${scoreText}s — ${rankText} ⚡️
+    const miniAppUrl = window.location.origin;
+
+    const castText = `My reflex time: ${scoreText}s — ${rankText} tier ⚡️
 Play: ${miniAppUrl}`;
 
-    // 2) ÖNCE: Wallet ödeme (0.001 ETH, Base)
-    if (!sdk || !sdk.wallet || typeof sdk.wallet.getEthereumProvider !== "function") {
-      throw new Error("Bu istemci wallet.getEthereumProvider özelliğini desteklemiyor.");
-    }
-
+    // ---- 1) ÖDEME ----
     const provider = await getEthereumProvider();
     await ensureBaseNetwork(provider);
 
-    // Basit ETH transferi
     const txParams = {
       to: PAYMENT_RECEIVER,
-      value: PAYMENT_AMOUNT_WEI_HEX,
+      value: PAYMENT_AMOUNT_WEI_HEX
     };
 
-    const txHash = await provider.request({
+    await provider.request({
       method: "eth_sendTransaction",
-      params: [txParams],
+      params: [txParams]
     });
 
-    console.log("Payment tx sent:", txHash);
-
-    // 3) Tx kabul edildikten sonra CAST
-    if (sdk.actions && typeof sdk.actions.composeCast === "function") {
+    // ---- 2) CAST ----
+    const sdk = getMiniAppSDK();
+    if (sdk?.actions?.composeCast) {
       await sdk.actions.composeCast({
         text: castText,
-        embeds: [shareImageUrl], // Sadece score-image embed
+        embeds: [shareImageUrl]
       });
-      return; // Başarılı → çık
+      return;
     }
 
-    // 4) Fallback: Web Share API
+    // ---- 3) Fallback: Web Share ----
     if (navigator.share) {
       await navigator.share({
         title: "Reflex Score",
         text: castText,
-        url: miniAppUrl,
+        url: miniAppUrl
       });
       return;
     }
 
-    // 5) Fallback: Clipboard
-    if (navigator.clipboard) {
-      await navigator.clipboard.writeText(castText);
-      alert("Cast metni panoya kopyalandı!");
-      return;
-    }
+    // ---- 4) Fallback: Clipboard ----
+    await navigator.clipboard.writeText(castText);
+    alert("Copied to clipboard!");
 
-    // En son çare: yeni sekme
-    window.open(miniAppUrl, "_blank");
   } catch (err) {
-    console.error("Pay-then-share sırasında hata:", err);
-    alert("Ödeme veya paylaşım iptal edildi / başarısız oldu.");
+    console.error("Share sırasında hata:", err);
+    alert("Payment or share failed / cancelled.");
   } finally {
     isSharing = false;
-    if (shareBtn) {
-      shareBtn.disabled = false;
-      shareBtn.textContent = originalText || "SHARE";
-    }
+    shareBtn.disabled = false;
+    shareBtn.textContent = originalText;
   }
 }
 
 // ================================================================
-// EVENT LISTENERS & INIT
+// INIT
 // ================================================================
 
-document.addEventListener("DOMContentLoaded", () => {
-  // 1) Mini App ready() çağrısı
+document.addEventListener("DOMContentLoaded", async () => {
   callMiniAppReady();
 
-  // 2) Başlangıç UI
-  showScreen("START");
-  setStatus("SYSTEM READY");
+  bestScoreValue.textContent = "--";
 
-  if (bestScoreValue) {
-    bestScoreValue.textContent = "--";
-  }
-  updateReactorState(null);
+  // START
+  startButton.addEventListener("click", () => {
+    startScreen.style.display = "none";
+    gameScreen.classList.add("visible");
+    startGame();
+  });
 
-  // START butonu → oyuna geç
-  if (startButton) {
-    startButton.addEventListener("click", () => {
-      showScreen("GAME");
-      setStatus("SYSTEM READY");
-      startGame();
-    });
-  }
+  // TAP
+  reactorBtn.addEventListener("click", () => {
+    if (gameState === "WAIT") {
+      handleFail("TOO EARLY!");
+    } else if (gameState === "GO") {
+      const diff = performance.now() - goStartTime;
+      showScore(diff);
+    }
+  });
 
-  // REACTOR tıklaması
-  if (reactorBtn) {
-    reactorBtn.addEventListener("click", () => {
-      if (gameState === "WAIT") {
-        handleFail("TOO EARLY!");
-      } else if (gameState === "GO") {
-        const now = performance.now();
-        const diff = now - goStartTime;
-        showScore(diff);
-      }
-    });
-  }
+  // AGAIN
+  againBtn.addEventListener("click", () => {
+    resetToGame();
+    startGame();
+  });
 
-  // Tekrar dene
-  if (againBtn) {
-    againBtn.addEventListener("click", () => {
-      resetToGame();
-      startGame();
-    });
-  }
-
-  // SHARE (pay + cast)
-  if (shareBtn) {
-    shareBtn.addEventListener("click", () => {
-      handleShareClick();
-    });
-  }
+  // SHARE → Payment + Cast
+  shareBtn.addEventListener("click", handleShare);
 });
