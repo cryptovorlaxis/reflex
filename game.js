@@ -131,9 +131,26 @@ function transitionToGo() {
   gameState = "GO";
   goStartTime = performance.now();
 
+  // Butonun GO ışığı
   updateReactorState("mode-go");
   setStatus("GO!");
+
+  // ✅ Ekran flaşı
+  flashScreen();
+
+  // ✅ Tap butonu nabız gibi büyüsün
+  reactorBtn.classList.add("reactor-go-pulse");
+  setTimeout(() => {
+    reactorBtn.classList.remove("reactor-go-pulse");
+  }, 350);
+
+  // ✅ Status yazısı hafif titresin
+  statusText.classList.add("status-shake");
+  setTimeout(() => {
+    statusText.classList.remove("status-shake");
+  }, 250);
 }
+
 
 // EVENTLER
 document.addEventListener("DOMContentLoaded", () => {
