@@ -1,6 +1,6 @@
 // =================================================================
 // TRON Reflex Mini Game — SIMPLE BEST SCORE VERSION (NO FLASH)
-// + Pay-on-share (0.001 ETH on Base network)
+// + Pay-on-share (0.001 ETH on Base network) + PAID RUN badge
 // =================================================================
 
 // ---- Element referansları ----
@@ -17,6 +17,7 @@ const againBtn = document.getElementById("againBtn");
 const shareBtn = document.getElementById("shareBtn");
 const scorePanel = document.getElementById("scorePanel");
 const scoreScreen = document.getElementById("scoreScreen");
+const paidRunBadge = document.getElementById("paidRunBadge");
 
 // ---- Oyun state ----
 let gameState = "INTRO"; // INTRO, WAIT, GO, SCORE, FAIL
@@ -127,12 +128,23 @@ function updateReactorState(cls) {
   if (cls) reactorBtn.classList.add(cls);
 }
 
+function hidePaidRunBadge() {
+  if (paidRunBadge) paidRunBadge.style.display = "none";
+}
+
+function showPaidRunBadge() {
+  if (paidRunBadge) paidRunBadge.style.display = "inline-block";
+}
+
 // ================================================================
 // Score ekranı
 // ================================================================
 
 function showScore(ms) {
   gameState = "SCORE";
+
+  // Her yeni skor geldiğinde PAID RUN etiketini resetle
+  hidePaidRunBadge();
 
   const scoreStr = formatScore(ms);
   if (scoreDisplay) scoreDisplay.textContent = scoreStr;
@@ -183,6 +195,7 @@ function resetToGame() {
   if (scoreScreen) scoreScreen.classList.remove("visible");
   if (scorePanel) scorePanel.classList.remove("visible");
   if (gameScreen) gameScreen.classList.add("visible");
+  hidePaidRunBadge();
 }
 
 // ================================================================
@@ -245,10 +258,9 @@ Play: ${miniAppUrl}`;
     const provider = await getEthereumProvider();
     await ensureBaseNetwork(provider);
 
-    // from adresini al (önemli!)
     const accounts = await provider.request({ method: "eth_accounts" });
     if (!accounts || accounts.length === 0) {
-      throw new Error("Wallet adresi bulunamadı (eth_accounts boş döndü).");
+      throw new Error("Wallet adresi bulunamadı (eth_accounts boş).");
     }
     const from = accounts[0];
 
@@ -265,32 +277,33 @@ Play: ${miniAppUrl}`;
 
     // ---- 2) CAST ----
     const sdk = getMiniAppSDK();
+    let shared = false;
+
     if (sdk?.actions?.composeCast) {
       await sdk.actions.composeCast({
         text: castText,
         embeds: [shareImageUrl],
       });
-      return;
-    }
-
-    // ---- 3) Fallback: Web Share ----
-    if (navigator.share) {
+      shared = true;
+    } else if (navigator.share) {
       await navigator.share({
         title: "Reflex Score",
         text: castText,
         url: miniAppUrl,
       });
-      return;
-    }
-
-    // ---- 4) Fallback: Clipboard ----
-    if (navigator.clipboard) {
+      shared = true;
+    } else if (navigator.clipboard) {
       await navigator.clipboard.writeText(castText);
-      alert("Copied to clipboard!");
-      return;
+      alert("Cast text copied to clipboard!");
+      shared = true;
+    } else {
+      window.open(miniAppUrl, "_blank");
     }
 
-    window.open(miniAppUrl, "_blank");
+    // Eğer cast/şar başarılıysa etiketi yak
+    if (shared) {
+      showPaidRunBadge();
+    }
   } catch (err) {
     console.error("Share sırasında hata:", err);
     alert("Payment or share failed / cancelled.");
@@ -312,6 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
   callMiniAppReady();
 
   if (bestScoreValue) bestScoreValue.textContent = "--";
+  hidePaidRunBadge();
 
   // START
   if (startButton) {
