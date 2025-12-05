@@ -1,7 +1,7 @@
 // =================================================================
-// game.js — TRON Reflex Mini Game (logo'suz JS)
+// game.js — TRON Reflex Mini Game (Tier: DIAMOND → PLATINUM → GOLD → SILVER → BRONZE)
 // =================================================================
- 
+
 // Element referansları
 const startButton = document.getElementById("startButton");
 const startScreen = document.getElementById("startScreen");
@@ -31,19 +31,27 @@ function formatScore(ms) {
   return (ms / 1000).toFixed(3);
 }
 
+/**
+ * Yeni tier sistemi:
+ * DIAMOND  ≤ 0.160 s
+ * PLATINUM 0.160–0.210 s
+ * GOLD     0.210–0.260 s
+ * SILVER   0.260–0.330 s
+ * BRONZE   > 0.330 s
+ */
 function getRank(ms) {
   const s = ms / 1000;
 
-  if (s <= 0.15) {
-    return { label: "SINGULARITY PROTOCOL", cssClass: "rank-s-plus" };
-  } else if (s <= 0.22) {
-    return { label: "DEMON REACTOR", cssClass: "rank-s" };
-  } else if (s <= 0.3) {
-    return { label: "OPERATIVE", cssClass: "rank-a" };
-  } else if (s <= 0.4) {
-    return { label: "NEON SAMURAI", cssClass: "rank-b" };
+  if (s <= 0.16) {
+    return { label: "DIAMOND", cssClass: "rank-diamond" };
+  } else if (s <= 0.21) {
+    return { label: "PLATINUM", cssClass: "rank-platinum" };
+  } else if (s <= 0.26) {
+    return { label: "GOLD", cssClass: "rank-gold" };
+  } else if (s <= 0.33) {
+    return { label: "SILVER", cssClass: "rank-silver" };
   }
-  return { label: "UNRANKED GLITCH", cssClass: "rank-c" };
+  return { label: "BRONZE", cssClass: "rank-bronze" };
 }
 
 function setStatus(text) {
@@ -64,13 +72,20 @@ function showScore(ms) {
   const { label, cssClass } = getRank(ms);
   rankTitle.textContent = label;
 
+  // Eski rank class'larını temizle
   scorePanel.classList.remove(
     "rank-s-plus",
     "rank-s",
     "rank-a",
     "rank-b",
-    "rank-c"
+    "rank-c",
+    "rank-diamond",
+    "rank-platinum",
+    "rank-gold",
+    "rank-silver",
+    "rank-bronze"
   );
+  // Yeni tier class'ını ekle
   scorePanel.classList.add(cssClass);
 
   let isNewRecord = false;
@@ -112,7 +127,7 @@ function startGame() {
 
   gameState = "WAIT";
   updateReactorState("mode-wait");
-  setStatus("WAIT FOR GREEN...");
+  setStatus("STANDBY…"); // Eskiden: WAIT FOR GREEN...
 
   const randomWait = 1500 + Math.random() * 3000;
 
@@ -125,7 +140,7 @@ function transitionToGo() {
   gameState = "GO";
   goStartTime = performance.now();
   updateReactorState("mode-go");
-  setStatus("TAP NOW!");
+  setStatus("GO!"); // Eskiden: TAP NOW!
 }
 
 // Event listeners
@@ -135,6 +150,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // START
   if (startButton) {
+    startButton.textContent = "INITIATE REACTOR"; // ENTER THE GRID yerine
+    const hint = document.querySelector(".start-hint");
+    if (hint) {
+      hint.textContent = "Booting reflex engine…"; // Calibrating neural interface… yerine
+    }
+
     startButton.addEventListener("click", () => {
       startScreen.style.display = "none";
       gameScreen.classList.add("visible");
@@ -167,7 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (shareBtn) {
     shareBtn.addEventListener("click", async () => {
       const scoreText = scoreDisplay.textContent || "0.000";
-      const rankText = rankTitle.textContent || "UNRANKED GLITCH";
+      const rankText = rankTitle.textContent || "BRONZE";
 
       const shareImageUrl = `${window.location.origin}/api/score-image?score=${encodeURIComponent(
         scoreText
@@ -175,7 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const miniAppUrl = window.location.origin;
 
-      const castText = `My reflex time: ${scoreText}s — ${rankText} in REFLEX TEST ⚡️
+      const castText = `My reflex time: ${scoreText}s — ${rankText} tier in REFLEX TEST ⚡️
 
 Play: ${miniAppUrl}`;
 
