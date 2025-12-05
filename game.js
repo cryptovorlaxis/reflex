@@ -184,8 +184,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const miniAppUrl = window.location.origin;
 
-      const castText = `My reflex time: ${scoreText}s — ${rankText} tier ⚡️
-Try your skill: ${miniAppUrl}`;
+const castText = `My reflex time: ${scoreText}s — ${rankText} tier ⚡️`;
+
 
       // Farcaster
       if (
