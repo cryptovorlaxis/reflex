@@ -342,6 +342,22 @@ body {
   transform: translateY(0) scale(1);
   pointer-events: auto;
 }
+.paid-run-badge {
+  display: none;
+  margin-top: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #ffcfff;
+  border: 1px solid rgba(255, 100, 255, 0.7);
+  box-shadow:
+    0 0 8px rgba(255, 0, 180, 0.7),
+    0 0 16px rgba(255, 0, 200, 0.45);
+  background: radial-gradient(circle at 50% 0%, #3b003b, rgba(0, 0, 0, 0.9));
+}
+
 
 /* Rank başlığı ve rozet */
 #rankTitle {
