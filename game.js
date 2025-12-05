@@ -60,15 +60,16 @@ function loadBestScore() {
   }
 }
 
-// SCORE ekranını göster
 function showScore(ms) {
   gameState = "SCORE";
 
-  scoreDisplay.textContent = formatScore(ms);
+  const scoreStr = formatScore(ms);
+  scoreDisplay.textContent = scoreStr;
 
   const { label, cssClass } = getRank(ms);
   rankTitle.textContent = label;
 
+  // Eski tier sınıflarını temizle
   scorePanel.classList.remove(
     "rank-diamond",
     "rank-platinum",
@@ -78,20 +79,27 @@ function showScore(ms) {
   );
   scorePanel.classList.add(cssClass);
 
+  // BEST SCORE KONTROLÜ
   let isNewRecord = false;
 
-  if (bestScore === null || ms < bestScore) {
+  if (bestScore === 0 || ms < bestScore) {
     bestScore = ms;
     localStorage.setItem("reflexBestScore", String(ms));
     isNewRecord = true;
   }
 
-  bestScoreValue.textContent = formatScore(bestScore);
+  // BEST SCORE UI GÜNCELLEME
+  bestScoreValue.textContent = bestScore === 0
+    ? "--"
+    : (bestScore / 1000).toFixed(3);
+
   newRecordBadge.style.display = isNewRecord ? "inline-block" : "none";
 
+  // Panel aç
   scoreScreen.classList.add("visible");
   scorePanel.classList.add("visible");
 }
+
 
 function handleFail(reason) {
   gameState = "FAIL";
