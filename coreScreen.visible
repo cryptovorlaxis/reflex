@@ -25,7 +25,6 @@ body {
 /* ============================================================
    BACKGROUND FX
 ============================================================ */
-
 .bg-nebula {
   position: fixed;
   inset: 0;
@@ -34,13 +33,8 @@ body {
   animation: nebulaPulse 8s ease-in-out infinite;
 }
 @keyframes nebulaPulse {
-  0%,
-  100% {
-    opacity: 0.85;
-  }
-  50% {
-    opacity: 1;
-  }
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
 }
 
 .stars {
@@ -48,48 +42,33 @@ body {
   inset: 0;
   z-index: -2;
   opacity: 0.6;
-  background-image: radial-gradient(1px 1px at 20px 30px, #fff, transparent),
+  background-image:
+    radial-gradient(1px 1px at 20px 30px, #fff, transparent),
     radial-gradient(1px 1px at 70px 120px, #fff, transparent),
     radial-gradient(1px 1px at 150px 180px, #fff, transparent);
   background-size: 200px 200px;
   animation: starsDrift 120s linear infinite;
 }
 @keyframes starsDrift {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-1400px);
-  }
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-1400px); }
 }
 
 .cyber-grid {
   position: fixed;
   inset: 0;
   z-index: -1;
-  opacity: 0.25;
-  background: linear-gradient(
-      transparent 0%,
-      rgba(188, 19, 254, 0.3) 2%,
-      transparent 3%
-    ),
-    linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(0, 243, 255, 0.2) 2%,
-      transparent 3%
-    );
+  opacity: .25;
+  background:
+    linear-gradient(transparent 0%, rgba(188,19,254,0.3) 2%, transparent 3%),
+    linear-gradient(90deg, transparent 0%, rgba(0,243,255,0.2) 2%, transparent 3%);
   background-size: 80px 80px;
   transform: perspective(400px) rotateX(60deg) translateY(-200px);
   animation: gridMove 22s linear infinite;
 }
 @keyframes gridMove {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 0 80px;
-  }
+  0% { background-position: 0 0; }
+  100% { background-position: 0 80px; }
 }
 
 .scanlines {
@@ -98,9 +77,9 @@ body {
   z-index: 999;
   pointer-events: none;
   background: linear-gradient(
-    rgba(255, 255, 255, 0) 0%,
-    rgba(0, 0, 0, 0.12) 50%,
-    rgba(255, 255, 255, 0) 50%
+    rgba(255,255,255,0) 0%,
+    rgba(0,0,0,0.12) 50%,
+    rgba(255,255,255,0) 50%
   );
   background-size: 100% 4px;
 }
@@ -120,11 +99,10 @@ body {
   z-index: 10;
 }
 
-/* LOGO: sabit genişlik + yükseklik, background olarak */
 .logo-container {
   position: relative;
   width: min(60vw, 260px);
-  height: min(60vw, 260px);   /* 👈 BURASI ÖNEMLİ: aspect-ratio YOK */
+  height: min(60vw, 260px);
   background-image: url("logo.png");
   background-size: contain;
   background-repeat: no-repeat;
@@ -133,17 +111,14 @@ body {
   margin-bottom: 10px;
 }
 
-/* glow istersen kalsın, istersen tamamen kapat */
-.intro-glow {
-  display: none;
-}
+.intro-glow { display: none; }
 
 .load-line {
   width: 200px;
   height: 3px;
   background: linear-gradient(90deg, transparent, #00eaff, transparent);
   animation: loadSlide 2s infinite linear;
-  opacity: 0.75;
+  opacity: .75;
 }
 @keyframes loadSlide {
   0% { transform: translateX(-60px); }
@@ -153,35 +128,31 @@ body {
 #startButton {
   padding: 16px 50px;
   font-size: 22px;
-  background: rgba(0, 40, 60, 0.45);
+  background: rgba(0,40,60,0.45);
   border: 2px solid #00eaff;
   border-radius: 6px;
   letter-spacing: 2px;
   color: #dff;
   cursor: pointer;
   text-shadow: 0 0 12px #00eaff;
-  box-shadow: 0 0 22px rgba(0, 255, 255, 0.25);
-  transition: 0.25s ease;
+  box-shadow: 0 0 22px rgba(0,255,255,0.25);
+  transition: .25s ease;
 }
 #startButton:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 40px rgba(0, 255, 255, 0.35);
-  background: rgba(0, 80, 120, 0.45);
+  box-shadow: 0 0 40px rgba(0,255,255,0.35);
+  background: rgba(0,80,120,0.45);
 }
 
 .start-hint {
   font-size: 14px;
-  opacity: 0.65;
+  opacity: .65;
   color: #b8eafd;
 }
-
-
-
 
 /* ============================================================
    GAME SCREEN
 ============================================================ */
-
 #gameScreen {
   position: absolute;
   inset: 0;
@@ -193,17 +164,11 @@ body {
 }
 #gameScreen.visible {
   display: flex;
-  animation: fadeIn 0.5s ease forwards;
+  animation: fadeIn .5s ease forwards;
 }
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(.96); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
 #status {
@@ -225,61 +190,35 @@ body {
 /* ============================================================
    REACTOR BUTTON
 ============================================================ */
-
 .reactor-core {
   width: 270px;
   height: 270px;
   position: relative;
   border-radius: 50%;
   cursor: pointer;
-  transition: 0.15s ease;
+  transition: .15s ease;
 }
 
 .reactor-ring {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 3px solid rgba(0, 255, 255, 0.35);
-  filter: drop-shadow(0 0 12px rgba(0, 255, 255, 0.4));
+  border: 3px solid rgba(0,255,255,0.35);
+  filter: drop-shadow(0 0 12px rgba(0,255,255,0.4));
 }
-.ring1 {
-  animation: spin1 7s linear infinite;
-}
-.ring2 {
-  inset: 25px;
-  animation: spin2 5s linear infinite reverse;
-}
-.ring3 {
-  inset: 50px;
-  animation: spin3 3s linear infinite;
-}
+.ring1 { animation: spin1 7s linear infinite; }
+.ring2 { inset: 25px; animation: spin2 5s linear infinite reverse; }
+.ring3 { inset: 50px; animation: spin3 3s linear infinite; }
 
-@keyframes spin1 {
-  to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes spin2 {
-  to {
-    transform: rotate(-360deg);
-  }
-}
-@keyframes spin3 {
-  to {
-    transform: rotate(360deg);
-  }
-}
+@keyframes spin1 { to { transform: rotate(360deg); } }
+@keyframes spin2 { to { transform: rotate(-360deg); } }
+@keyframes spin3 { to { transform: rotate(360deg); } }
 
 .reactor-center {
   position: absolute;
   inset: 80px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(0, 255, 255, 0.4),
-    rgba(0, 60, 100, 0.6),
-    rgba(0, 20, 30, 0.9)
-  );
+  background: radial-gradient(circle, rgba(0,255,255,0.4), rgba(0,60,100,0.6), rgba(0,20,30,0.9));
 }
 
 .reactor-icon {
@@ -293,50 +232,37 @@ body {
   box-shadow: 0 0 20px #00eaff;
 }
 
-/* STATES */
 .mode-wait {
-  border-color: #ffaa00 !important;
-  box-shadow: 0 0 28px rgba(255, 170, 0, 0.55) !important;
+  border-color: #ffaa00!important;
+  box-shadow: 0 0 28px rgba(255,170,0,0.55)!important;
   animation: pulseWait 1s infinite alternate;
 }
 @keyframes pulseWait {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(1.03);
-  }
+  from { transform: scale(1); }
+  to   { transform: scale(1.03); }
 }
 
 .mode-go {
-  border-color: #00ff00 !important;
+  border-color: #00ff00!important;
   background: radial-gradient(circle, #003300, #000);
   transform: scale(1.07);
-  box-shadow: 0 0 50px #00ff00, inset 0 0 30px #00ff00 !important;
+  box-shadow: 0 0 50px #00ff00, inset 0 0 30px #00ff00!important;
 }
 
 .mode-fail {
-  border-color: #bc13fe !important;
-  box-shadow: 0 0 40px #bc13fe !important;
-  animation: failShake 0.25s;
+  border-color: #bc13fe!important;
+  box-shadow: 0 0 40px #bc13fe!important;
+  animation: failShake .25s;
 }
 @keyframes failShake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-8px);
-  }
-  75% {
-    transform: translateX(8px);
-  }
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
 }
 
 /* ============================================================
    SCORE SCREEN
 ============================================================ */
-
 #scoreScreen {
   position: absolute;
   inset: 0;
@@ -344,9 +270,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  /* EKLEDİK: arka planı hafif karart */
-  background: rgba(0, 0, 0, 0.82);
+  background: rgba(0,0,0,0.82);
 }
 
 #scoreScreen.visible {
@@ -354,9 +278,38 @@ body {
   animation: fadeIn .5s ease forwards;
 }
 
+/* ============================================================
+   SCORE PANEL — YENİ TOK, OPak, BÜYÜK TASARIM
+============================================================ */
+.score-panel {
+  background: #05070f; 
+  border: 2px solid rgba(255,255,255,0.16);
+  border-radius: 24px;
 
-/* Eski rank-s-plus / rank-s / ... sınıfları yerine: */
+  padding: 42px 36px;
+  max-width: 440px;
+  width: min(90%, 440px);
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+
+  opacity: 0;
+  transform: translateY(18px) scale(.96);
+  pointer-events: none;
+  transition: .4s cubic-bezier(.34,1.56,.64,1);
+}
+
+.score-panel.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* ============================================================
+   TIER RENK SINIFLARI
+============================================================ */
 .score-panel.rank-diamond {
   border-color: #3cf4ff;
   box-shadow: 0 0 45px rgba(60, 244, 255, 0.5);
@@ -402,16 +355,17 @@ body {
   text-shadow: 0 0 14px #CD7F32;
 }
 
-
+/* SCORE */
 #score {
-  font-size: 78px;
+  font-size: 84px;
   font-weight: 900;
-  background: linear-gradient(to bottom, #fff, #ccc);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.28));
+  background: linear-gradient(to bottom,#fff,#ccc);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  filter: drop-shadow(0 0 14px rgba(255,255,255,.32));
 }
 
+/* BUTTONS */
 .btn-group {
   display: flex;
   width: 100%;
@@ -421,15 +375,15 @@ body {
 
 .cyber-btn {
   flex: 1;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.25);
   padding: 14px;
   border-radius: 10px;
   font-family: "Orbitron", sans-serif;
   font-weight: 700;
   color: white;
   cursor: pointer;
-  transition: 0.25s;
+  transition: .25s;
   text-transform: uppercase;
 }
 .cyber-btn:hover {
