@@ -234,12 +234,18 @@ async function handleShare() {
   if (isSharing) return;
   isSharing = true;
 
-  const originalText = shareBtn ? shareBtn.textContent : "";
+  // Badge’i her denemenin başında GİZLE
+  hidePaidRunBadge();
 
+  const originalText = shareBtn ? shareBtn.textContent : "";
   if (shareBtn) {
     shareBtn.disabled = true;
     shareBtn.textContent = "PROCESSING…";
   }
+
+  // Başarılı ödeme + başarılı cast kontrolü
+  let paymentSuccess = false;
+  let castSuccess = false;
 
   try {
     const scoreText = scoreDisplay?.textContent || "0.000";
@@ -260,8 +266,9 @@ Play: ${miniAppUrl}`;
 
     const accounts = await provider.request({ method: "eth_accounts" });
     if (!accounts || accounts.length === 0) {
-      throw new Error("Wallet adresi bulunamadı (eth_accounts boş).");
+      throw new Error("Wallet adresi alınamadı.");
     }
+
     const from = accounts[0];
 
     const txParams = {
@@ -270,43 +277,49 @@ Play: ${miniAppUrl}`;
       value: PAYMENT_AMOUNT_WEI_HEX,
     };
 
+    // 👉 Eğer kullanıcı Cancel’a basarsa HATA FIRLATIR
     await provider.request({
       method: "eth_sendTransaction",
       params: [txParams],
     });
 
-    // ---- 2) CAST ----
-    const sdk = getMiniAppSDK();
-    let shared = false;
+    paymentSuccess = true; // ✔ gerçek ödeme oldu
 
+    // ---- 2) CAST (sadece ödeme başarılıysa dene) ----
+    const sdk = getMiniAppSDK();
     if (sdk?.actions?.composeCast) {
       await sdk.actions.composeCast({
         text: castText,
         embeds: [shareImageUrl],
       });
-      shared = true;
+      castSuccess = true;
     } else if (navigator.share) {
       await navigator.share({
         title: "Reflex Score",
         text: castText,
         url: miniAppUrl,
       });
-      shared = true;
+      castSuccess = true;
     } else if (navigator.clipboard) {
       await navigator.clipboard.writeText(castText);
-      alert("Cast text copied to clipboard!");
-      shared = true;
-    } else {
-      window.open(miniAppUrl, "_blank");
+      alert("Copied to clipboard!");
+      castSuccess = true;
     }
 
-    // Eğer cast/şar başarılıysa etiketi yak
-    if (shared) {
-      showPaidRunBadge();
+    // ---- Badge Mantığı ----
+    if (paymentSuccess && castSuccess) {
+      showPaidRunBadge();  // ⭐ YALNIZCA GERÇEK ÖDEME + BAŞARILI CAST’TA
     }
+
   } catch (err) {
-    console.error("Share sırasında hata:", err);
-    alert("Payment or share failed / cancelled.");
+    console.error("PAY/SHARE ERROR:", err);
+
+    // 👉 Ödeme başarısızsa veya kullanıcı iptal ederse:
+    // - paymentSuccess = false kalır
+    // - asla badge gösterilmez
+    hidePaidRunBadge();
+
+    alert("Payment or share cancelled.");
   } finally {
     isSharing = false;
     if (shareBtn) {
