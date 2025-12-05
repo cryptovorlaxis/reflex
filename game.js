@@ -1,5 +1,5 @@
 // =================================================================
-// TRON Reflex Mini Game — FINAL CLEAN VERSION
+// TRON Reflex Mini Game — SIMPLE BEST SCORE VERSION
 // =================================================================
 
 // Element referansları
@@ -22,10 +22,8 @@ let gameState = "INTRO";
 let waitTimer = null;
 let goStartTime = 0;
 
-// Best score başlangıç
-let bestScore = localStorage.getItem("reflexBestScore")
-  ? parseFloat(localStorage.getItem("reflexBestScore"))
-  : null;
+// BEST SCORE (sadece bu oturum için)
+let bestScore = null;
 
 // Format
 function formatScore(ms) {
@@ -51,25 +49,18 @@ function updateReactorState(cls) {
   if (cls) reactorBtn.classList.add(cls);
 }
 
-// BEST SCORE göster
-function loadBestScore() {
-  if (bestScore === null) {
-    bestScoreValue.textContent = "--";
-  } else {
-    bestScoreValue.textContent = formatScore(bestScore);
-  }
-}
-
+// SCORE ekranını göster
 function showScore(ms) {
   gameState = "SCORE";
 
+  // Anlık skor
   const scoreStr = formatScore(ms);
   scoreDisplay.textContent = scoreStr;
 
+  // Rank
   const { label, cssClass } = getRank(ms);
   rankTitle.textContent = label;
 
-  // Eski tier sınıflarını temizle
   scorePanel.classList.remove(
     "rank-diamond",
     "rank-platinum",
@@ -79,27 +70,19 @@ function showScore(ms) {
   );
   scorePanel.classList.add(cssClass);
 
-  // BEST SCORE KONTROLÜ
+  // BEST SCORE (sadece bu oturum)
   let isNewRecord = false;
-
-  if (bestScore === 0 || ms < bestScore) {
+  if (bestScore === null || ms < bestScore) {
     bestScore = ms;
-    localStorage.setItem("reflexBestScore", String(ms));
     isNewRecord = true;
   }
 
-  // BEST SCORE UI GÜNCELLEME
-  bestScoreValue.textContent = bestScore === 0
-    ? "--"
-    : (bestScore / 1000).toFixed(3);
-
+  bestScoreValue.textContent = bestScore === null ? "--" : formatScore(bestScore);
   newRecordBadge.style.display = isNewRecord ? "inline-block" : "none";
 
-  // Panel aç
   scoreScreen.classList.add("visible");
   scorePanel.classList.add("visible");
 }
-
 
 function handleFail(reason) {
   gameState = "FAIL";
@@ -143,9 +126,11 @@ function transitionToGo() {
 
 // EVENTLER
 document.addEventListener("DOMContentLoaded", () => {
-  loadBestScore();
+  // Başlangıçta BEST
+  bestScoreValue.textContent = "--";
 
   if (startButton) {
+    // Buton metni zaten HTML'de INITIATE REACTOR, ama yine de garanti:
     startButton.textContent = "INITIATE REACTOR";
 
     const hint = document.querySelector(".start-hint");
