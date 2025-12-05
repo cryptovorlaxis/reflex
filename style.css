@@ -210,24 +210,12 @@ body {
 }
 
 
-.reactor-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 3px solid rgba(0, 255, 255, 0.35);
-  filter: drop-shadow(0 0 12px rgba(0, 255, 255, 0.4));
+.reactor-ring,
+.reactor-center,
+.reactor-icon {
+  display: none;
 }
-.ring1 {
-  animation: spin1 7s linear infinite;
-}
-.ring2 {
-  inset: 25px;
-  animation: spin2 5s linear infinite reverse;
-}
-.ring3 {
-  inset: 50px;
-  animation: spin3 3s linear infinite;
-}
+
 
 @keyframes spin1 {
   to { transform: rotate(360deg); }
