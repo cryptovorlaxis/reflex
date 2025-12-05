@@ -122,10 +122,20 @@ function startGame() {
 
   const randomWait = 1500 + Math.random() * 3000;
 
+  // Flash GO’dan 50–120 ms önce gelsin
+  const fakeFlashTime = randomWait - (50 + Math.random() * 70);
+
+  // FAKE FLASH (kullanıcıyı kandıran erken ışık)
+  setTimeout(() => {
+    if (gameState === "WAIT") flashScreen();
+  }, fakeFlashTime);
+
+  // Normal GO geçişi
   waitTimer = setTimeout(() => {
     transitionToGo();
   }, randomWait);
 }
+
 
 function transitionToGo() {
   gameState = "GO";
