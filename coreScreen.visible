@@ -25,6 +25,7 @@ body {
 /* ============================================================
    BACKGROUND FX
 ============================================================ */
+
 .bg-nebula {
   position: fixed;
   inset: 0;
@@ -123,7 +124,7 @@ body {
 .logo-container {
   position: relative;
   width: min(60vw, 260px);
-  height: min(60vw, 260px); /* 👈 BURASI ÖNEMLİ: aspect-ratio YOK */
+  height: min(60vw, 260px);   /* 👈 BURASI ÖNEMLİ: aspect-ratio YOK */
   background-image: url("logo.png");
   background-size: contain;
   background-repeat: no-repeat;
@@ -145,12 +146,8 @@ body {
   opacity: 0.75;
 }
 @keyframes loadSlide {
-  0% {
-    transform: translateX(-60px);
-  }
-  100% {
-    transform: translateX(60px);
-  }
+  0% { transform: translateX(-60px); }
+  100% { transform: translateX(60px); }
 }
 
 #startButton {
@@ -178,9 +175,13 @@ body {
   color: #b8eafd;
 }
 
+
+
+
 /* ============================================================
    GAME SCREEN
 ============================================================ */
+
 #gameScreen {
   position: absolute;
   inset: 0;
@@ -224,6 +225,7 @@ body {
 /* ============================================================
    REACTOR BUTTON
 ============================================================ */
+
 .reactor-core {
   width: 270px;
   height: 270px;
@@ -334,6 +336,7 @@ body {
 /* ============================================================
    SCORE SCREEN
 ============================================================ */
+
 #scoreScreen {
   position: absolute;
   inset: 0;
@@ -341,31 +344,26 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* EKLEDİK: arka planı hafif karart */
-  background: rgba(0, 0, 0, 0.82);
 }
 #scoreScreen.visible {
   display: flex;
   animation: fadeIn 0.5s ease forwards;
 }
 
-/* === SCORE PANEL ANA STİLİ === */
 .score-panel {
-  background: #05070f; /* opak, koyu */
-  border: 2px solid rgba(255, 255, 255, 0.16);
-  border-radius: 24px;
-
-  padding: 42px 36px;
-  max-width: 440px;
-  width: min(90%, 440px);
-
+  background: rgba(15, 20, 30, 0.75);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 22px;
+  padding: 35px 30px;
+  max-width: 380px;
+  width: 90%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-
+  gap: 14px;
   opacity: 0;
-  transform: translateY(18px) scale(0.96);
+  transform: translateY(20px) scale(0.95);
   pointer-events: none;
   transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -376,16 +374,6 @@ body {
   pointer-events: auto;
 }
 
-/* Rank başlığı */
-#rankTitle {
-  font-family: "Rajdhani", sans-serif;
-  font-size: 26px;
-  font-weight: 900;
-  text-align: center;
-  letter-spacing: 2px;
-}
-
-/* New record rozeti */
 .new-record-badge {
   background: #fff;
   color: #000;
@@ -396,63 +384,68 @@ body {
   display: none;
 }
 
-/* Eski rank-s-plus / rank-s / ... sınıfları yerine: */
-.score-panel.rank-diamond { 
-  border-color: #3cf4ff; 
-  box-shadow: 0 0 45px rgba(60, 244, 255, 0.5); 
-}
-.score-panel.rank-diamond #rankTitle { 
-  color: #3cf4ff; 
-  text-shadow: 0 0 16px #3cf4ff; 
+#rankTitle {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 26px;
+  font-weight: 900;
+  text-align: center;
+  letter-spacing: 2px;
 }
 
-.score-panel.rank-platinum { 
-  border-color: #E5E4E2; 
-  box-shadow: 0 0 40px rgba(229,228,226,0.5); 
+.score-panel.rank-s-plus {
+  border-color: #fff;
+  box-shadow: 0 0 45px rgba(255, 255, 255, 0.4);
 }
-.score-panel.rank-platinum #rankTitle { 
-  color: #E5E4E2; 
-  text-shadow: 0 0 14px #E5E4E2; 
-}
-
-.score-panel.rank-gold { 
-  border-color: #FFD700; 
-  box-shadow: 0 0 40px rgba(255,215,0,0.5); 
-}
-.score-panel.rank-gold #rankTitle { 
-  color: #FFD700; 
-  text-shadow: 0 0 14px #FFD700; 
+.score-panel.rank-s-plus #rankTitle {
+  color: #fff;
+  text-shadow: 0 0 16px #fff;
 }
 
-.score-panel.rank-silver { 
-  border-color: #C0C0C0; 
-  box-shadow: 0 0 40px rgba(192,192,192,0.5); 
+.score-panel.rank-s {
+  border-color: #ff003c;
+  box-shadow: 0 0 40px rgba(255, 0, 60, 0.4);
 }
-.score-panel.rank-silver #rankTitle { 
-  color: #C0C0C0; 
-  text-shadow: 0 0 14px #C0C0C0; 
-}
-
-.score-panel.rank-bronze { 
-  border-color: #CD7F32; 
-  box-shadow: 0 0 40px rgba(205,127,50,0.5); 
-}
-.score-panel.rank-bronze #rankTitle { 
-  color: #CD7F32; 
-  text-shadow: 0 0 14px #CD7F32; 
+.score-panel.rank-s #rankTitle {
+  color: #ff003c;
+  text-shadow: 0 0 14px #ff003c;
 }
 
-/* SCORE SAYISI */
+.score-panel.rank-a {
+  border-color: #00f3ff;
+  box-shadow: 0 0 40px rgba(0, 243, 255, 0.4);
+}
+.score-panel.rank-a #rankTitle {
+  color: #00f3ff;
+  text-shadow: 0 0 14px #00f3ff;
+}
+
+.score-panel.rank-b {
+  border-color: #ffaa00;
+  box-shadow: 0 0 40px rgba(255, 170, 0, 0.4);
+}
+.score-panel.rank-b #rankTitle {
+  color: #ffaa00;
+  text-shadow: 0 0 14px #ffaa00;
+}
+
+.score-panel.rank-c {
+  border-color: #bc13fe;
+  box-shadow: 0 0 40px rgba(188, 19, 254, 0.4);
+}
+.score-panel.rank-c #rankTitle {
+  color: #bc13fe;
+  text-shadow: 0 0 14px #bc13fe;
+}
+
 #score {
-  font-size: 84px;
+  font-size: 78px;
   font-weight: 900;
   background: linear-gradient(to bottom, #fff, #ccc);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.32));
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.28));
 }
 
-/* BUTONLAR */
 .btn-group {
   display: flex;
   width: 100%;
