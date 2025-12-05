@@ -31,8 +31,8 @@ let bestScore = null;
 let isSharing = false;
 
 // ---- Payment yapılandırması ----
-const PAYMENT_RECEIVER = "0xb614b629466d9ce515410cb423960f980ecc6f73";
-const PAYMENT_AMOUNT_WEI_HEX = "0x38d7ea4c68000"; // 0.001 ETH
+const PAYMENT_RECEIVER = "0xe1E6565AD8d30A5Cd9D93cCe79e160d014F762A5";
+const PAYMENT_AMOUNT_WEI_HEX = "0x5af3107a4000"; // 0.0001 ETH (~0.30 USD)
 const BASE_CHAIN_ID_HEX = "0x2105"; // 8453 Base Mainnet
 
 // ================================================================
