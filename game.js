@@ -1,5 +1,5 @@
 // =================================================================
-// TRON Reflex Mini Game — SIMPLE BEST SCORE VERSION (NO FAKE FLASH)
+// TRON Reflex Mini Game — SIMPLE BEST SCORE VERSION (NO FLASH)
 // =================================================================
 
 // Element referansları
@@ -18,7 +18,7 @@ const scorePanel = document.getElementById("scorePanel");
 const scoreScreen = document.getElementById("scoreScreen");
 
 // Oyun durumları
-let gameState = "INTRO";
+let gameState = "INTRO";   // INTRO, WAIT, GO, SCORE, FAIL
 let waitTimer = null;
 let goStartTime = 0;
 
@@ -41,33 +41,22 @@ function getRank(ms) {
 }
 
 function setStatus(text) {
-  statusText.textContent = text;
+  if (statusText) statusText.textContent = text;
 }
 
 function updateReactorState(cls) {
+  if (!reactorBtn) return;
   reactorBtn.classList.remove("mode-wait", "mode-go", "mode-fail");
   if (cls) reactorBtn.classList.add(cls);
-}
-
-// GO anında kısa beyaz flaş (SADECE GERÇEK GO İÇİN)
-function flashScreen() {
-  const flash = document.createElement("div");
-  flash.className = "go-flash";
-  document.body.appendChild(flash);
-  setTimeout(() => {
-    flash.remove();
-  }, 200);
 }
 
 // SCORE ekranını göster
 function showScore(ms) {
   gameState = "SCORE";
 
-  // Anlık skor
   const scoreStr = formatScore(ms);
   scoreDisplay.textContent = scoreStr;
 
-  // Rank
   const { label, cssClass } = getRank(ms);
   rankTitle.textContent = label;
 
@@ -118,10 +107,10 @@ function startGame() {
 
   gameState = "WAIT";
   updateReactorState("mode-wait");
-  setStatus("FOCUS");
+  setStatus("FOCUS…");   // STANDBY yerine
 
-  // Sadece gerçek GO için random bekleme
-  const randomWait = 2500 + Math.random() * 4500;
+  // Random bekleme (zorlaştırmak istersen burayı büyütürüz)
+  const randomWait = 1500 + Math.random() * 3000;
 
   waitTimer = setTimeout(() => {
     transitionToGo();
@@ -136,23 +125,17 @@ function transitionToGo() {
   goStartTime = performance.now();
 
   updateReactorState("mode-go");
-  setStatus("GO!");
-
-
-  reactorBtn.classList.add("reactor-go-pulse");
-  setTimeout(() => reactorBtn.classList.remove("reactor-go-pulse"), 350);
-
-  statusText.classList.add("status-shake");
-  setTimeout(() => statusText.classList.remove("status-shake"), 250);
+  setStatus("STRIKE!");  // GO yerine
 }
 
 // EVENTLER
 document.addEventListener("DOMContentLoaded", () => {
   // Başlangıçta BEST
-  bestScoreValue.textContent = "--";
+  if (bestScoreValue) bestScoreValue.textContent = "--";
 
+  // START BUTTON
   if (startButton) {
-    startButton.textContent = "START TEST";
+    startButton.textContent = "START TEST"; // INITIATE REACTOR yerine
 
     const hint = document.querySelector(".start-hint");
     if (hint) hint.textContent = "Wait for the signal…";
@@ -164,11 +147,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // TAP BUTTON
   if (reactorBtn) {
     reactorBtn.addEventListener("click", () => {
-      if (gameState === "FOCUS") {
-        handleFail("TOO EARLY!");
-      } else if (gameState === "STRIKE") {
+      if (gameState === "WAIT") {
+        handleFail("TOO EARLY!"); // Bunu sen özellikle istedin :)
+      } else if (gameState === "GO") {
         const now = performance.now();
         const diff = now - goStartTime;
         showScore(diff);
@@ -176,6 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // AGAIN
   if (againBtn) {
     againBtn.addEventListener("click", () => {
       resetToGame();
@@ -183,6 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // SHARE — tek görsel embed
   if (shareBtn) {
     shareBtn.addEventListener("click", async () => {
       const scoreText = scoreDisplay.textContent || "0.000";
