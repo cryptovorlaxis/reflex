@@ -1,5 +1,5 @@
 // =================================================================
-// TRON Reflex Mini Game — SIMPLE BEST SCORE VERSION
+// TRON Reflex Mini Game — SIMPLE BEST SCORE VERSION (NO FAKE FLASH)
 // =================================================================
 
 // Element referansları
@@ -49,7 +49,7 @@ function updateReactorState(cls) {
   if (cls) reactorBtn.classList.add(cls);
 }
 
-// GO anında kısa beyaz flaş
+// GO anında kısa beyaz flaş (SADECE GERÇEK GO İÇİN)
 function flashScreen() {
   const flash = document.createElement("div");
   flash.className = "go-flash";
@@ -58,7 +58,6 @@ function flashScreen() {
     flash.remove();
   }, 200);
 }
-
 
 // SCORE ekranını göster
 function showScore(ms) {
@@ -88,7 +87,8 @@ function showScore(ms) {
     isNewRecord = true;
   }
 
-  bestScoreValue.textContent = bestScore === null ? "--" : formatScore(bestScore);
+  bestScoreValue.textContent =
+    bestScore === null ? "--" : formatScore(bestScore);
   newRecordBadge.style.display = isNewRecord ? "inline-block" : "none";
 
   scoreScreen.classList.add("visible");
@@ -129,6 +129,7 @@ function startGame() {
 }
 
 function transitionToGo() {
+  // Güvenlik: sadece WAIT modunda GO'ya geç
   if (gameState !== "WAIT") return;
 
   gameState = "GO";
@@ -137,8 +138,6 @@ function transitionToGo() {
   updateReactorState("mode-go");
   setStatus("GO!");
 
-  // 🔥 Sadece gerçek GO efekti
-  flashScreen();
 
   reactorBtn.classList.add("reactor-go-pulse");
   setTimeout(() => reactorBtn.classList.remove("reactor-go-pulse"), 350);
@@ -147,41 +146,12 @@ function transitionToGo() {
   setTimeout(() => statusText.classList.remove("status-shake"), 250);
 }
 
-
-
-
-function transitionToGo() {
-  gameState = "GO";
-  goStartTime = performance.now();
-
-  // Butonun GO ışığı
-  updateReactorState("mode-go");
-  setStatus("GO!");
-
-  // ✅ Ekran flaşı
-  flashScreen();
-
-  // ✅ Tap butonu nabız gibi büyüsün
-  reactorBtn.classList.add("reactor-go-pulse");
-  setTimeout(() => {
-    reactorBtn.classList.remove("reactor-go-pulse");
-  }, 350);
-
-  // ✅ Status yazısı hafif titresin
-  statusText.classList.add("status-shake");
-  setTimeout(() => {
-    statusText.classList.remove("status-shake");
-  }, 250);
-}
-
-
 // EVENTLER
 document.addEventListener("DOMContentLoaded", () => {
   // Başlangıçta BEST
   bestScoreValue.textContent = "--";
 
   if (startButton) {
-    // Buton metni zaten HTML'de INITIATE REACTOR, ama yine de garanti:
     startButton.textContent = "INITIATE REACTOR";
 
     const hint = document.querySelector(".start-hint");
