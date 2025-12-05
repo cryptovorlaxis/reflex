@@ -118,7 +118,7 @@ function startGame() {
 
   gameState = "WAIT";
   updateReactorState("mode-wait");
-  setStatus("STANDBY…");
+  setStatus("FOCUS");
 
   // Sadece gerçek GO için random bekleme
   const randomWait = 2500 + Math.random() * 4500;
