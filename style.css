@@ -189,6 +189,9 @@ body {
   color: #aaa;
 }
 
+/* ============================================================
+   TAP BUTTON (REACTOR CORE)
+============================================================ */
 .reactor-core {
   width: 260px;
   height: 260px;
@@ -219,6 +222,19 @@ body {
   transition: 0.25s ease;
 }
 
+/* İçte hafif ikinci halka efekti */
+.reactor-core::before {
+  content: "";
+  position: absolute;
+  inset: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 255, 255, 0.4);
+  box-shadow:
+    0 0 12px rgba(0, 255, 255, 0.5),
+    inset 0 0 10px rgba(0, 255, 255, 0.35);
+  opacity: 0.9;
+}
+
 /* Buton içindeki görsel */
 .tap-img {
   width: 78%;
@@ -226,7 +242,6 @@ body {
   pointer-events: none;
   filter: drop-shadow(0 0 14px rgba(0, 255, 255, 0.45));
 }
-
 
 /* WAIT = turuncu uyarı */
 .mode-wait {
@@ -407,27 +422,4 @@ body {
   background: white;
   color: black;
   box-shadow: 0 0 25px white;
-}
-
-.tap-img {
-  width: 80%;
-  height: auto;
-  pointer-events: none; /* tıklama div'e gitsin */
-  filter: drop-shadow(0 0 18px #00f3ff);
-}
-
-/* Durumlara göre çerçeve ışığı */
-.mode-wait {
-  border-color: #ffaa00 !important;
-  box-shadow: 0 0 28px rgba(255, 170, 0, 0.55) !important;
-}
-
-.mode-go {
-  border-color: #00ff00 !important;
-  box-shadow: 0 0 50px #00ff00, inset 0 0 30px #00ff00 !important;
-}
-
-.mode-fail {
-  border-color: #bc13fe !important;
-  box-shadow: 0 0 40px #bc13fe !important;
 }
