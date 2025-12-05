@@ -25,7 +25,6 @@ body {
 /* ============================================================
    BACKGROUND FX
 ============================================================ */
-
 .bg-nebula {
   position: fixed;
   inset: 0;
@@ -34,8 +33,13 @@ body {
   animation: nebulaPulse 8s ease-in-out infinite;
 }
 @keyframes nebulaPulse {
-  0%, 100% { opacity: 0.85; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .stars {
@@ -43,16 +47,19 @@ body {
   inset: 0;
   z-index: -2;
   opacity: 0.6;
-  background-image:
-    radial-gradient(1px 1px at 20px 30px, #fff, transparent),
+  background-image: radial-gradient(1px 1px at 20px 30px, #fff, transparent),
     radial-gradient(1px 1px at 70px 120px, #fff, transparent),
     radial-gradient(1px 1px at 150px 180px, #fff, transparent);
   background-size: 200px 200px;
   animation: starsDrift 120s linear infinite;
 }
 @keyframes starsDrift {
-  0%   { transform: translateY(0); }
-  100% { transform: translateY(-1400px); }
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-1400px);
+  }
 }
 
 .cyber-grid {
@@ -60,16 +67,28 @@ body {
   inset: 0;
   z-index: -1;
   opacity: 0.25;
-  background:
-    linear-gradient(transparent 0%, rgba(188, 19, 254, 0.3) 2%, transparent 3%),
-    linear-gradient(90deg, transparent 0%, rgba(0, 243, 255, 0.2) 2%, transparent 3%);
+  background: linear-gradient(
+      transparent 0%,
+      rgba(188, 19, 254, 0.3) 2%,
+      transparent 3%
+    ),
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 243, 255, 0.2) 2%,
+      transparent 3%
+    );
   background-size: 80px 80px;
   transform: perspective(400px) rotateX(60deg) translateY(-200px);
   animation: gridMove 22s linear infinite;
 }
 @keyframes gridMove {
-  0%   { background-position: 0 0; }
-  100% { background-position: 0 80px; }
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 80px;
+  }
 }
 
 .scanlines {
@@ -88,7 +107,6 @@ body {
 /* ============================================================
    START SCREEN — STATIC LOGO
 ============================================================ */
-
 #startScreen {
   position: absolute;
   inset: 0;
@@ -101,6 +119,7 @@ body {
   z-index: 10;
 }
 
+/* LOGO: sabit genişlik + yükseklik, background olarak */
 .logo-container {
   position: relative;
   width: min(60vw, 260px);
@@ -113,6 +132,7 @@ body {
   margin-bottom: 10px;
 }
 
+/* glow istersen kalsın, istersen tamamen kapat */
 .intro-glow {
   display: none;
 }
@@ -125,8 +145,12 @@ body {
   opacity: 0.75;
 }
 @keyframes loadSlide {
-  0%   { transform: translateX(-60px); }
-  100% { transform: translateX(60px); }
+  0% {
+    transform: translateX(-60px);
+  }
+  100% {
+    transform: translateX(60px);
+  }
 }
 
 #startButton {
@@ -157,7 +181,6 @@ body {
 /* ============================================================
    GAME SCREEN
 ============================================================ */
-
 #gameScreen {
   position: absolute;
   inset: 0;
@@ -172,8 +195,14 @@ body {
   animation: fadeIn 0.5s ease forwards;
 }
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.96); }
-  to   { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 #status {
@@ -195,7 +224,6 @@ body {
 /* ============================================================
    REACTOR BUTTON
 ============================================================ */
-
 .reactor-core {
   width: 270px;
   height: 270px;
@@ -225,13 +253,19 @@ body {
 }
 
 @keyframes spin1 {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 @keyframes spin2 {
-  to { transform: rotate(-360deg); }
+  to {
+    transform: rotate(-360deg);
+  }
 }
 @keyframes spin3 {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .reactor-center {
@@ -264,8 +298,12 @@ body {
   animation: pulseWait 1s infinite alternate;
 }
 @keyframes pulseWait {
-  from { transform: scale(1); }
-  to   { transform: scale(1.03); }
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.03);
+  }
 }
 
 .mode-go {
@@ -281,15 +319,21 @@ body {
   animation: failShake 0.25s;
 }
 @keyframes failShake {
-  0%, 100% { transform: translateX(0); }
-  25%      { transform: translateX(-8px); }
-  75%      { transform: translateX(8px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-8px);
+  }
+  75% {
+    transform: translateX(8px);
+  }
 }
 
 /* ============================================================
    SCORE SCREEN
 ============================================================ */
-
 #scoreScreen {
   position: absolute;
   inset: 0;
@@ -297,6 +341,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  /* Arka planı hafif karart */
   background: rgba(0, 0, 0, 0.82);
 }
 
@@ -305,12 +350,9 @@ body {
   animation: fadeIn 0.5s ease forwards;
 }
 
-/* ============================================================
-   SCORE PANEL
-============================================================ */
-
+/* SCORE PANEL (ANA KART) */
 .score-panel {
-  background: #05070f;
+  background: #05070f; /* opak, koyu */
   border: 2px solid rgba(255, 255, 255, 0.16);
   border-radius: 24px;
 
@@ -353,10 +395,7 @@ body {
   letter-spacing: 2px;
 }
 
-/* ============================================================
-   TIER RENK SINIFLARI
-============================================================ */
-
+/* Tier renk sınıfları */
 .score-panel.rank-diamond {
   border-color: #3cf4ff;
   box-shadow: 0 0 45px rgba(60, 244, 255, 0.5);
@@ -367,43 +406,42 @@ body {
 }
 
 .score-panel.rank-platinum {
-  border-color: #e5e4e2;
-  box-shadow: 0 0 40px rgba(229, 228, 226, 0.5);
+  border-color: #E5E4E2;
+  box-shadow: 0 0 40px rgba(229,228,226,0.5);
 }
 .score-panel.rank-platinum #rankTitle {
-  color: #e5e4e2;
-  text-shadow: 0 0 14px #e5e4e2;
+  color: #E5E4E2;
+  text-shadow: 0 0 14px #E5E4E2;
 }
 
 .score-panel.rank-gold {
-  border-color: #ffd700;
-  box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+  border-color: #FFD700;
+  box-shadow: 0 0 40px rgba(255,215,0,0.5);
 }
 .score-panel.rank-gold #rankTitle {
-  color: #ffd700;
-  text-shadow: 0 0 14px #ffd700;
+  color: #FFD700;
+  text-shadow: 0 0 14px #FFD700;
 }
 
 .score-panel.rank-silver {
-  border-color: #c0c0c0;
-  box-shadow: 0 0 40px rgba(192, 192, 192, 0.5);
+  border-color: #C0C0C0;
+  box-shadow: 0 0 40px rgba(192,192,192,0.5);
 }
 .score-panel.rank-silver #rankTitle {
-  color: #c0c0c0;
-  text-shadow: 0 0 14px #c0c0c0;
+  color: #C0C0C0;
+  text-shadow: 0 0 14px #C0C0C0;
 }
 
 .score-panel.rank-bronze {
-  border-color: #cd7f32;
-  box-shadow: 0 0 40px rgba(205, 127, 50, 0.5);
+  border-color: #CD7F32;
+  box-shadow: 0 0 40px rgba(205,127,50,0.5);
 }
 .score-panel.rank-bronze #rankTitle {
-  color: #cd7f32;
-  text-shadow: 0 0 14px #cd7f32;
+  color: #CD7F32;
+  text-shadow: 0 0 14px #CD7F32;
 }
 
-/* SCORE VALUE */
-
+/* SCORE SAYISI */
 #score {
   font-size: 84px;
   font-weight: 900;
@@ -413,8 +451,7 @@ body {
   filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.32));
 }
 
-/* BUTTON GROUP */
-
+/* BUTONLAR */
 .btn-group {
   display: flex;
   width: 100%;
