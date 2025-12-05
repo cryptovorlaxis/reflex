@@ -4,18 +4,19 @@ export const config = {
   runtime: 'edge',
 };
 
-function getRankColor(rank) {
-  if (rank.includes('SINGULARITY')) return '#ffffff';
-  if (rank.includes('DEMON')) return '#ff003c';
-  if (rank.includes('OPERATIVE')) return '#00f3ff';
-  if (rank.includes('SAMURAI')) return '#ffaa00';
-  return '#bc13fe';
+function getRankColor(rank: string) {
+  if (rank === 'DIAMOND') return '#3cf4ff';    // neon mavi / elmas
+  if (rank === 'PLATINUM') return '#E5E4E2';   // platin gümüşü
+  if (rank === 'GOLD') return '#FFD700';       // altın
+  if (rank === 'SILVER') return '#C0C0C0';     // gümüş
+  if (rank === 'BRONZE') return '#CD7F32';     // bronz
+  return '#6A6A6A';                            // fallback (IRON gibi)
 }
 
-export default function (req) {
+export default function (req: Request) {
   const { searchParams } = new URL(req.url);
   const score = searchParams.get('score') || '0.000';
-  const rank = searchParams.get('rank') || 'UNRANKED GLITCH';
+  const rank = searchParams.get('rank') || 'BRONZE';
 
   const neon = getRankColor(rank);
 
@@ -55,13 +56,14 @@ export default function (req) {
                   type: 'div',
                   props: {
                     style: {
-                      fontSize: 40,
+                      fontSize: 46,
                       color: neon,
-                      marginBottom: 10,
+                      marginBottom: 14,
                       fontWeight: 'bold',
                       textTransform: 'uppercase',
+                      letterSpacing: 4,
                     },
-                    children: rank,
+                    children: `${rank} TIER`,
                   },
                 },
                 {
