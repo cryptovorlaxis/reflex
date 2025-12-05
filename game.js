@@ -152,10 +152,10 @@ document.addEventListener("DOMContentLoaded", () => {
   bestScoreValue.textContent = "--";
 
   if (startButton) {
-    startButton.textContent = "INITIATE REACTOR";
+    startButton.textContent = "START TEST";
 
     const hint = document.querySelector(".start-hint");
-    if (hint) hint.textContent = "Booting reflex engine…";
+    if (hint) hint.textContent = "Wait for the signal…";
 
     startButton.addEventListener("click", () => {
       startScreen.style.display = "none";
@@ -166,9 +166,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (reactorBtn) {
     reactorBtn.addEventListener("click", () => {
-      if (gameState === "WAIT") {
+      if (gameState === "FOCUS") {
         handleFail("TOO EARLY!");
-      } else if (gameState === "GO") {
+      } else if (gameState === "STRIKE") {
         const now = performance.now();
         const diff = now - goStartTime;
         showScore(diff);
