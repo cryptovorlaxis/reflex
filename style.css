@@ -228,29 +228,35 @@ body {
 }
 
 
-/* STATES */
+/* WAIT = turuncu uyarı */
 .mode-wait {
-  border-color: #ffaa00 !important;
-  box-shadow: 0 0 28px rgba(255, 170, 0, 0.55) !important;
-  animation: pulseWait 1s infinite alternate;
-}
-@keyframes pulseWait {
-  from { transform: scale(1); }
-  to   { transform: scale(1.03); }
+  border-color: #ffae00 !important;
+  box-shadow:
+    0 0 22px rgba(255, 174, 0, 0.7),
+    0 0 48px rgba(255, 174, 0, 0.4),
+    inset 0 0 18px rgba(255, 174, 0, 0.4) !important;
 }
 
+/* GO = parlak neon yeşil */
 .mode-go {
-  border-color: #00ff00 !important;
-  background: radial-gradient(circle, #003300, #000);
-  transform: scale(1.07);
-  box-shadow: 0 0 50px #00ff00, inset 0 0 30px #00ff00 !important;
+  border-color: #00ff66 !important;
+  box-shadow:
+    0 0 28px rgba(0, 255, 102, 0.8),
+    0 0 60px rgba(0, 255, 102, 0.45),
+    inset 0 0 30px rgba(0, 255, 102, 0.5) !important;
+  transform: scale(1.06);
 }
 
+/* FAIL = mor neon */
 .mode-fail {
   border-color: #bc13fe !important;
-  box-shadow: 0 0 40px #bc13fe !important;
+  box-shadow:
+    0 0 28px rgba(188, 19, 254, 0.8),
+    0 0 56px rgba(188, 19, 254, 0.45),
+    inset 0 0 20px rgba(188, 19, 254, 0.45) !important;
   animation: failShake 0.25s;
 }
+
 @keyframes failShake {
   0%, 100% { transform: translateX(0); }
   25%      { transform: translateX(-8px); }
