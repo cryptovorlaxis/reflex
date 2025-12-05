@@ -49,6 +49,17 @@ function updateReactorState(cls) {
   if (cls) reactorBtn.classList.add(cls);
 }
 
+// GO anında kısa beyaz flaş
+function flashScreen() {
+  const flash = document.createElement("div");
+  flash.className = "go-flash";
+  document.body.appendChild(flash);
+  setTimeout(() => {
+    flash.remove();
+  }, 200);
+}
+
+
 // SCORE ekranını göster
 function showScore(ms) {
   gameState = "SCORE";
