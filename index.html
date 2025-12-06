@@ -7,11 +7,19 @@
   <!-- === CSS === -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Farcaster cast içinde “Play mini app” butonu için -->
+  <!-- Farcaster embed (Mini App kartı) -->
   <meta
-  name="fc:miniapp"
-  content='{"version":"1","imageUrl": "https://reflex-rho.vercel.app/screenshot1.png?v=2","button":{"title":"Play Reflex","action":{"type":"launch_frame","name":"Reflex Test Arcade","url":"https://reflex-rho.vercel.app/","splashImageUrl":"https://reflex-rho.vercel.app/screenshot1.png","splashBackgroundColor":"#000000"}}}'
-/>
+    name="fc:miniapp"
+    content='{"version":"1","imageUrl":"https://reflex-rho.vercel.app/screenshot1.png?v=2","button":{"title":"Play Reflex","action":{"type":"launch_miniapp","url":"https://reflex-rho.vercel.app/","name":"Reflex Test","splashImageUrl":"https://reflex-rho.vercel.app/screenshot1.png?v=2","splashBackgroundColor":"#000000"}}}'
+  />
+
+    <!-- Backward compatibility için Frame embed -->
+  <meta
+    name="fc:frame"
+    content='{"version":"1","imageUrl":"https://reflex-rho.vercel.app/screenshot1.png?v=2","button":{"title":"Play Reflex","action":{"type":"launch_frame","url":"https://reflex-rho.vercel.app/","name":"Reflex Test","splashImageUrl":"https://reflex-rho.vercel.app/screenshot1.png?v=2","splashBackgroundColor":"#000000"}}}'
+  />
+
+
 
 
   <!-- ========================================================= -->
