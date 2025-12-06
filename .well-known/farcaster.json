@@ -7,7 +7,7 @@
   "miniapp": {
     "version": "1",
     "name": "Reflex Test",
-    "iconUrl": "https://reflex-rho.vercel.app/icon.png",
+    "iconUrl": "https://reflex-rho.vercel.app/icon.png?v=2",
     "homeUrl": "https://reflex-rho.vercel.app/",
     "imageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
     "buttonTitle": "Start Game",
