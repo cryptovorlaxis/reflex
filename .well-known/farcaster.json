@@ -6,7 +6,7 @@
   },
   "miniapp": {
     "version": "1",
-    "name": "Reflex Test Arcade",
+    "name": "Reflex Test",
     "iconUrl": "https://reflex-rho.vercel.app/icon.png",
     "homeUrl": "https://reflex-rho.vercel.app",
     "imageUrl": "https://reflex-rho.vercel.app/screenshot1.png",
