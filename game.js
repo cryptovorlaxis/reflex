@@ -251,9 +251,6 @@ async function handleShare() {
     const scoreText = scoreDisplay?.textContent || "0.000";
     const rankText = rankTitle?.textContent || "BRONZE";
 
-    const shareImageUrl = `${window.location.origin}/api/score-image?score=${encodeURIComponent(
-      scoreText
-    )}&rank=${encodeURIComponent(rankText)}`;
 
     const miniAppUrl = window.location.origin;
 
@@ -289,7 +286,7 @@ async function handleShare() {
     if (sdk?.actions?.composeCast) {
       await sdk.actions.composeCast({
         text: castText,
-        embeds: [miniAppUrl, shareImageUrl],
+        embeds: [miniAppUrl],
         // sadece mini app kartı olsun istersen: embeds: [miniAppUrl]
       });
       castSuccess = true;
