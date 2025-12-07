@@ -257,7 +257,7 @@ async function handleShare() {
 
     const miniAppUrl = window.location.origin;
 
-    const castText = `My reflex time: ${scoreText}s — ${rankText} tier ⚡️;
+    const castText = `My reflex time: ${scoreText}s — ${rankText} tier ⚡️`;
 
     // ---- 1) ÖDEME ----
     const provider = await getEthereumProvider();
