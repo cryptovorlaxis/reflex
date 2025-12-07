@@ -257,8 +257,7 @@ async function handleShare() {
 
     const miniAppUrl = window.location.origin;
 
-    const castText = `My reflex time: ${scoreText}s — ${rankText} tier ⚡️
-Play: ${miniAppUrl}`;
+    const castText = `My reflex time: ${scoreText}s — ${rankText} tier ⚡️;
 
     // ---- 1) ÖDEME ----
     const provider = await getEthereumProvider();
@@ -290,14 +289,15 @@ Play: ${miniAppUrl}`;
     if (sdk?.actions?.composeCast) {
       await sdk.actions.composeCast({
         text: castText,
-        embeds: [shareImageUrl],
+        embeds: [miniAppUrl, shareImageUrl],
+        // sadece mini app kartı olsun istersen: embeds: [miniAppUrl]
       });
       castSuccess = true;
-    } else if (navigator.share) {
+    } 
+    else if (navigator.share) {
       await navigator.share({
         title: "Reflex Score",
         text: castText,
-        url: miniAppUrl,
       });
       castSuccess = true;
     } else if (navigator.clipboard) {
