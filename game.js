@@ -18,6 +18,9 @@ const shareBtn = document.getElementById("shareBtn");
 const scorePanel = document.getElementById("scorePanel");
 const scoreScreen = document.getElementById("scoreScreen");
 const paidRunBadge = document.getElementById("paidRunBadge");
+const onchainBtn = document.getElementById("onchainBtn");
+const onchainStatus = document.getElementById("onchainStatus");
+
 
 // ---- Oyun state ----
 let gameState = "INTRO"; // INTRO, WAIT, GO, SCORE, FAIL
@@ -102,6 +105,56 @@ async function ensureBaseNetwork(provider) {
 }
 
 // ================================================================
+// ✅ ONCHAIN RUN (Base üzerinde küçük tx)
+// ================================================================
+
+async function runOnchainAction() {
+  try {
+    if (!onchainBtn || !onchainStatus) return;
+
+    onchainBtn.disabled = true;
+    onchainStatus.textContent = "Wallet bağlanıyor…";
+
+    const provider = await getEthereumProvider();
+    await ensureBaseNetwork(provider);
+
+    // Kullanıcıdan hesap izni
+    const accounts = await provider.request({ method: "eth_requestAccounts" });
+    const from = accounts?.[0];
+    if (!from) throw new Error("Cüzdan adresi alınamadı.");
+
+    onchainStatus.textContent = "İşlem hazırlanıyor…";
+
+    // ✅ En garanti yöntem: kendine çok küçük ETH gönder (0.00001)
+    // Not: bu yöntem hemen her wallet’ta sorunsuz çalışır.
+    const valueHex = "0x9184e72a000"; // 0.00001 ETH (10^13 wei)
+
+    const txParams = {
+      from,
+      to: from,        // kendine
+      value: valueHex, // küçük tutar
+    };
+
+    onchainStatus.textContent = "İşlem gönderiliyor…";
+    const txHash = await provider.request({
+      method: "eth_sendTransaction",
+      params: [txParams],
+    });
+
+    onchainStatus.textContent = `Gönderildi ✅ ${txHash.slice(0, 10)}…`;
+
+
+
+  } catch (err) {
+    console.error(err);
+    if (onchainStatus) onchainStatus.textContent = "Hata: " + (err?.message || err);
+  } finally {
+    if (onchainBtn) onchainBtn.disabled = false;
+  }
+}
+
+
+// ================================================================
 // Yardımcı fonksiyonlar
 // ================================================================
 
@@ -143,8 +196,6 @@ function showPaidRunBadge() {
 function showScore(ms) {
   gameState = "SCORE";
 
-  // Her yeni skor geldiğinde PAID RUN etiketini resetle
-  hidePaidRunBadge();
 
   const scoreStr = formatScore(ms);
   if (scoreDisplay) scoreDisplay.textContent = scoreStr;
@@ -162,6 +213,12 @@ function showScore(ms) {
     );
     scorePanel.classList.add(cls);
   }
+
+  hidePaidRunBadge();
+
+if (onchainStatus) onchainStatus.textContent = "";
+if (onchainBtn) onchainBtn.disabled = false;
+
 
   // Best score güncelle
   let isNew = false;
@@ -369,6 +426,11 @@ document.addEventListener("DOMContentLoaded", () => {
       startGame();
     });
   }
+
+  if (onchainBtn) {
+  onchainBtn.addEventListener("click", runOnchainAction);
+}
+
 
   // SHARE → Payment + Cast
   if (shareBtn) {
