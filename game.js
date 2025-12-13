@@ -142,6 +142,9 @@ async function runOnchainAction() {
     });
 
     onchainStatus.textContent = `Gönderildi ✅ ${txHash.slice(0, 10)}…`;
+    onchainStatus.innerHTML =
+  `Gönderildi ✅ <a href="https://basescan.org/tx/${txHash}" target="_blank" style="color:#7dd3fc">Tx’i Basescan’da aç</a>`;
+
 
 
 
