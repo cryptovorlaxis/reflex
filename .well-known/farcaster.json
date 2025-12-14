@@ -13,7 +13,6 @@
     "buttonTitle": "Start Game",
     "splashImageUrl": "https://reflex-rho.vercel.app/splash-200.png",
     "splashBackgroundColor": "#000000",
-    "webhookUrl": "https://reflex-rho.vercel.app/api/webhook",
     "description": "Tap as fast as you can when the button turns green! Test your reflexes in this neon arcade minigame.",
     "tagline": "Test Your Speed!",
     "primaryCategory": "games",
